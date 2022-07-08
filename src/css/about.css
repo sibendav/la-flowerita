@@ -1,0 +1,12 @@
+.about-section {
+    padding: 50px;
+    text-align: center;
+    background-color: #bacbe6;
+    color: black;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
