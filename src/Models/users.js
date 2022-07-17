@@ -33,7 +33,7 @@ const UserSchema = new Schema({
     };
     UserSchema.statics.FIND = async function(e,p) {
       console.log("finding user:" + e + "" +p)
-      return this.find({'email': e, 'password': p}).count().exec();     
+      return this.find({'email': e, 'password': p});     
     };
 
     UserSchema.statics.REMOVE = async function(e,p) {
@@ -48,4 +48,4 @@ const UserSchema = new Schema({
     // the UserSchema is useless so far
     // we need to create a model using it
     // db.model('User', UserSchema, 'User'); // (model, UserSchema, collection)
-    mongo.model('Users', UserSchema); // if model name as lowercase with suffix "s" === collection name: User => users
+    mongo.model('Users', UserSchema,'Users'); // if model name as lowercase with suffix "s" === collection name: User => users

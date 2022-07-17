@@ -8,14 +8,26 @@ var jsonParser = bodyParser.json()
 var mongoose = require("mongoose");
 require("./src/Models/users");
 
-const uri = "mongodb+srv://tratzon:tratzon1@cluster0.l39y0.mongodb.net/FlowersShop?retryWrites=true&w=majority";
-mongoose.connect(uri, 
-    { useNewUrlParser: true, useUnifiedTopology: true
-    },  () => {
-        console.log('Connected to MongoDB');
-      });
+const uri = "mongodb://tratzon:tratzon1@cluster0-shard-00-00.l39y0.mongodb.net:27017,cluster0-shard-00-01.l39y0.mongodb.net:27017,Users-shard-00-02.l39y0.mongodb.net:27017/FlowersShop?ssl=true&replicaSet=atlas-2i336t-shard-0&authSource=admin&retryWrites=true&w=majority";
+// mongoose.connect(uri, 
+//     { useNewUrlParser: true, useUnifiedTopology: true
+//     },  () => {
+//         console.log('Connected to MongoDB');
+//       });
 
-
+mongoose.connect(uri, {
+    keepAlive: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(x => {
+        console.log(
+            `Connected to Mongo! Database name: "${x.connections[0].name}"`,
+        );
+    })
+    .catch(err => {
+        console.error('Error connecting to mongo', err);
+    });
 const port = 5000;
 app.use(express.static(path.join(__dirname, "/public")));
 
