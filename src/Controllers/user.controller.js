@@ -71,4 +71,23 @@ module.exports = class User {
     }
   }
   
+  static async getResetPasswordPage(req,res,next){
+    console.log("I am in resetPassword function");
+  
+    const resetPasswordToken = crypto
+    .createHash('sha512')
+    .update(req.params.resetToken)
+    .digest('hex');
+  
+    const user = await Users.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+      });
+  
+    if(!user){
+      return res.sendStatus(400).send(new error(`Invalid token`));
+    }
+    console.log("finished checking resetPassword function");
+    res.render('../Views/resetPassword.ejs',{id: user._id, ERROR: ""});
+  }
 }
