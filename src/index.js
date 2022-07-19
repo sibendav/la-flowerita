@@ -18,6 +18,7 @@ import Contact from './components/Contact.js';
 import Catalog from './components/Catalog.js';
 import About from './components/About.js';
 import LoginModal from './components/LoginModal.js';
+import ResetPassword from './components/ResetPassword.js';
 
 class App extends Component {
     constructor() {
@@ -78,7 +79,7 @@ class App extends Component {
             }
           )
         }
-        
+
     render() {
         return (
         <div>
@@ -119,6 +120,7 @@ class App extends Component {
             <Route path="/about" element={<About/>}/>
             <Route path="/catalog" element={<Catalog/>}/>
             <Route path="/contact" element={<Contact/>}/>
+            <Route path="/resetPassword" element={<ResetPassword/>}/>
         </Routes>
       </div>
 

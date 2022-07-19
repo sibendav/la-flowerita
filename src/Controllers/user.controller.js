@@ -1,6 +1,9 @@
 const UserService = require("../Services/UserService");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const sendEmail = require("../Middleware/sendMail")
+const mongoose = require('mongoose');
+const Users = mongoose.model('Users');
 
 module.exports = class User {
   static async auth(req, res, next) {
@@ -36,4 +39,36 @@ module.exports = class User {
     req.logout();
     return res.sendStatus(200);
   }
+
+  static async emailForResetPassword(req, res, next) {
+    console.log("emailForResetPassword");
+    var email = req.body.email;
+    const user = await Users.findOne({ email: email });
+    if(!user){
+      return res.sendStatus(404);
+    }
+    const resetToken = UserService.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false})
+
+  const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
+  const message = `You are receiving this email because you (or someone else) has requested the reset of a password.`
+  try {
+    await sendEmail({
+    email: user.email,
+    subject: 'Password reset',
+    message: message,
+    html: '<strong>To set new Password: </strong>'
+    + ' <a href="' + resetUrl + '">Restore Password</a>'
+    })
+    console.log("email sent");
+    return res.status(200);
+    } catch (error) {
+    console.log(error);
+    user.getResetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false })
+    return res.sendStatus(500);
+    }
+  }
+  
 }

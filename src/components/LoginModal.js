@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { NavLink } from "react-router-dom";
 
 class LoginModal extends Component {
   constructor() {
@@ -69,8 +70,8 @@ class LoginModal extends Component {
   render() {
     return (
       <div>
-        <Button 
-          style={{display:this.props.showButton}}
+        <Button
+          style={{ display: this.props.showButton }}
           className="nav-item ml-auto btn btn-outline-success"
           onClick={() => this.handleShow()}
         >
@@ -131,6 +132,13 @@ class LoginModal extends Component {
               >
                 Sign in
               </button>
+              <NavLink
+                style={{cursor:"pointer"}}
+                onClick={() => this.handleClose()}
+                to="/resetPassword"
+              >
+                forgot pasword ? click here
+              </NavLink>
             </div>
           </Modal.Footer>
         </Modal>

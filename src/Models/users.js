@@ -9,7 +9,8 @@ const UserSchema = new Schema({
       address: String,
       isActivate: Boolean,
       email: String,
-      password: String
+      password: String,
+      resetPasswordToken: String
     }, { autoIndex: false });
     
     // db.model('User', UserSchema, 'User'); // (model, UserSchema, collection)

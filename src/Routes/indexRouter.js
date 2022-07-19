@@ -7,5 +7,6 @@ var jsonParser = bodyParser.json();
 router.post("/auth", jsonParser, UserCtrl.auth);
 router.get("/getCurrentUser", jsonParser, UserCtrl.getCurrentUser);
 router.get("/logout", jsonParser, UserCtrl.logout);
+router.post("/emailForResetPassword", jsonParser, UserCtrl.emailForResetPassword);
 
 module.exports =  router;
