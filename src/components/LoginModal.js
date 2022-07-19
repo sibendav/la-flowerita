@@ -6,36 +6,36 @@ class LoginModal extends Component {
   constructor() {
     super();
     this.state = {
-      show: false,
-      username: "",
+      showModal: false,
+      email: "",
       password: "",
       ERROR: "",
     };
   }
 
   handleClose = () => {
-    this.setState({ show: false });
+    this.setState({ showModal: false });
   };
   handleShow = () => {
-    this.setState({ show: true });
+    this.setState({ showModal: true });
   };
   async dofetch() {
     alert("hii");
 
     // check inputs
-    var username = this.state.username;
+    var email = this.state.email;
     var password = this.state.password;
-    if (username == "" || password == "") {
+    if (email == "" || password == "") {
       this.setState({ ERROR: "Please fill all the fields" });
       return;
     }
-    if (!username.includes("@")) {
+    if (!email.includes("@")) {
       this.setState({ ERROR: "Please fill all the fields correctly" });
       return;
     }
 
     // pass inputs to server
-    let user = { username, password };
+    let user = { email, password };
     var options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,17 +45,18 @@ class LoginModal extends Component {
     let ok = 404;
     await fetch("/auth", options)
       .then(function (res) {
+        alert(res);
         if (res.ok) {
           ok = 200;
           console.log(ok);
         }
       })
       .catch((e) => this.setState({ ERROR: "There is an error: " + e }));
+    
     // if ok - pass him to his personal space
     if (ok == 200) {
-      // document.cookie = "session=" + username + "," + password;
-      // document.location.href = "/";
       alert("you logged successfully");
+      document.location.href = "/";
     } else {
       this.setState({ ERROR: "There is no such user" });
     }
@@ -64,12 +65,12 @@ class LoginModal extends Component {
 
   inputsHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
-    alert(e.target.value);
   };
   render() {
     return (
       <div>
-        <Button
+        <Button 
+          style={{display:this.props.showButton}}
           className="nav-item ml-auto btn btn-outline-success"
           onClick={() => this.handleShow()}
         >
@@ -80,7 +81,7 @@ class LoginModal extends Component {
 
         <Modal
           style={{ opacity: 1 }}
-          show={this.state.show}
+          show={this.state.showModal}
           onHide={() => this.handleClose()}
         >
           <Modal.Header>
@@ -98,8 +99,8 @@ class LoginModal extends Component {
               <div className="mb-3">
                 <input
                   type="email"
-                  name="username"
-                  id="username"
+                  name="email"
+                  id="email"
                   className="form-control"
                   placeholder="Email address"
                   onChange={this.inputsHandler}

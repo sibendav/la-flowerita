@@ -24,91 +24,61 @@ class App extends Component {
         super();
         this.state = {
           // needed to change
-            nav: "About"
+            loggedIn: false,
+            ERROR: ""
         };
     }
 
-    componentDidMount = () => {
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var allcookies = decodedCookie.split(';');
-
-        for (let i = 0; i < allcookies.length; i++) {
-
-            let cookiename = allcookies[i].split('=')[0];
-            let cookievalue = allcookies[i].split('=')[1];
-
-            if (cookiename == "session") {
-                if (cookievalue != "no") {
-                    let username = cookievalue.split(',')[0];
-                    let password = cookievalue.split(',')[1];
-                    let role = cookievalue.split(',')[2];
-
-                    this.insession(username, password, role);
-
-                }
+    componentDidMount = async() => {
+        var options = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            };
+        await fetch("/getCurrentUser", options).then( res => res.json()).then(
+            (result) => {
+              this.setState({
+                loggedIn: true
+              });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+              this.setState({
+                ERROR: error
+              });
             }
-        }
-        let currenturl = window.location.href;
-        console.log(currenturl);
-        let baliseurl = currenturl.split("#")[1];
-        // if (baliseurl == null) {
-            // await resetactive();
-            // $("about").addClass('active');
-            // $("#content").html("<About></About>");
-            // this.state.nav = "About"
-            // $(this).scrollTop(0);
-        // } else {
-        //     // await resetactive();
-        //     this.findnav("#" + baliseurl);
-        // }
+          )
+        // let currenturl = window.location.href;
    }
-
-    async insession(name, password) {
-        document.cookie = 'session=' + name + ',' + password;
-        // let isAdmin = 0;
-        // let isWorker = 0;
-        await fetch("db/users.json", {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-
-        }).then(response => response.json())
-            .then(data => {
-                for (const isuser of data) {
-                    console.log(name);
-                    if (isuser != null && isuser.email == name && isuser.password == password) {
-                        if (isuser.degree == "manager") {
-                            // isAdmin == 1;
-                            console.log("The user is admin!");
-                            document.getElementById("users").style.display = "block";
-                            document.cookie = 'session=' + name + ',' + password + ',' + 2;
-
-                        } else if (isuser.degree == "worker") {
-                            // isWorker == 1;
-                            console.log("The user is worker!");
-                            document.getElementById("users").style.display = "block";
-                            document.cookie = 'session=' + name + ',' + password + ',' + 1;
-
-                        } else {
-                            document.cookie = 'session=' + name + ',' + password + ',' + 0;
-                            console.log("The user is client!");
-                        }
-
-
-                        document.getElementById("catalog").style.display = "block";
-
-                        document.getElementById("logoutbtn").style.display = "block";
-                        document.getElementById("login").style.display = "none";
-                        $("#content").load("views/about.html");
-                        $("#home").addClass('active');
-
-                    }
-                }
-            })
-};
- 
     
+    logout = async () =>{
+        var options = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            };
+        await fetch("/logout", options).then(
+            (result) => {
+              this.setState({
+                loggedIn: false}
+                //because setState is async function
+                , () => {
+                    console.log(result);
+                })   
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+              this.setState({
+                ERROR: error
+              }, () => {
+                console.log(error);
+            })
+            }
+          )
+        }
+        
     render() {
         return (
         <div>
@@ -134,11 +104,11 @@ class App extends Component {
                           <NavLink className="nav-link active" style={{"fontSize": "initial", display:"none"}} to="/users" id="users">Manage Users</NavLink>
                       </li>
                   </ul>
-                  <button type="button" className="nav-item ml-auto btn btn-outline-success" id="logoutbtn" style={{display:"none"}}>
-                      <a className="nav-link active" href="#logout" id="logout" >Logout</a>
+                  <button type="button" className="nav-item ml-auto btn btn-outline-success" id="logoutbtn" style={{display:this.state.loggedIn ? "block": "none"}}>
+                      <a className="nav-link active" onClick={() => this.logout()} id="logout" >Logout</a>
                   </button>
 
-                      <LoginModal />
+                      <LoginModal showButton={this.state.loggedIn ? "none": "block"} />
               </div>
           </div>
       </nav>
