@@ -4,17 +4,23 @@ const LocalStrategy = require("passport-local");
 const sendEmail = require("../Middleware/sendMail")
 const mongoose = require('mongoose');
 const Users = mongoose.model('Users');
+const crypto = require('crypto');
 
 module.exports = class User {
   static async auth(req, res, next) {
     console.log("inside auth function");
-    let exist = await UserService.FIND(req.body.email, req.body.password);
+    let exist = await UserService.FindByEmail(req.body.email);
     console.log("/auth" + exist);
     if (exist != 0) {
       passport.authenticate("local", function (err, user, info) {
         if (err || !user) {
-          console.log("Error", info);
-          return res.status(400).send(info);
+          if(info.status == 404){
+            return res.sendStatus(404);
+          }
+          else{
+          console.log("Error", err);
+          return res.sendStatus(400);
+          }
         }
 
         req.logIn(user, function (err) {
@@ -47,10 +53,10 @@ module.exports = class User {
     if(!user){
       return res.sendStatus(404);
     }
-    const resetToken = UserService.getResetPasswordToken();
+    const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false})
 
-  const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
+  // const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password.`
   try {
     await sendEmail({
@@ -58,10 +64,10 @@ module.exports = class User {
     subject: 'Password reset',
     message: message,
     html: '<strong>To set new Password: </strong>'
-    + ' <a href="' + resetUrl + '">Restore Password</a>'
+    + ' <h1">' + resetToken + '</h1>'
     })
-    console.log("email sent");
-    return res.status(200);
+    console.log("email sent " + resetToken);
+    return res.sendStatus(200);
     } catch (error) {
     console.log(error);
     user.getResetPasswordToken = undefined;
@@ -71,23 +77,42 @@ module.exports = class User {
     }
   }
   
-  static async getResetPasswordPage(req,res,next){
-    console.log("I am in resetPassword function");
+  static async checkToken(req,res,next){
   
     const resetPasswordToken = crypto
     .createHash('sha512')
-    .update(req.params.resetToken)
+    .update(req.body.token)
     .digest('hex');
   
+
     const user = await Users.findOne({
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() }
       });
   
+      console.log("I am in resetPassword function");
     if(!user){
-      return res.sendStatus(400).send(new error(`Invalid token`));
+      console.log(user);
+      return res.sendStatus(400);
     }
     console.log("finished checking resetPassword function");
-    res.render('../Views/resetPassword.ejs',{id: user._id, ERROR: ""});
+    console.log(user);
+    return res.json({id: user._id, status: 200});
   }
+
+  static async updatePassword(req,res,next){
+    const user = await Users.findOne({ _id: req.body.id});
+    if(!user){
+      return res.sendStatus(404);
+    }
+    console.log(req.body);
+    user.password = req.body.password;
+    user.setPassword(user.password);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await UserService.UPDATE(user.email, user);
+    console.log("finished resetUserPass function");
+    return res.sendStatus(200);
+  }
+
 }

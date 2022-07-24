@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
 require("../Models/users");
 var mongoose = require("mongoose");
 const User = mongoose.model('Users');
@@ -39,27 +37,12 @@ module.exports = class UserService {
     ).exec();
   }
 
-  static async UPDATE(e, p, newE, newP, d) {
+  static async UPDATE(e, user) {
     return User.updateOne(
-      { email: e, password: p },
-      { $set: { email: newE, password: newP, degree: d } }
+      { email: e },
+      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree } }
     ).exec();
   }
 
-  static async validatePassword(password) {
-    console.log(password);
-    // const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    return this.password === password;
-  }
 
-  // For reseting password
-  static async getResetPasswordToken() {
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    // Hash token and set to resetPassordToken field
-    this.resetPasswordToken = crypto
-      .createHash("sha512")
-      .update(resetToken)
-      .digest("hex");
-    return resetToken;
-  }
 };

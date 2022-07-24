@@ -8,5 +8,7 @@ router.post("/auth", jsonParser, UserCtrl.auth);
 router.get("/getCurrentUser", jsonParser, UserCtrl.getCurrentUser);
 router.get("/logout", jsonParser, UserCtrl.logout);
 router.post("/emailForResetPassword", jsonParser, UserCtrl.emailForResetPassword);
+router.post("/checkToken", jsonParser, UserCtrl.checkToken);
+router.post("/updatePassword", jsonParser, UserCtrl.updatePassword);
 
 module.exports =  router;

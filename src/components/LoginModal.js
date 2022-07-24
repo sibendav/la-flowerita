@@ -45,22 +45,29 @@ class LoginModal extends Component {
     
     let ok = 404;
     await fetch("/auth", options)
-      .then(function (res) {
-        alert(res);
-        if (res.ok) {
-          ok = 200;
-          console.log(ok);
+    .then(
+      (res) => {
+        console.log(res);
+        if (res.status == 200) {
+          alert("you logged successfully");
+          document.location.href = "/";
         }
-      })
-      .catch((e) => this.setState({ ERROR: "There is an error: " + e }));
-    
-    // if ok - pass him to his personal space
-    if (ok == 200) {
-      alert("you logged successfully");
-      document.location.href = "/";
-    } else {
-      this.setState({ ERROR: "There is no such user" });
-    }
+        else if(res.status == 404){
+          this.setState({ ERROR: "Email or password is not correct." });
+        }
+        else if(res.status == 400){
+          this.setState({ ERROR: "There was an error. Please try again" });
+        }
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      (error) => {
+        this.setState({
+          ERROR: error
+        });
+      }
+    )
   }
 
 
@@ -123,7 +130,7 @@ class LoginModal extends Component {
             </form>
           </Modal.Body>
           <Modal.Footer>
-            <h3>{this.state.ERROR}</h3>
+            <h5>{this.state.ERROR}</h5>
             <div className="modal-footer">
               <button
                 className="btn btn-lg btn-primary btn-block"

@@ -11,8 +11,8 @@ passport.use(new LocalStrategy({
 }, (email, password, done) => {
   Users.findOne({ email })
     .then((user) => {
-      if(!user || !UserService.validatePassword(password)) {
-        return done(null, false, { message:  'email or password is invalid'  });
+      if(!user || !user.validatePassword(password)) {
+        return done(null, false, { status:  404  });
       }
       user = {_id: user._id, email:user.email};
       console.log(user);
