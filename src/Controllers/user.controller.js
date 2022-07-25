@@ -5,6 +5,8 @@ const sendEmail = require("../Middleware/sendMail")
 const mongoose = require('mongoose');
 const Users = mongoose.model('Users');
 const crypto = require('crypto');
+const uploadPicture = require("../Middleware/uploadPicture")
+var fs = require('fs');
 
 module.exports = class User {
   static async auth(req, res, next) {
@@ -93,7 +95,7 @@ module.exports = class User {
       console.log("I am in resetPassword function");
     if(!user){
       console.log(user);
-      return res.sendStatus(400);
+      return res.json({status: 404});
     }
     console.log("finished checking resetPassword function");
     console.log(user);
@@ -115,4 +117,27 @@ module.exports = class User {
     return res.sendStatus(200);
   }
 
+  static async signup(req, res, next){
+    var user = req.body.user;
+
+    if (user.email == "" || user.password == "" || user.phone == "" || user.degree == "" || user.address == "" || user.name == ""){
+      return res.sendStatus(422);
+    }
+
+    let email = user.email;
+    const oldUser = await Users.findOne({ email });
+    if (oldUser){
+      return res.sendStatus(409);
+    }
+    if(req.body.file){
+    // await uploadPicture.uploadFile(req, res);
+    console.log(user.profileImage);
+    }
+    const newUser = new Users(user);
+    newUser.setPassword(user.password);
+    await newUser.save();
+    console.log("user added successfullly");
+    console.log(newUser);
+    return res.sendStatus(200);
+  }
 }

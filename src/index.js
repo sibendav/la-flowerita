@@ -18,8 +18,8 @@ import Contact from './components/Contact.js';
 import Catalog from './components/Catalog.js';
 import About from './components/About.js';
 import LoginModal from './components/LoginModal.js';
+import SignupModal from './components/SignupModal.js';
 import ResetPassword from './components/ResetPassword.js';
-import updatepassword from './components/UpdatePassword.js';
 
 class App extends Component {
     constructor() {
@@ -111,6 +111,8 @@ class App extends Component {
                   </button>
 
                       <LoginModal showButton={this.state.loggedIn ? "none": "block"} />
+                      <SignupModal showButton={this.state.loggedIn ? "none": "block"}/>
+
               </div>
           </div>
       </nav>
@@ -122,7 +124,6 @@ class App extends Component {
             <Route path="/catalog" element={<Catalog/>}/>
             <Route path="/contact" element={<Contact/>}/>
             <Route path="/resetPassword" element={<ResetPassword/>}/>
-            <Route path="/updatepassword" element={<updatepassword id=""/>}/>
         </Routes>
       </div>
 

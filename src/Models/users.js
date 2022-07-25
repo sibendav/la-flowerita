@@ -13,7 +13,8 @@ const UserSchema = new Schema({
       email: String,
       hash: String,
       salt: String,
-      resetPasswordToken: String
+      profileImage: {data: Buffer, contentType: String},
+      resetPasswordToken: String,
     }, { autoIndex: false });
     
     UserSchema.methods.getResetPasswordToken = function(){
