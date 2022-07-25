@@ -5,7 +5,6 @@ const sendEmail = require("../Middleware/sendMail")
 const mongoose = require('mongoose');
 const Users = mongoose.model('Users');
 const crypto = require('crypto');
-const uploadPicture = require("../Middleware/uploadPicture")
 var fs = require('fs');
 
 module.exports = class User {
@@ -128,10 +127,6 @@ module.exports = class User {
     const oldUser = await Users.findOne({ email });
     if (oldUser){
       return res.sendStatus(409);
-    }
-    if(req.body.file){
-    // await uploadPicture.uploadFile(req, res);
-    console.log(user.profileImage);
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);

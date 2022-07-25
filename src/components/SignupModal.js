@@ -31,9 +31,15 @@ class SignupModal extends Component {
   async signup() {
     alert("hii");
     // check inputs
-    var data = this.state.src;
-    var contentType = this.state.picture.type;
+    var data = "";
+    var contentType = "";
+    if(this.state.picture != undefined)
+    { 
+    data = this.state.src;
+     contentType = this.state.picture.type;
+    }
     var profileImage = {data: data, contentType: contentType};
+    
     var email = this.state.email;
     var password = this.state.password;
     var degree = this.state.degree;
