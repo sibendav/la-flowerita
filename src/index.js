@@ -20,6 +20,7 @@ import About from './components/About.js';
 import LoginModal from './components/LoginModal.js';
 import SignupModal from './components/SignupModal.js';
 import ResetPassword from './components/ResetPassword.js';
+import ProductList from './components/Catalog.js';
 
 class App extends Component {
     constructor() {
@@ -97,7 +98,7 @@ class App extends Component {
                           <NavLink className="nav-link active" style={{"fontSize": "initial"}} aria-current="page" to="/about" id="about">About</NavLink>
                       </li>
                       <li className="nav-item">
-                          <NavLink className="nav-link active" style={{"fontSize": "initial",display:"none"}} to="/catalog" id="catalog">Flower Catalog</NavLink>
+                          <NavLink className="nav-link active" style={{"fontSize": "initial"}} to="/catalog" id="catalog">Flower Catalog</NavLink>
                       </li>
                       <li className="nav-item">
                           <NavLink className="nav-link active" style={{"fontSize": "initial"}} to="/contact" id="contact">Contact</NavLink>
@@ -121,9 +122,11 @@ class App extends Component {
         <Routes>
             <Route exact = "true" path="/" element={<About/>}/>
             <Route path="/about" element={<About/>}/>
-            <Route path="/catalog" element={<Catalog/>}/>
+            <Route path="/catalog" element={<ProductList />}/>
             <Route path="/contact" element={<Contact/>}/>
             <Route path="/resetPassword" element={<ResetPassword/>}/>
+            
+
         </Routes>
       </div>
 
