@@ -55,4 +55,15 @@ module.exports = class ProductService {
       }
     ).exec();
   }
+
+  static async DELETE(id) {
+    return Product.updateOne(
+      { _id: id },
+      {
+        $set: {
+          isActivate: false,
+        },
+      }
+    ).exec();
+  }
 };

@@ -1,11 +1,15 @@
 import React, { Component } from "react";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
-import withAuth from "./Auth.js"
+import withAuth from "./Auth.js";
 import {FaEye, FaPen, FaTrash } from "react-icons/fa";
+import swal from 'sweetalert';
+
 class DetailsProductModal extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +40,49 @@ class DetailsProductModal extends Component {
     this.setState({ isUpdate: !this.state.isUpdate });
   };
   
-
+  showConfirmDialog = () => {
+    this.handleClose();
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.deleteProduct()
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  };
+  async deleteProduct(){
+    var options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({id: this.state.id}),
+    };
+    await fetch("/deleteProduct", options).then(
+      (res) => {
+        console.log(res);
+        if (res.status == 200) {
+          console.log("deleting product was successful");
+        } else if (res.status == 404) {
+          this.setState({ ERROR: "Product does not exist already" });
+        } else if (res.status == 400) {
+          this.setState({ ERROR: "There was an error. Please try again" });
+        } else if (res.status == 500) {
+          this.setState({ ERROR: "There was an error on our side" });
+        }
+      },
+      (error) => {
+        this.setState({
+          ERROR: error,
+        });
+      }
+    );
+    swal("Deleted!", "Product deleted successfully!", "success");
+  }
   async updateProduct() {
     var name = this.state.name;
     var price = this.state.price;
@@ -85,8 +131,8 @@ class DetailsProductModal extends Component {
       }
     );
     if (!this.state.picture) {
-      alert("Product updated successfully");
-      window.location.replace("/catalog");
+      swal("Updated!", "Product updated successfully!", "success");
+      window.location.replace("#/catalog");
     }else{
     var myFormData = new FormData();
     myFormData.append('file', this.state.picture);
@@ -97,8 +143,8 @@ class DetailsProductModal extends Component {
       body: myFormData,
     });
     if (response.status == 200) {
-      alert("Product updated successfully");
-      window.location.replace("/catalog");
+      swal("Updated!", "Product updated successfully!", "success");
+      window.location.replace("#/catalog");
     }
   }
   }
@@ -281,7 +327,7 @@ class DetailsProductModal extends Component {
             <a
               role="button"
               style={{display: !this.state.isUpdate? "block" : "none"}}
-              onClick={() => this.changeUpdate()}
+              onClick={() => this.showConfirmDialog()}
             >
               <FaTrash/>
             </a>

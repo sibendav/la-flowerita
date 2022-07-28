@@ -46,4 +46,14 @@ module.exports = class Catalog {
         }
         return res.sendStatus(200);
     }
+    static async deleteProduct(req, res, next){
+        var oldProduct = await ProductService.FIND(req.body.id);
+        if(oldProduct){
+            await ProductService.DELETE(req.body.id)
+            console.log('Product deleted:' + req.body.id);
+        } else{
+            return res.sendStatus(404);
+        }
+        return res.sendStatus(200);
+    }
 }

@@ -20,6 +20,7 @@ router.post("/getCatalog", jsonParser, CatalogCtrl.getCatalog);
 router.post("/addNewProduct", jsonParser, CatalogCtrl.addNewProduct);
 router.post("/addProductPicture", jsonParser, CatalogCtrl.addProductPicture);
 router.post("/updateProduct", jsonParser, CatalogCtrl.updateProduct);
+router.post("/deleteProduct", jsonParser, CatalogCtrl.deleteProduct);
 
 
 
