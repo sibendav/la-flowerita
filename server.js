@@ -6,6 +6,11 @@ var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json()
 var mongoose = require("mongoose");
 require("./src/Models/users");
+require("./src/Models/products");
+require("./src/Models/orderProducts");
+require("./src/Models/shoppinglists");
+require("./src/Models/userShoppinglists");
+
 const dbConfig = require("./src/Config/db");
 
 // AUTHENTIATION

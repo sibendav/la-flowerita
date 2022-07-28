@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
+import '../css/newProductModal.css';
 
 class SignupModal extends Component {
   constructor() {
@@ -31,15 +32,6 @@ class SignupModal extends Component {
   async signup() {
     alert("hii");
     // check inputs
-    var data = "";
-    var contentType = "";
-    if(this.state.picture != undefined)
-    { 
-    data = this.state.src;
-     contentType = this.state.picture.type;
-    }
-    var profileImage = {data: data, contentType: contentType};
-    
     var email = this.state.email;
     var password = this.state.password;
     var degree = this.state.degree;
@@ -60,29 +52,31 @@ class SignupModal extends Component {
       return;
     }
     // pass inputs to server
-    let user = { email, password, degree, name, phone, address, profileImage };
+    let user = { email, password, degree, name, phone, address };
     var options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({user: user}),
     };
-    
-    await fetch("/signup", options)
+    var id = 0;
+    await fetch("/signup", options).then(res => res.json())
     .then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
-          alert("you signedup successfully! You may login to your account");
-          document.location.href = "/";
+          id = res.id;
         }
         else if(res.status == 409){
           this.setState({ ERROR: "Email already exists." });
+          return;
         }
         else if(res.status == 400){
           this.setState({ ERROR: "There was an error. Please try again" });
+          return;
         }
         else if(res.status == 422){
           this.setState({ ERROR: "Please fill all the fields correctly." });
+          return;
         }
       },
       // Note: it's important to handle errors here
@@ -92,8 +86,36 @@ class SignupModal extends Component {
         this.setState({
           ERROR: error
         });
+        return;
       }
     )
+    if (id != 0) {
+      if (!this.state.picture) {
+        alert("you signedup successfully! You may login to your account");
+        document.location.href = "/";
+      }
+      if (
+        this.state.picture.type.includes("png") ||
+        this.state.picture.type.includes("jpg")
+      ) {
+        this.setState({ ERROR: "Only types: PNG or JPG" });
+        return;
+      }
+      var myFormData = new FormData();
+      myFormData.append("file", this.state.picture);
+      myFormData.append("id", id);
+
+      const response = await fetch("/addUserProfile", {
+        method: "POST",
+        body: myFormData,
+      });
+      if (response.status == 200) {
+        alert("you signedup successfully! You may login to your account");
+        document.location.href = "/";
+      }
+    } else {
+      alert("Didn't get id");
+    }
   }
 
   renderPreview() {
@@ -124,14 +146,13 @@ class SignupModal extends Component {
   };
   radioHandler = (e) => {
     this.setState({ [e.target.name]: document.querySelector(`input[name=${e.target.name}]:checked`).id});
-    alert(this.state.degree);
   };
   render() {
     return (
       <div>
         <Button
           style={{ display: this.props.showButton }}
-          className="nav-item ml-auto btn btn-outline-success"
+          className="button-17"
           onClick={() => this.handleShow()}
         >
           Signup

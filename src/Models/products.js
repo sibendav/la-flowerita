@@ -6,8 +6,10 @@ const ProductSchema = new Schema({
       name: String,
       color: String,
       price: String,
+      type: String,
       isActivate: Boolean,
-      image : {data: String, contentType: String}
-    }, { autoIndex: false });
+      description: String,
+      image : {data: Buffer, contentType: String}
+    }, { autoIndex: true });
 
     mongo.model('Products', ProductSchema, 'Products'); // if model name as lowercase with suffix "s" === collection name: User => users

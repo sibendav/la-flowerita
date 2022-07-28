@@ -79,7 +79,7 @@ class LoginModal extends Component {
       <div>
         <Button
           style={{ display: this.props.showButton }}
-          className="nav-item ml-auto btn btn-outline-success"
+          className="button-17"
           onClick={() => this.handleShow()}
         >
           Login

@@ -3,19 +3,56 @@ var mongoose = require("mongoose");
 const Product = mongoose.model('Products');
 
 module.exports = class ProductService {
-static async CREATE(product) {
-    return this.create({
+
+  static async GetALL() {
+    return Product.find({ isActivate: true }).exec();
+  }
+
+  static async CREATE(product) {
+    return Product.create({
       name: product.name,
-      color: product.color,
+      description: product.description,
       price: product.price,
-      isActivate:true,
+      type: product.type,
+      isActivate: true,
+      color: product.color,
       image: product.image,
-      
     });
-};
+  }
 
-static async GetALL() {
-  return Product.find({'isActivate': true}).exec();
-};
+  static async LastId() {
+    return Product.find().sort({ _id: -1 }).limit(1);
+  }
 
-}
+  static async FIND(id) {
+    return Product.find({ _id: id });
+  }
+
+  static async UPDATE(id, product) {
+    return Product.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: product.name,
+          description: product.description,
+          color: product.color,
+          price: product.price,
+          type: product.type,
+          // image: product.image,
+          // isActivate: product.isActivate
+        },
+      }
+    ).exec();
+  }
+
+  static async UpdatePicture(id, product) {
+    return Product.updateOne(
+      { _id: id },
+      {
+        $set: {
+          image: product.image,
+        },
+      }
+    ).exec();
+  }
+};

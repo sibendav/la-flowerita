@@ -15,7 +15,7 @@ const UserSchema = new Schema({
       salt: String,
       profileImage: {data: Buffer, contentType: String},
       resetPasswordToken: String,
-    }, { autoIndex: false });
+    }, { autoIndex: true });
     
     UserSchema.methods.getResetPasswordToken = function(){
       // const resetToken = crypto.randomBytes(20).toString('hex');

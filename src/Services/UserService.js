@@ -12,6 +12,7 @@ module.exports = class UserService {
       isActivate: true,
       email: user.email,
       password: user.password,
+      image: user.image
     });
   }
 
@@ -20,6 +21,10 @@ module.exports = class UserService {
   }
   static async GetClients() {
     return User.find({ isActivate: true, degree: "client" }).exec();
+  }
+  static async FindById(id) {
+    console.log("finding user:" + id);
+    return User.find({ _id: id });
   }
   static async FindByEmail(e) {
     console.log("finding user:" + e);
@@ -40,9 +45,17 @@ module.exports = class UserService {
   static async UPDATE(e, user) {
     return User.updateOne(
       { email: e },
-      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree } }
+      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree, profileImage: user.profileImage } }
     ).exec();
   }
+
+  static async UpdateById(id, user) {
+    return User.updateOne(
+      { _id: id },
+      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree, profileImage: user.profileImage } }
+    ).exec();
+  }
+
 
 
 };

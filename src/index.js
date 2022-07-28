@@ -21,6 +21,7 @@ import LoginModal from './components/LoginModal.js';
 import SignupModal from './components/SignupModal.js';
 import ResetPassword from './components/ResetPassword.js';
 import ProductList from './components/Catalog.js';
+import NoPermission from './components/NoPermission.js';
 
 class App extends Component {
     constructor() {
@@ -125,7 +126,8 @@ class App extends Component {
             <Route path="/catalog" element={<ProductList />}/>
             <Route path="/contact" element={<Contact/>}/>
             <Route path="/resetPassword" element={<ResetPassword/>}/>
-            
+            <Route path="/NoPermission" element={<NoPermission/>}/>
+
 
         </Routes>
       </div>

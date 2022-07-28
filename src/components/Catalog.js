@@ -34,12 +34,13 @@ class ProductList extends Component {
         {this.state.products.map((product) => {
           return (
             <Product
-              id={product.id}
+              id={product._id}
               image={product.image}
               name={product.name}
               color={product.color}
               price={product.price}
-              description={"bla bla bla"}
+              description={product.description}
+              type={product.type}
             />
           );
         })}

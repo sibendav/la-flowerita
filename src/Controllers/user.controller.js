@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Users = mongoose.model('Users');
 const crypto = require('crypto');
 var fs = require('fs');
+const imagesMiddleware = require("../Middleware/uploadImage");
 
 module.exports = class User {
   static async auth(req, res, next) {
@@ -120,19 +121,35 @@ module.exports = class User {
     var user = req.body.user;
 
     if (user.email == "" || user.password == "" || user.phone == "" || user.degree == "" || user.address == "" || user.name == ""){
-      return res.sendStatus(422);
+      return res.json({status:422});
     }
 
     let email = user.email;
     const oldUser = await Users.findOne({ email });
     if (oldUser){
-      return res.sendStatus(409);
+      return res.json({status:409});
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
+    newUser.isActivate = true;
     await newUser.save();
     console.log("user added successfullly");
     console.log(newUser);
-    return res.sendStatus(200);
+    return res.json({status:200, id:newUser._id});
   }
+
+
+
+static async addUserProfile(req, res, next){
+    await imagesMiddleware.uploadFile(req, res);
+    var id = req.body.id;
+    var user = await UserService.FindById(id);
+    if(user){
+        user.profileImage = {data:req.file.buffer, contentType: req.file.mimetype};
+        console.log(user);
+        await UserService.UpdateById(id,user)
+    }
+    return res.sendStatus(200);
+
+}
 }
