@@ -108,8 +108,8 @@ class App extends Component {
                           <NavLink className="nav-link active" style={{"fontSize": "initial", display:"none"}} to="/users" id="users">Manage Users</NavLink>
                       </li>
                   </ul>
-                  <button type="button" className="nav-item ml-auto btn btn-outline-success" id="logoutbtn" style={{display:this.state.loggedIn ? "block": "none"}}>
-                      <a className="nav-link active" onClick={() => this.logout()} id="logout" >Logout</a>
+                  <button type="button" className="button-17" id="logoutbtn" style={{display:this.state.loggedIn ? "block": "none"}}
+                    onClick={() => this.logout()}> Logout
                   </button>
 
                       <LoginModal showButton={this.state.loggedIn ? "none": "block"} />

@@ -7,6 +7,9 @@ module.exports = class ProductService {
   static async GetALL() {
     return Product.find({ isActivate: true }).exec();
   }
+  static async GetCatalogByType(type) {
+    return Product.find({ isActivate: true, type:type }).exec();
+  }
 
   static async CREATE(product) {
     return Product.create({

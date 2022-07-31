@@ -7,7 +7,13 @@ const imagesMiddleware = require("../Middleware/uploadImage");
 module.exports = class Catalog {
 
     static async getCatalog(req, res, next){
-        var products = await  ProductService.GetALL();
+        var type = req.body.type;
+        var products = [];
+        if(type == "All" || !type){
+            products = await  ProductService.GetALL();
+        } else{
+            products = await  ProductService.GetCatalogByType(type);
+        }
         return res.json({products: products});
     }
     static async addNewProduct(req, res, next){

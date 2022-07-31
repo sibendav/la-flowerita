@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import Product from "./Product";
 import NewProductModal from "./NewProductModal";
 
-import { FaPlus } from "react-icons/fa";
 
 
 class ProductList extends Component {
@@ -13,13 +12,16 @@ class ProductList extends Component {
 
     this.state = {
       products: [],
+      type: false
     };
   }
 
   componentDidMount() {
+    var type = !this.state.type ? "All": this.state.type;
     var options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body:{type: type}
     };
     fetch("/getCatalog", options).then(res => res.json())
     .then((result) => {
@@ -27,10 +29,28 @@ class ProductList extends Component {
       console.log(this.state.products);
     });
   }
+
+  refreshPage() {
+    window.location.reload(false);
+  }
+
+  async changeType(e){
+    var type = e.target.value;
+    this.setState({type:type});
+  }
   render() {
     return (
       <div className="container main-content">
         <NewProductModal />
+        
+      <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" value="Flowers" className="button-17">Flowers</button>
+        <button type="button" value="Bouquest" className="button-17">Bouquest</button>
+        <button type="button" value="All" className="button-17">All</button>
+        <button type="button" onClick={() => this.refreshPage()} style={{"width":"10%","height":"5%",margin:"20px"}}>
+          <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
+      </button>
+      </div>
         {this.state.products.map((product) => {
           return (
             <Product
@@ -55,60 +75,3 @@ class ProductList extends Component {
 
 export default ProductList;
 
-// import React, { Component } from "react";
-
-// class Catalog extends Component {
-//   render() {
-//     return (
-//         <div>
-// <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-//     <h1 style="font-size: xxx-large; align-content: center">Flower Catalog</h1>
-// </div>
-// <div className="container px-4 px-lg-5 mt-5">
-//     <div id='myCatalog' className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"></div>
-//     <br/>
-//     <br/>
-//     <br/>
-// {/* <script type="text/javascript">
-//     $.ajax({
-//         url: 'db/products.json',
-//         dataType: 'json',
-//         success: function (data) {
-//             for (var i = 0; i < data.length; i++) {
-//                 var row = $(`<div className="col mb-5">
-//     <div className="card h-100">
-//         <img className="card-img-top" src="${data[i].image}" height="400" width="300"/>
-//         <div className="card-body p-4">
-//             <div className="text-center">
-//                 <h5 className="fw-bolder">${data[i].name}</h5>
-//                 <div className="d-flex justify-content-center small text-warning mb-2">
-//                     <div className="bi-star-fill"></div>
-//                     <div className="bi-star-fill"></div>
-//                     <div className="bi-star-fill"></div>
-//                     <div className="bi-star-fill"></div>
-//                     <div className="bi-star-fill"></div>
-//                 </div>
-//                 ${data[i].price}$
-//             </div>
-//         </div>
-// <!--        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
-// <!--            <div className="text-center"><a className="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>-->
-// <!--        </div>-->
-//     </div>
-// </div>
-//                 `);
-//                 $("#myCatalog").append($(row).html());
-//             }
-//         },
-//         error: function (jqXHR, textStatus, errorThrown) {
-//             alert('Error: ' + textStatus + ' - ' + errorThrown);
-//         }
-//     });
-// </script> */}
-// </div>
-// </div>
-//     );
-//   }
-// }
-
-// export default Catalog;

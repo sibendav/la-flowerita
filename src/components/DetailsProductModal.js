@@ -132,7 +132,6 @@ class DetailsProductModal extends Component {
     );
     if (!this.state.picture) {
       swal("Updated!", "Product updated successfully!", "success");
-      window.location.replace("#/catalog");
     }else{
     var myFormData = new FormData();
     myFormData.append('file', this.state.picture);
@@ -144,7 +143,6 @@ class DetailsProductModal extends Component {
     });
     if (response.status == 200) {
       swal("Updated!", "Product updated successfully!", "success");
-      window.location.replace("#/catalog");
     }
   }
   }

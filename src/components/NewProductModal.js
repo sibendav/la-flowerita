@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
 import withAuth from "./Auth.js"
+import swal from 'sweetalert';
+
 class NewProductModal extends Component {
   constructor() {
     super();
@@ -89,12 +91,10 @@ class NewProductModal extends Component {
       body: myFormData,
     });
     if (response.status == 200) {
-      alert("Product added successfully");
-      window.location.replace("/catalog");
+      swal("Success!", "Product added successfully!", "success");
     }
   }else{
-    alert("Didn't get id");
-  }
+    swal("Error!", "There was an error in uploading image", "error");  }
   }
   renderPreview() {
     if(this.state.src) {

@@ -39,6 +39,8 @@ module.exports = class User {
   }
 
   static async getCurrentUser(req, res, next) {
+    console.log(req.session);
+    console.log(req.user);
     return res.json(req.user);
   }
 
