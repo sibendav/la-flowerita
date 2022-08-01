@@ -18,7 +18,7 @@ const session = require('express-session');
 app.use(session(
     { secret: 'secret', 
     algorithms: ['RS256'], 
-    cookie: { maxAge: 360000 }, 
+    cookie: { maxAge: 60 }, 
     resave: false, 
     saveUninitialized: false }));
 const passport = require('passport');

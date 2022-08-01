@@ -8,10 +8,13 @@ module.exports = class Catalog {
 
     static async getCatalog(req, res, next){
         var type = req.body.type;
+        console.log(type);
         var products = [];
         if(type == "All" || !type){
+            console.log("all");
             products = await  ProductService.GetALL();
         } else{
+            console.log(type);
             products = await  ProductService.GetCatalogByType(type);
         }
         return res.json({products: products});

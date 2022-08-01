@@ -12,8 +12,8 @@ module.exports = class User {
   static async auth(req, res, next) {
     console.log("inside auth function");
     let exist = await UserService.FindByEmail(req.body.email);
-    console.log("/auth" + exist);
-    if (exist != 0) {
+    // console.log("/auth" + exist);
+    if (exist) {
       passport.authenticate("local", function (err, user, info) {
         if (err || !user) {
           if(info.status == 404){
@@ -40,8 +40,13 @@ module.exports = class User {
 
   static async getCurrentUser(req, res, next) {
     console.log(req.session);
-    console.log(req.user);
-    return res.json(req.user);
+    var profileImage = "";
+    if(req.user){
+    var user = await UserService.FindByEmail(req.user.email);
+    profileImage = user.profileImage;
+    }
+    // console.log(req.user);
+    return res.json({user: req.user, profileImage:profileImage});
   }
 
   static async logout(req, res, next) {
@@ -154,4 +159,11 @@ static async addUserProfile(req, res, next){
     return res.sendStatus(200);
 
 }
+
+
+static async getProfileImage(req, res, next){
+  var user = await UserService.FindByEmail(req.user.email);
+  return res.json({profileImage:user.profileImage});
+}
+
 }

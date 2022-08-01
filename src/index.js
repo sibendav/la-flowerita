@@ -21,6 +21,7 @@ import LoginModal from './components/LoginModal.js';
 import SignupModal from './components/SignupModal.js';
 import ResetPassword from './components/ResetPassword.js';
 import ProductList from './components/Catalog.js';
+import ShoppingCart from './components/ShoppingCart.js';
 import NoPermission from './components/NoPermission.js';
 
 class App extends Component {
@@ -29,7 +30,10 @@ class App extends Component {
         this.state = {
           // needed to change
             loggedIn: false,
-            ERROR: ""
+            ERROR: "", 
+            user: false,
+            profileImage: false,
+            numOfProductsInCart: false
         };
     }
 
@@ -40,9 +44,26 @@ class App extends Component {
             };
         await fetch("/getCurrentUser", options).then( res => res.json()).then(
             (result) => {
-              this.setState({
-                loggedIn: true
+              if(result.user)
+              {
+                this.setState({
+                loggedIn: true,
+                user: result.user,
+                profileImage: JSON.parse(sessionStorage.getItem('profileImage')) || ""
               });
+            }
+              else
+              {
+                var cart = JSON.parse(sessionStorage.getItem("cart"));
+                this.setState({
+                  numOfProductsInCart: cart.products.length
+                });
+              }
+              // localStorage.setItem("user", JSON.stringify(result.user));
+              // const saved = localStorage.getItem("user");
+              // const initialValue = JSON.parse(saved);
+              // console.log(initialValue);
+            
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
@@ -53,9 +74,15 @@ class App extends Component {
               });
             }
           )
+
         // let currenturl = window.location.href;
    }
     
+   async onUpdateCart(num){
+    this.setState({
+      numOfProductsInCart: num
+    });
+   }
     logout = async () =>{
         var options = {
             method: "GET",
@@ -64,11 +91,14 @@ class App extends Component {
         await fetch("/logout", options).then(
             (result) => {
               this.setState({
-                loggedIn: false}
+                loggedIn: false,
+                user: false}
                 //because setState is async function
                 , () => {
                     console.log(result);
                 })   
+                sessionStorage.removeItem("email");
+                sessionStorage.removeItem("profileImage");
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
@@ -82,64 +112,172 @@ class App extends Component {
             }
           )
         }
-
+      arrayBufferToBase64(buffer) {
+          var binary = '';
+          var bytes = [].slice.call(new Uint8Array(buffer.data));
+          bytes.forEach((b) => binary += String.fromCharCode(b));
+          return window.btoa(binary);
+      };
+      refresh = () => {
+        window.location.reload(false);
+      }
     render() {
-        return (
+      var path = "";
+      console.log(this.state.profileImage)
+      try{
+        path = "data:/" + this.state.profileImage.contentType + ";base64," + this.arrayBufferToBase64(this.state.profileImage.data)
+      } 
+      catch(e){
+      console.log("couldn't find path of profile image");
+      }
+      return (
         <div>
-        <HashRouter>
-            <nav className="navbar navbar-expand-lg"  style={{"backgroundColor": "#e3f2fd", "marginBottom": "auto","marginInline": "auto","marginTop": "auto"}}>
-          <div className="container-fluid">
-              <a className="navbar-brand" exact="true" to="/"><img src="images/flower_shop.png" height="60"/>Flowers Shop</a>
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <HashRouter>
+            <nav
+              className="navbar navbar-expand-lg"
+              style={{
+                backgroundColor: "#e3f2fd",
+                marginBottom: "auto",
+                marginInline: "auto",
+                marginTop: "auto",
+              }}
+            >
+              <div className="container-fluid">
+                <a className="navbar-brand" exact="true" to="/">
+                  <img src="images/flower_shop.png" height="60" />
+                  Flowers Shop
+                </a>
+                <button
+                  className="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNav"
+                  aria-controls="navbarNav"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
                   <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                </button>
+                <div
+                  className="collapse navbar-collapse"
+                  id="navbarSupportedContent"
+                >
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li className="nav-item">
-                          <NavLink className="nav-link active" style={{"fontSize": "initial"}} aria-current="page" to="/about" id="about">About</NavLink>
-                      </li>
-                      <li className="nav-item">
-                          <NavLink className="nav-link active" style={{"fontSize": "initial"}} to="/catalog" id="catalog">Flower Catalog</NavLink>
-                      </li>
-                      <li className="nav-item">
-                          <NavLink className="nav-link active" style={{"fontSize": "initial"}} to="/contact" id="contact">Contact</NavLink>
-                      </li>
-                      <li className="nav-item">
-                          <NavLink className="nav-link active" style={{"fontSize": "initial", display:"none"}} to="/users" id="users">Manage Users</NavLink>
-                      </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}
+                        aria-current="page"
+                        to="/about"
+                        id="about"
+                      >
+                        About
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}
+                        to="/catalog"
+                        id="catalog"
+                      >
+                        Flower Catalog
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}
+                        to="/contact"
+                        id="contact"
+                      >
+                        Contact
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial", display: "none" }}
+                        to="/users"
+                        id="users"
+                      >
+                        Manage Users
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}
+                        to="/cart"
+                        id="users"
+                      >
+                        <i class="fa" style={{ "font-size": "24px" }}>
+                          &#xf07a;
+                        </i>
+                        <span className="badge badge-warning" id="lblCartCount">
+                          {" "}
+                          {this.state.numOfProductsInCart}{" "}
+                        </span>
+                      </NavLink>
+                    </li>
                   </ul>
-                  <button type="button" className="button-17" id="logoutbtn" style={{display:this.state.loggedIn ? "block": "none"}}
-                    onClick={() => this.logout()}> Logout
+                  <button
+                    type="button"
+                    className="button-17"
+                    id="logoutbtn"
+                    style={{ display: this.state.loggedIn ? "block" : "none" }}
+                    onClick={() => this.logout()}
+                  >
+                    {" "}
+                    Logout
                   </button>
-
-                      <LoginModal showButton={this.state.loggedIn ? "none": "block"} />
-                      <SignupModal showButton={this.state.loggedIn ? "none": "block"}/>
-
+                  {this.state.user ? (
+                    <img
+                      src={path}
+                      className="avatar"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
+                        e.target.onerror = null; // prevents looping
+                      }}
+                      alt={this.props.name}
+                      height="150"
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <LoginModal
+                    reloadNavbar={this.refresh}
+                    showButton={this.state.loggedIn ? "none" : "block"}
+                  />
+                  <SignupModal
+                    showButton={this.state.loggedIn ? "none" : "block"}
+                  />
+                </div>
               </div>
-          </div>
-      </nav>
-  
-      <div id="content">
-        <Routes>
-            <Route exact = "true" path="/" element={<About/>}/>
-            <Route path="/about" element={<About/>}/>
-            <Route path="/catalog" element={<ProductList />}/>
-            <Route path="/contact" element={<Contact/>}/>
-            <Route path="/resetPassword" element={<ResetPassword/>}/>
-            <Route path="/NoPermission" element={<NoPermission/>}/>
+            </nav>
 
+            <div id="content">
+              <Routes>
+                <Route exact="true" path="/" element={<About />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/catalog" element={<ProductList onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/cart" element={<ShoppingCart onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/resetPassword" element={<ResetPassword />} />
+                <Route path="/NoPermission" element={<NoPermission />} />
+              </Routes>
+            </div>
 
-        </Routes>
-      </div>
-
-  
-      <footer className="container-fluid text-center" style={{"backgroundColor": "#e3f2fd", float: "bottom"}}>
-          <p>© Simha Franko & Adi Malachi Yosef 2022</p>
-      </footer>
-      </HashRouter>
-  
-  </div>
-        );
+            <footer
+              className="container-fluid text-center"
+              style={{ backgroundColor: "#e3f2fd", float: "bottom" }}
+            >
+              <p>© Simha Franko & Adi Malachi Yosef 2022</p>
+            </footer>
+          </HashRouter>
+        </div>
+      );
     }
 }
 

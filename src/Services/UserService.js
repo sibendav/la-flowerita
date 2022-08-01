@@ -24,15 +24,15 @@ module.exports = class UserService {
   }
   static async FindById(id) {
     console.log("finding user:" + id);
-    return User.find({ _id: id });
+    return User.findOne({ _id: id });
   }
   static async FindByEmail(e) {
-    console.log("finding user:" + e);
-    return User.find({ email: e });
+    console.log("finding user by email:" + e);
+    return User.findOne({ email: e });
   }
   static async FIND(e, p) {
     console.log("finding user:" + e + "" + p);
-    return User.find({ email: e, password: p });
+    return await User.findOne({ email: e, password: p });
   }
 
   static async REMOVE(e, p) {
@@ -56,6 +56,7 @@ module.exports = class UserService {
     ).exec();
   }
 
+  
 
 
 };

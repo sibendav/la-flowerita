@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
+import swal from 'sweetalert';
 
 class LoginModal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showModal: false,
       email: "",
       password: "",
       ERROR: "",
+      reloadNavbar: props.reloadNavbar
     };
   }
 
@@ -21,8 +23,6 @@ class LoginModal extends Component {
     this.setState({ showModal: true });
   };
   async dofetch() {
-    alert("hii");
-
     // check inputs
     var email = this.state.email;
     var password = this.state.password;
@@ -43,20 +43,21 @@ class LoginModal extends Component {
       body: JSON.stringify(user),
     };
     
-    let ok = 404;
     await fetch("/auth", options)
     .then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
-          alert("you logged successfully");
-          document.location.href = "/";
+          swal("Success!", "You Logged In!", "success");
+          // document.location.href = "/";
         }
         else if(res.status == 404){
           this.setState({ ERROR: "Email or password is not correct." });
+          return;
         }
         else if(res.status == 400){
           this.setState({ ERROR: "There was an error. Please try again" });
+          return;
         }
       },
       // Note: it's important to handle errors here
@@ -66,9 +67,21 @@ class LoginModal extends Component {
         this.setState({
           ERROR: error
         });
+        return;
       }
     )
-  }
+    options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+      };
+    await fetch("/getCurrentUser", options).then(res => res.json()).then((res) => {
+      sessionStorage.setItem("profileImage", JSON.stringify(res.profileImage));
+      sessionStorage.setItem("email", JSON.stringify(res.user.email));
+      // alert(res.profileImage);
+      this.state.reloadNavbar();
+      // document.location.href = "/";
+    })
+    }
 
 
   inputsHandler = (e) => {
