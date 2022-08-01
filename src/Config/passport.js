@@ -15,7 +15,7 @@ passport.use(new LocalStrategy({
         return done(null, false, { status:  404  });
       }
       user = {_id: user._id, email:user.email};
-      console.log(user);
+      console.log("logged " + JSON.stringify(user));
       return done(null, user);
     }).catch(done);
 }));

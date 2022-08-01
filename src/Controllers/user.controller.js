@@ -45,7 +45,7 @@ module.exports = class User {
     var user = await UserService.FindByEmail(req.user.email);
     profileImage = user.profileImage;
     }
-    // console.log(req.user);
+    console.log(req.user);
     return res.json({user: req.user, profileImage:profileImage});
   }
 
