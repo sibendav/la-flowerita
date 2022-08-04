@@ -31,7 +31,6 @@ class App extends Component {
           // needed to change
             loggedIn: false,
             ERROR: "", 
-            user: false,
             profileImage: false,
             numOfProductsInCart: false
         };
@@ -42,23 +41,14 @@ class App extends Component {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             };
-        await fetch("/getCurrentUser", options).then( res => res.json()).then(
+        await fetch("/getSession", options).then( res => res.json()).then(
             (result) => {
-              if(result.user)
-              {
+              console.log(result)
                 this.setState({
-                loggedIn: true,
-                user: result.user,
-                profileImage: JSON.parse(sessionStorage.getItem('profileImage')) || ""
+                loggedIn: result.isLogged,
+                profileImage: result.profileImage || "",
+                numOfProductsInCart: result.cart.products.length
               });
-            }
-              else
-              {
-                var cart = JSON.parse(sessionStorage.getItem("cart"));
-                this.setState({
-                  numOfProductsInCart: cart.products.length
-                });
-              }
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");
               // const initialValue = JSON.parse(saved);
@@ -95,10 +85,8 @@ class App extends Component {
                 user: false}
                 //because setState is async function
                 , () => {
-                    console.log(result);
+                  this.refresh();
                 })   
-                sessionStorage.removeItem("email");
-                sessionStorage.removeItem("profileImage");
             },
             // Note: it's important to handle errors here
             // instead of a catch() block so that we don't swallow
@@ -231,7 +219,7 @@ class App extends Component {
                     {" "}
                     Logout
                   </button>
-                  {this.state.user ? (
+                  {this.state.loggedIn ? (
                     <img
                       src={path}
                       className="avatar"

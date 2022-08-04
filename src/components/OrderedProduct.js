@@ -30,7 +30,7 @@ class OrderedProduct extends Component{
     if (this.state.quantity !== prevState.quantity) {
       this.setState({subTotal: this.state.quantity * this.state.price})
     }
-  }
+  } 
   async intoWishList(){
     this.setState({isInWishList: true});
   }

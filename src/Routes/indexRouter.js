@@ -23,7 +23,15 @@ router.post("/addNewProduct", jsonParser, CatalogCtrl.addNewProduct);
 router.post("/addProductPicture", jsonParser, CatalogCtrl.addProductPicture);
 router.post("/updateProduct", jsonParser, CatalogCtrl.updateProduct);
 router.post("/deleteProduct", jsonParser, CatalogCtrl.deleteProduct);
-router.post("addProductToCart", jsonParser, ShoppinglistCtrl.addProduct);
+// router.post("addProductToCart", jsonParser, ShoppinglistCtrl.addProduct);
+router.get("/getCurrentCart", jsonParser, ShoppinglistCtrl.getCurrentCart);
+router.get("/isLogged", jsonParser, UserCtrl.isLogged);
+router.post("/addNewProductToCart", jsonParser, ShoppinglistCtrl.addNewProductToCart);
+router.post("/updateProductInCart", jsonParser, ShoppinglistCtrl.updateProductInCart);
+router.post("/deleteProductFromCart", jsonParser, ShoppinglistCtrl.deleteProductFromCart);
+router.get("/getSession", jsonParser, UserCtrl.getSession);
+
+
 
 
 module.exports =  router;

@@ -11,7 +11,7 @@ module.exports = class Catalog {
         console.log(type);
         var products = [];
         if(type == "All" || !type){
-            console.log("all");
+            // console.log("all");
             products = await  ProductService.GetALL();
         } else{
             console.log(type);

@@ -6,7 +6,7 @@ const ProductSchema = new Schema({
       sellerId: Number,
       name: String,
       color: String,
-      price: String,
+      price: Number,
       type: String,
       isActivate: Boolean,
       description: String,

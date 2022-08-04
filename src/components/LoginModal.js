@@ -12,7 +12,7 @@ class LoginModal extends Component {
       email: "",
       password: "",
       ERROR: "",
-      reloadNavbar: props.reloadNavbar
+      reloadNavbar: props.reloadNavbar,
     };
   }
 
@@ -49,7 +49,7 @@ class LoginModal extends Component {
         console.log(res);
         if (res.status == 200) {
           swal("Success!", "You Logged In!", "success");
-          // document.location.href = "/";
+          document.location.href = "/";
         }
         else if(res.status == 404){
           this.setState({ ERROR: "Email or password is not correct." });
@@ -70,17 +70,17 @@ class LoginModal extends Component {
         return;
       }
     )
-    options = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-      };
-    await fetch("/getCurrentUser", options).then(res => res.json()).then((res) => {
-      sessionStorage.setItem("profileImage", JSON.stringify(res.profileImage));
-      sessionStorage.setItem("email", JSON.stringify(res.user.email));
-      // alert(res.profileImage);
-      this.state.reloadNavbar();
-      // document.location.href = "/";
-    })
+    // options = {
+    //   method: "GET",
+    //   headers: { "Content-Type": "application/json" }
+    //   };
+    // await fetch("/getCurrentUser", options).then(res => res.json()).then((res) => {
+    //   sessionStorage.setItem("profileImage", JSON.stringify(res.profileImage));
+    //   sessionStorage.setItem("email", JSON.stringify(res.user.email));
+    //   // alert(res.profileImage);
+    //   this.state.reloadNavbar();
+    //   // document.location.href = "/";
+    // })
     }
 
 

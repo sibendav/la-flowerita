@@ -1,10 +1,10 @@
+const { Double } = require("mongodb");
 const mongo = require("mongoose");
 const { Schema } = mongo;
 
 const ShoppinglistSchema = new Schema({
-      userId: Number,
+      userId: String,
       products: Array,
-      totalPrice: Number,
       isPaid: Boolean,
     }, { autoIndex: false });
 

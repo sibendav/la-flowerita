@@ -18,60 +18,77 @@ class ShoppingCart extends Component {
       onUpdateCart: props.onUpdateCart,
     };
   }
-  componentDidMount() {
-    const isAuth = sessionStorage.getItem("email");
-    console.log(sessionStorage);
-    if (isAuth) {
-      this.cartForLoggedUser();
-    } else {
-      this.cartForNoUser();
-    }
-  }
-  cartForLoggedUser(){
-    console.log("logged in");
-    // var products = [];
-    // var options = {
-    //   method: "GET",
-    //   headers: { "Content-Type": "application/json" },
-    // };
-    // await fetch("/getCurrentCart", options).then(res => res.json()).then(
-    //   (result) => {
-    //     if (result.status == 200) {
-    //       this.setState({
-    //         id: result.cart.id,
-    //         products: res.cart.products,
-    //         totalPrice: products.reduce(
-    //           (acc, item) => acc + item.price * item.quantity,
-    //           0
-    //         ),
-    //       });
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
-
-  }
-  cartForNoUser() {
-    console.log("no user");
-    var products = JSON.stringify([]);
-    if (sessionStorage.getItem("cart")) {
-      var cart = JSON.parse(sessionStorage.getItem("cart"));
-      console.log(cart);
-      if (cart) {
-        products = cart.products;
+  componentDidMount = async () => {
+    var options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    await fetch("/getCurrentCart", options).then(res => res.json()).then(
+      (result) => {
+        console.log(result)
+        if (result.status == 200) {
+          this.setState({
+            id: result.cart._id,
+            products: result.cart.products,
+            totalPrice: result.cart.products.reduce(
+              (acc, item) => acc + item.price * item.quantity,
+              0
+            ),
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
       }
-      sessionStorage.setItem("cart", JSON.stringify({ products: products }));
-      this.setState({
-        products: products,
-        totalPrice: products.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0
-        ),
-      });
-    }
+    );
   }
+
+  // async cartForLoggedUser(){
+  //   console.log("logged in");
+  //   var products = [];
+  //   var options = {
+  //     method: "GET",
+  //     headers: { "Content-Type": "application/json" },
+  //   };
+  //   await fetch("/getCurrentCart", options).then(res => res.json()).then(
+  //     (result) => {
+  //       console.log(result)
+  //       if (result.status == 200) {
+  //         this.setState({
+  //           id: result.cart._id,
+  //           products: result.cart.products,
+  //           totalPrice: result.cart.products.reduce(
+  //             (acc, item) => acc + item.price * item.quantity,
+  //             0
+  //           ),
+  //         });
+  //       }
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+
+  // }
+  // async cartForNoUser() {
+  //   console.log("no user");
+  //   var products = JSON.stringify([]);
+  //   if (sessionStorage.getItem("cart")) {
+  //     var cart = JSON.parse(sessionStorage.getItem("cart"));
+  //     console.log(cart);
+  //     if (cart) {
+  //       products = cart.products;
+  //     }
+  //     sessionStorage.setItem("cart", JSON.stringify({ products: products }));
+  //     this.setState({
+  //       products: products,
+  //       totalPrice: products.reduce(
+  //         (acc, item) => acc + item.price * item.quantity,
+  //         0
+  //       ),
+  //     });
+  //   }
+  // }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.products.length != prevState.products.length) {
       this.state.onUpdateCart(this.state.products.length);
@@ -88,36 +105,109 @@ class ShoppingCart extends Component {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        var cart = JSON.parse(sessionStorage.getItem("cart"));
-        console.log(id);
-        cart.products = cart.products.filter((p) => p.id != id);
-        sessionStorage.setItem("cart", JSON.stringify(cart));
-        this.setState({
-          products: cart.products,
-          totalPrice: cart.products.reduce(
-            (acc, item) => acc + item.price * item.quantity,
-            0
-          ),
-        });
+        var options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({productId: id})
+        };
+        fetch("/deleteProductFromCart", options).then(res => res.json()).then(
+          (result) => {
+            console.log(result)
+            if (result.status == 200) {
+              this.setState({
+                products: result.cart.products,
+                totalPrice: result.cart.products.reduce(
+                  (acc, item) => acc + item.price * item.quantity,
+                  0
+                ),
+              });
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       }
-    });
-  }
+      //   var isLogged = await isLogged();
+      //   if (isLogged){
+      //     var options = {
+      //       method: "GET",
+      //       headers: { "Content-Type": "application/json" },
+      //     };
+      //     await fetch("/isLogged", options).then(
+      //       (result) => {
+      //         console.log("hiiiii");
+      //         if (result.status == 200) {
+      //           return true;
+      //         } else {
+      //           return false;
+      //         }
+      //       },
+      //       (error) => {
+      //         console.log(error);
+      //         return false;
+      //       }
+      //     );
+      //   } else {
+      //   var cart = JSON.parse(sessionStorage.getItem("cart"));
+      //   console.log(id);
+      //   cart.products = cart.products.filter((p) => p.id != id);
+      //   sessionStorage.setItem("cart", JSON.stringify(cart));
+      //   this.setState({
+      //     products: cart.products,
+      //     totalPrice: cart.products.reduce(
+      //       (acc, item) => acc + item.price * item.quantity,
+      //       0
+      //     ),
+      //   });
+      // }
+      })
+    }
+
   async updateQuantity(e, id) {
     var quantity = Number(e.target.value);
-    var cart = JSON.parse(sessionStorage.getItem("cart"));
-    cart.products.map((p) => {
-      if (p.id == id) p.quantity = quantity;
-    });
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    console.log(cart);
-    this.setState({
-      products: cart.products,
-      totalPrice: cart.products.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      ),
-    });
+    var product = this.state.products.filter(p => p.id == id);
+    product = product[0]    
+    product.quantity = quantity;
+    var products = this.state.products;
+    products.map((p) => {if(p.id == id) p = product})
+    var options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body:JSON.stringify({product:{productId: product.id, price: product.price, quantity: product.quantity}})
+    };
+    await fetch("/updateProductInCart", options).then(res => res.json()).then(
+      (result) => {
+        console.log(result)
+        if (result.status == 200) {
+          this.setState({
+            products: result.cart.products,
+            totalPrice: result.cart.products.reduce(
+              (acc, item) => acc + item.price * item.quantity,
+              0
+            ),
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
+  //   var cart = JSON.parse(sessionStorage.getItem("cart"));
+  //   cart.products.map((p) => {
+  //     if (p.id == id) p.quantity = quantity;
+  //   });
+  //   sessionStorage.setItem("cart", JSON.stringify(cart));
+  //   console.log(cart);
+  //   this.setState({
+  //     products: cart.products,
+  //     totalPrice: cart.products.reduce(
+  //       (acc, item) => acc + item.price * item.quantity,
+  //       0
+  //     ),
+  //   });
+  // }
   render() {
     return (
       <div className="productSlider mb-5 mt-5">

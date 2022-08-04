@@ -7,6 +7,7 @@ const Users = mongoose.model('Users');
 const crypto = require('crypto');
 var fs = require('fs');
 const imagesMiddleware = require("../Middleware/uploadImage");
+const ShoppinglistsService = require('../Services/ShoppinglistService');
 
 module.exports = class User {
   static async auth(req, res, next) {
@@ -166,4 +167,27 @@ static async getProfileImage(req, res, next){
   return res.json({profileImage:user.profileImage});
 }
 
+static async isLogged(req, res, next){
+  if(req.user)
+    return res.sendStatus(200);
+  return res.sendStatus(404);
+}
+
+static async getSession(req, res, next){
+  var profileImage = {data:"", contentType:""};
+  var cart = {products: []}
+  var isLogged = false;
+  console.log("getsession");
+  if(req.user){
+    profileImage = await Users.findById(req.user._id).profileImage;
+    cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
+    isLogged = true;
+  } else{
+    if(req.session.cart)
+      {cart = req.session.cart;}
+  }
+  var result = {isLogged: isLogged, profileImage:profileImage, cart: cart}
+  console.log(req.session);
+  return res.json(result)
+}
 }
