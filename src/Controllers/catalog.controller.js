@@ -1,4 +1,5 @@
 const ProductService = require('../Services/ProductService');
+const WishlistService = require('../Services/WishlistService');
 const mongoose = require('mongoose');
 const Products = mongoose.model('Products');
 var fs = require("fs");
@@ -17,6 +18,27 @@ module.exports = class Catalog {
             console.log(type);
             products = await  ProductService.GetCatalogByType(type);
         }
+        var loggedUser = req.user ? true : false;
+        var wishlist = {products:[]};
+        if (loggedUser) {
+          var id = req.user._id;
+          wishlist = await WishlistService.GetCurrentWishlist(id);
+          console.log("get wishlist from DB")
+        } else {
+            if(req.session.wishlist){
+                wishlist = req.session.wishlist;
+                wishlist.products = wishlist.products.map(p => p.id);
+                console.log("get wishlist from session")
+            }
+        }
+        // var result = [];
+        // for(var i = 0; i < products.length; i++){
+        //     products[i] = {isActive:products[i].isActive, color:products[i].color, type:products[i].type, description:products[i].description,name:products[i].name, image:products[i].image,price:products[i].price, isInWishList:wishlist.products.indexOf(products[i]._id) == -1 ? false : true};
+        // }
+
+        // console.log(products[0]);
+
+        // products = products.map(p => p.isInWishList = wishlist.products.indexOf(p.id) == -1 ? false : true);
         return res.json({products: products});
     }
     static async addNewProduct(req, res, next){

@@ -119,6 +119,7 @@ module.exports = class Shoppinglist {
     }
     static async getCurrentCart(req, res, next){
         // console.log("getCurrentCart");
+        console.log("hi")
         var cart = { products: [] };
         if (req.user) {
         //   console.log("logged user");
@@ -149,17 +150,9 @@ module.exports = class Shoppinglist {
                 cart = req.session.cart;
                 console.log("get cart from session")
                 return res.json({status: 200, cart: cart});
-            } else {
-                req.session.cart = cart;
-                req.session.save((err) => {
-                    console.log(err);
-                  });
-                console.log(req.session)
-                console.log("create cart in session")
-                return res.json({status: 200, cart: cart});
-            // console.log(req.session.cart);
+            }
         }
+        
     }
-        // console.log("cart of user " + cart);
-    } 
+    
 }

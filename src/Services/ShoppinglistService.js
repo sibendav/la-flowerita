@@ -30,16 +30,6 @@ module.exports = class ProductService {
     return result;
   }
 
-  static async GetALL() {
-  }
-
-  static async CREATE(product) {
-  }
-
-  static async FIND(id) {
-    return Products.findById(id);
-  }
-
   static async AddProduct(id, product) {
     var cart = await this.GetCurrentCart(id)
     var orderProducts = await OrderProducts.find({ _id: { "$in": cart.products }});
@@ -56,6 +46,33 @@ module.exports = class ProductService {
     console.log("create orderProduct")
     // create orderProduct
     product = {productId: product._id, quantity: 1, priceForEach: product.price};
+    var orderProduct = new OrderProducts(product);
+    await orderProduct.save();
+    console.log(orderProduct)
+    console.log("new order product " + orderProduct);
+    cart.products.push(orderProduct._id);
+    await Shoppinglist.updateOne(
+      { _id: cart._id},
+      { $set: { products: cart.products } }
+    );
+  }
+
+  static async AddProductFromSession(id, product) {
+    var cart = await this.GetCurrentCart(id)
+    var orderProducts = await OrderProducts.find({ _id: { "$in": cart.products }});
+    var orderProduct = orderProducts.find(p => p.productId == product.id);
+    console.log("exisits " + orderProduct);
+    if(orderProduct){
+      console.log("update quantity")
+      await OrderProducts.updateOne(
+        { productId:product.id },
+        { $set: { quantity:  orderProduct.quantity + product.quantity } }
+      );
+      return;
+    }
+    console.log("create orderProduct")
+    // create orderProduct
+    product = {productId: product.id, quantity: product.quantity, priceForEach: product.price};
     var orderProduct = new OrderProducts(product);
     await orderProduct.save();
     console.log(orderProduct)

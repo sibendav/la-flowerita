@@ -8,8 +8,9 @@ import swal from "sweetalert";
 class Product extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
-      isInWishList: false,
+      isInWishList: props.isInWishList,
       id: props.id,
       name: props.name,
       image: props.image,
@@ -17,9 +18,11 @@ class Product extends Component {
       price: props.price,
       description: props.description,
       type: props.type,
-      onUpdateCart: props.onUpdateCart
+      onUpdateCart: props.onUpdateCart,
+      onUpdateWishlist: props.onUpdateWishlist
     };
   }
+  
   async intoCart(props) {
     console.log(this.state);
       var options = {
@@ -39,32 +42,28 @@ class Product extends Component {
           console.log(error);
         }
       );
-    // } else {
-    //   var cart = JSON.parse(sessionStorage.getItem("cart"));
-    //   console.log(cart);
-    //   var newProduct = {
-    //     id: this.state.id,
-    //     quantity: 1,
-    //     name: this.state.name,
-    //     price: this.state.price,
-    //     image: this.state.image,
-    //   };
-    //   console.log(newProduct);
-    //   if (!cart || cart.products[0] == null) {
-    //     cart = { products: [newProduct] };
-    //   } else if (cart.products.find(p => p.id == this.state.id)) {
-    //     cart.products.map((p) => {
-    //       if (p.id == this.state.id) p.quantity = p.quantity + 1;
-    //     });
-    //   } else {
-    //     cart.products.push(newProduct);
-    //   }
-    //   sessionStorage.setItem("cart", JSON.stringify(cart));
-    //   this.state.onUpdateCart(cart.products.length);
-    // }
     swal("Success","Product Added Successfully To Cart", "success")
   }
   async intoWishList() {
+    console.log(this.state);
+      var options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: this.state.id }),
+      };
+      await fetch("/addNewProductToWishlist", options).then(res => res.json()).then(
+        (result) => {
+          if (result.status == 200) {
+            this.state.onUpdateWishlist(result.wishlist.products.length);
+
+            swal("Success!", "Product Added To Cart!", "success");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    swal("Success","Product Added Successfully To Cart", "success")
     this.setState({ isInWishList: true });
   }
   async outOfWishList() {

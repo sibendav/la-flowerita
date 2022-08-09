@@ -12,11 +12,12 @@ class ProductList extends Component {
 
     this.state = {
       products: [],
-      type: false
+      type: false,
+      wishlist: []
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount(){
     var type = this.state.type ? this.state.type : "All";
     var options = {
         method: "POST",
@@ -24,10 +25,19 @@ class ProductList extends Component {
         body:JSON.stringify({type: type})
     };
     console.log(type);
-    await fetch("/getCatalog", options).then(res => res.json())
+    fetch("/getCatalog", options).then(res => res.json())
     .then((result) => {
       this.setState({ products: result.products });
       console.log(this.state.products);
+    });
+    options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+  };
+    fetch("/getCurrentWishlist", options).then(res => res.json())
+    .then((result) => {
+      console.log(result.wishlist.products[0]);
+      this.setState({ wishlist: result.wishlist.products.map(p => p.id) });
     });
   }
 
@@ -83,6 +93,8 @@ class ProductList extends Component {
               description={product.description}
               type={product.type}
               onUpdateCart={(num) => this.props.onUpdateCart(num)}
+              onUpdateWishlist={(num) => this.props.onUpdateWishlist(num)}
+              isInWishList={this.state.wishlist.indexOf(product._id) == -1 ? false: true}
             />
           );
         }): <h1> There are no products for this category</h1>

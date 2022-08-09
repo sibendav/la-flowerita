@@ -22,17 +22,19 @@ import SignupModal from './components/SignupModal.js';
 import ResetPassword from './components/ResetPassword.js';
 import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
+import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
+import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-          // needed to change
             loggedIn: false,
             ERROR: "", 
             profileImage: false,
-            numOfProductsInCart: false
+            numOfProductsInCart: false,
+            numOfProductsInWishlist: false
         };
     }
 
@@ -47,7 +49,8 @@ class App extends Component {
                 this.setState({
                 loggedIn: result.isLogged,
                 profileImage: result.profileImage || "",
-                numOfProductsInCart: result.cart.products.length
+                numOfProductsInCart: result.cart.products.length,
+                numOfProductsInWishlist: result.wishlist.products.length
               });
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");
@@ -72,6 +75,11 @@ class App extends Component {
     this.setState({
       numOfProductsInCart: num
     });
+  }
+    async onUpdateWishlist(num){
+      this.setState({
+        numOfProductsInWishlist: num
+      });
    }
     logout = async () =>{
         var options = {
@@ -208,6 +216,24 @@ class App extends Component {
                         </span>
                       </NavLink>
                     </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}
+                        to="/wishlist"
+                        id="users"
+                      >
+                        <i class="fa" style={{ "font-size": "24px" }}>
+                        <FaHeart
+                          style={{ cursor: "pointer" }}
+                        />
+                        </i>
+                        <span className="badge badge-warning" id="lblCartCount">
+                          {" "}
+                          {this.state.numOfProductsInWishlist}{" "}
+                        </span>
+                      </NavLink>
+                    </li>
                   </ul>
                   <button
                     type="button"
@@ -249,8 +275,9 @@ class App extends Component {
               <Routes>
                 <Route exact="true" path="/" element={<About />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/catalog" element={<ProductList onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/catalog" element={<ProductList onUpdateWishlist={(num) => this.onUpdateWishlist(num)} onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
                 <Route path="/cart" element={<ShoppingCart onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/wishlist" element={<Wishlist onUpdateCart={(num) => this.onUpdateCart(num)} onUpdateWishlist={(num) => this.onUpdateWishlist(num)}/>} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/NoPermission" element={<NoPermission />} />

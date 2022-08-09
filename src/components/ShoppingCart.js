@@ -223,13 +223,14 @@ class ShoppingCart extends Component {
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Sub Total</th>
-                    <th>Action</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}
+                      isCart={true}
                       product={product}
                       onDelete={(id) => this.deleteFromCart(id)}
                       onUpdate={(e, id) => this.updateQuantity(e, id)}
