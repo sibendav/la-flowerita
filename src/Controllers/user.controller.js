@@ -117,11 +117,11 @@ module.exports = class User {
   
       console.log("I am in resetPassword function");
     if(!user){
-      console.log(user);
+      // console.log(user);
       return res.json({status: 404});
     }
     console.log("finished checking resetPassword function");
-    console.log(user);
+    // console.log(user);
     return res.json({id: user._id, status: 200});
   }
 
@@ -154,10 +154,10 @@ module.exports = class User {
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
-    newUser.isActivate = true;
+    newUser.isActivate = user.degree != "Customer" ? false: true;
     await newUser.save();
     console.log("user added successfullly");
-    console.log(newUser);
+    // console.log(newUser);
     return res.json({status:200, id:newUser._id});
   }
 
@@ -169,7 +169,7 @@ static async addUserProfile(req, res, next){
     var user = await UserService.FindById(id);
     if(user){
         user.profileImage = {data:req.file.buffer, contentType: req.file.mimetype};
-        console.log(user);
+        // console.log(user);
         await UserService.UpdateById(id,user)
     }
     return res.sendStatus(200);
@@ -203,6 +203,9 @@ static async getSession(req, res, next){
     if(req.session.cart)
       {
         cart = req.session.cart;
+      }
+    if(req.session.wishlist){
+      console.log("hi")
         wishlist = req.session.wishlist;
       }
   }

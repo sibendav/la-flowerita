@@ -20,6 +20,7 @@ class NewProductModal extends Component {
       picture: false,
       src: false,
       id: 0,
+      maxAmount:"",
       ERROR: "",
     };
   }
@@ -38,12 +39,14 @@ class NewProductModal extends Component {
     var color = this.state.color;
     var type = this.state.type;
     var picture = this.state.picture;
+    var maxAmount = this.state.maxAmount;
     if (
       name == "" ||
       price == "" ||
       description == "" ||
       color == "" ||
       type == "" ||
+      maxAmount == "" ||
       !picture
     ) {
       this.setState({ ERROR: "Please fill all the fields." });
@@ -55,6 +58,7 @@ class NewProductModal extends Component {
       description: description,
       price: price,
       type: type,
+      maxAmount: maxAmount
     };
 
     var options = {
@@ -199,6 +203,17 @@ class NewProductModal extends Component {
                   id="price"
                   className="form-control"
                   placeholder="Price"
+                  onChange={this.inputsHandler}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="number"
+                  name="maxAmount"
+                  id="maxAmount"
+                  className="form-control"
+                  placeholder="Max Amount"
                   onChange={this.inputsHandler}
                   required
                 />

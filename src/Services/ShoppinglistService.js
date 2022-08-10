@@ -6,7 +6,14 @@ const OrderProducts = mongoose.model('OrderProducts');
 module.exports = class ProductService {
 
   static async GetCurrentCart(userId) {
-    return Shoppinglist.findOne({userId: userId, isPaid: false});
+    var cart = await Shoppinglist.findOne({userId: userId, isPaid: false});
+    // console.log(cart);
+    if(!cart){
+      console.log("new cart")
+      cart = new Shoppinglist({userId:userId, isPaid:false, products:[]})
+      await cart.save();
+    }
+    return cart;
   }
 
   static async GetProductsDetails(products) {
@@ -109,5 +116,12 @@ module.exports = class ProductService {
       { $set: { products: cart.products } }
     );
     await OrderProducts.deleteOne({productId: productId})
+  }
+
+  static async CartPaid(userId){
+    await Shoppinglist.updateOne(
+      { userId: userId, isPaid: false},
+      { $set: { isPaid: true, date: Date.now() } }
+    );
   }
 };

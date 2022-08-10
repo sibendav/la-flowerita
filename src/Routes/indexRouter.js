@@ -34,7 +34,7 @@ router.post("/addNewProductToWishlist", jsonParser, WishlistCtrl.addNewProductTo
 router.post("/updateProductInWishlist", jsonParser, WishlistCtrl.updateProductInWishlist);
 router.post("/deleteProductFromWishlist", jsonParser, WishlistCtrl.deleteProductFromWishlist);
 router.get("/getSession", jsonParser, UserCtrl.getSession);
-
+router.get("/payNow",jsonParser, ShoppinglistCtrl.payNow)
 
 
 

@@ -95,6 +95,7 @@ class ProductList extends Component {
               onUpdateCart={(num) => this.props.onUpdateCart(num)}
               onUpdateWishlist={(num) => this.props.onUpdateWishlist(num)}
               isInWishList={this.state.wishlist.indexOf(product._id) == -1 ? false: true}
+              maxAmount={product.maxAmount}
             />
           );
         }): <h1> There are no products for this category</h1>

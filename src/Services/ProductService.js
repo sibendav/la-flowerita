@@ -20,6 +20,8 @@ module.exports = class ProductService {
       isActivate: true,
       color: product.color,
       image: product.image,
+      maxAmount: product.maxAmount,
+      sellerId: product.sellerId
     });
   }
 
@@ -41,6 +43,8 @@ module.exports = class ProductService {
           color: product.color,
           price: product.price,
           type: product.type,
+          maxAmount: product.maxAmount,
+          sellerId: product.sellerId
           // image: product.image,
           // isActivate: product.isActivate
         },

@@ -8,7 +8,13 @@ const OrderProducts = mongoose.model('OrderProducts');
 module.exports = class ProductService {
 
   static async GetCurrentWishlist(userId) {
-    return Wishlist.findOne({userId: userId}).lean();
+    var wl = await Wishlist.findOne({userId: userId});
+    if(!wl){
+      console.log("new wl")
+      wl = new Wishlist({userId:userId, products:[]})
+      await wl.save();
+    }
+    return wl;
   }
 
   static async GetProductsDetails(products) {

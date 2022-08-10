@@ -15,12 +15,20 @@ const dbConfig = require("./src/Config/db");
 
 // AUTHENTIATION
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 app.use(session(
     { secret: 'secret', 
     algorithms: ['RS256'], 
     cookie: { maxAge: 15 * 60 * 1000 }, 
     resave: false, 
-    saveUninitialized: false }));
+    saveUninitialized: false,
+    // store: MongoStore.create({
+    //     mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
+    //     ttl: 15 * 60 * 1000 ,
+    //     autoRemove: 'native' 
+    // })
+     }));
 const passport = require('passport');
 const LocalStrategy = require('passport-local')
 app.use(passport.initialize())
@@ -51,4 +59,5 @@ app.listen(port, () => {
 
 indexRouter = require("./src/Routes/indexRouter");
 app.use("/", indexRouter);
+
 

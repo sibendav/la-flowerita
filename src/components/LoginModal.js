@@ -3,7 +3,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import swal from 'sweetalert';
-
+import {
+  FiLogIn,
+} from "react-icons/fi";
 class LoginModal extends Component {
   constructor(props) {
     super(props);
@@ -91,11 +93,12 @@ class LoginModal extends Component {
     return (
       <div>
         <Button
-          style={{ display: this.props.showButton }}
-          className="button-17"
+          title="Log In"
+          class="btn btn-primary btn-lg btn-floating" 
+          style={{display: this.props.showButton,"background-color": "#17c0eb"}}
           onClick={() => this.handleShow()}
         >
-          Login
+          {this.props.menuCollapse ? "" :"Login"}<FiLogIn/>
         </Button>
         {/* <button style={{"float":"right"}} type="button" id="login"  data-bs-toggle="modal" data-bs-target="#myModal">
                       Login */}

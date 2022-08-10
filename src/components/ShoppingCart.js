@@ -13,7 +13,6 @@ class ShoppingCart extends Component {
       id: -1,
       totalPrice: 0,
       products: [],
-      deleted: [],
       loggedIn: false,
       onUpdateCart: props.onUpdateCart,
     };
@@ -43,52 +42,6 @@ class ShoppingCart extends Component {
     );
   }
 
-  // async cartForLoggedUser(){
-  //   console.log("logged in");
-  //   var products = [];
-  //   var options = {
-  //     method: "GET",
-  //     headers: { "Content-Type": "application/json" },
-  //   };
-  //   await fetch("/getCurrentCart", options).then(res => res.json()).then(
-  //     (result) => {
-  //       console.log(result)
-  //       if (result.status == 200) {
-  //         this.setState({
-  //           id: result.cart._id,
-  //           products: result.cart.products,
-  //           totalPrice: result.cart.products.reduce(
-  //             (acc, item) => acc + item.price * item.quantity,
-  //             0
-  //           ),
-  //         });
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //     }
-  //   );
-
-  // }
-  // async cartForNoUser() {
-  //   console.log("no user");
-  //   var products = JSON.stringify([]);
-  //   if (sessionStorage.getItem("cart")) {
-  //     var cart = JSON.parse(sessionStorage.getItem("cart"));
-  //     console.log(cart);
-  //     if (cart) {
-  //       products = cart.products;
-  //     }
-  //     sessionStorage.setItem("cart", JSON.stringify({ products: products }));
-  //     this.setState({
-  //       products: products,
-  //       totalPrice: products.reduce(
-  //         (acc, item) => acc + item.price * item.quantity,
-  //         0
-  //       ),
-  //     });
-  //   }
-  // }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.products.length != prevState.products.length) {
       this.state.onUpdateCart(this.state.products.length);
@@ -128,42 +81,28 @@ class ShoppingCart extends Component {
           }
         );
       }
-      //   var isLogged = await isLogged();
-      //   if (isLogged){
-      //     var options = {
-      //       method: "GET",
-      //       headers: { "Content-Type": "application/json" },
-      //     };
-      //     await fetch("/isLogged", options).then(
-      //       (result) => {
-      //         console.log("hiiiii");
-      //         if (result.status == 200) {
-      //           return true;
-      //         } else {
-      //           return false;
-      //         }
-      //       },
-      //       (error) => {
-      //         console.log(error);
-      //         return false;
-      //       }
-      //     );
-      //   } else {
-      //   var cart = JSON.parse(sessionStorage.getItem("cart"));
-      //   console.log(id);
-      //   cart.products = cart.products.filter((p) => p.id != id);
-      //   sessionStorage.setItem("cart", JSON.stringify(cart));
-      //   this.setState({
-      //     products: cart.products,
-      //     totalPrice: cart.products.reduce(
-      //       (acc, item) => acc + item.price * item.quantity,
-      //       0
-      //     ),
-      //   });
-      // }
       })
     }
+  async payNow(){
+    if(this.state.products.length < 1){
+      swal("Error", "Please add atleast one product to the cart","error")
+    }
+    var options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    await fetch("/payNow", options).then(res => {
+      if(res.status == 200){
+          swal("Success","Payment is successful","success");
+          this.setState({products:[], totalPrice: 0});
+          this.onUpdateCart(this.state.products.length);
+    }
+      else{
+        swal("Error","There was an error","error");
+      }
+    })
 
+  }
   async updateQuantity(e, id) {
     var quantity = Number(e.target.value);
     var product = this.state.products.filter(p => p.id == id);
@@ -194,20 +133,7 @@ class ShoppingCart extends Component {
       }
     );
   }
-  //   var cart = JSON.parse(sessionStorage.getItem("cart"));
-  //   cart.products.map((p) => {
-  //     if (p.id == id) p.quantity = quantity;
-  //   });
-  //   sessionStorage.setItem("cart", JSON.stringify(cart));
-  //   console.log(cart);
-  //   this.setState({
-  //     products: cart.products,
-  //     totalPrice: cart.products.reduce(
-  //       (acc, item) => acc + item.price * item.quantity,
-  //       0
-  //     ),
-  //   });
-  // }
+
   render() {
     return (
       <div className="productSlider mb-5 mt-5">
@@ -253,7 +179,7 @@ class ShoppingCart extends Component {
                 <h6>Total Price :</h6>
                 <span>{this.state.totalPrice}$</span>
               </div>
-              <Button variant="dark" size="md" className="mt-4 w-100">
+              <Button  onClick={() => this.payNow()} variant="dark" size="md" className="mt-4 w-100">
                 pay now
               </Button>
             </div>

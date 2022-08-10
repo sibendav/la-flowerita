@@ -24,8 +24,30 @@ import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
-import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
+//import react pro sidebar components
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent
+} from "react-pro-sidebar";
 
+//import icons from react icons
+import { FaList, FaMailBulk, FaHeart, FaQuestion, FaUsers } from "react-icons/fa";
+// import {BiLogOut} from "react-icons/bi";
+import {
+  FiHome,
+  FiLogOut,
+  FiArrowUpCircle,
+  FiArrowDownCircle
+} from "react-icons/fi";
+import { RiPencilLine } from "react-icons/ri";
+import { BiCog } from "react-icons/bi";
+
+//import sidebar css from react-pro-sidebar module and our custom css
+import "react-pro-sidebar/dist/css/styles.css";
 class App extends Component {
     constructor() {
         super();
@@ -34,7 +56,9 @@ class App extends Component {
             ERROR: "", 
             profileImage: false,
             numOfProductsInCart: false,
-            numOfProductsInWishlist: false
+            numOfProductsInWishlist: false,
+            menuCollapse: false
+
         };
     }
 
@@ -117,6 +141,9 @@ class App extends Component {
       refresh = () => {
         window.location.reload(false);
       }
+      async setMenuCollapse(){
+        this.setState({menuCollapse: !this.state.menuCollapse})
+      }
     render() {
       var path = "";
       console.log(this.state.profileImage)
@@ -129,7 +156,7 @@ class App extends Component {
       return (
         <div>
           <HashRouter>
-            <nav
+            <nav 
               className="navbar navbar-expand-lg"
               style={{
                 backgroundColor: "#e3f2fd",
@@ -138,10 +165,10 @@ class App extends Component {
                 marginTop: "auto",
               }}
             >
+              {this.state.menuCollapse ? <FiArrowDownCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/> : <FiArrowUpCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/>}
               <div className="container-fluid">
                 <a className="navbar-brand" exact="true" to="/">
-                  <img src="images/flower_shop.png" height="60" />
-                  Flowers Shop
+                  <img className="avatar" src="images/flower_shop.png" height="60" />
                 </a>
                 <button
                   className="navbar-toggler"
@@ -167,7 +194,7 @@ class App extends Component {
                         to="/about"
                         id="about"
                       >
-                        About
+                        {this.state.menuCollapse ? "" :"About "}<FaQuestion />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -176,8 +203,9 @@ class App extends Component {
                         style={{ fontSize: "initial" }}
                         to="/catalog"
                         id="catalog"
+                        title="Catalog"
                       >
-                        Flower Catalog
+                        {this.state.menuCollapse ? "": "Flower Catalog "}<FaList /> 
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -186,8 +214,9 @@ class App extends Component {
                         style={{ fontSize: "initial" }}
                         to="/contact"
                         id="contact"
+                        title="Contact"
                       >
-                        Contact
+                        {this.state.menuCollapse ? "" :"Contact "}<FaMailBulk />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -196,8 +225,9 @@ class App extends Component {
                         style={{ fontSize: "initial", display: "none" }}
                         to="/users"
                         id="users"
+                        title="Users"
                       >
-                        Manage Users
+                        {this.state.menuCollapse ? "" : "Manage Users "}<FaUsers />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -205,13 +235,13 @@ class App extends Component {
                         className="nav-link active"
                         style={{ fontSize: "initial" }}
                         to="/cart"
-                        id="users"
+                        id="cart"
                       >
-                        <i class="fa" style={{ "font-size": "24px" }}>
+                        {this.state.menuCollapse ? "" : "Cart"}<i class="fa" style={{ "font-size": "24px" }}>
                           &#xf07a;
-                        </i>
+                        </i>  
                         <span className="badge badge-warning" id="lblCartCount">
-                          {" "}
+                          {""}
                           {this.state.numOfProductsInCart}{" "}
                         </span>
                       </NavLink>
@@ -223,11 +253,11 @@ class App extends Component {
                         to="/wishlist"
                         id="users"
                       >
-                        <i class="fa" style={{ "font-size": "24px" }}>
+                        {this.state.menuCollapse ?""
+                        : "Wish List"}<i class="fa" style={{ "font-size": "24px" }}>
                         <FaHeart
                           style={{ cursor: "pointer" }}
-                        />
-                        </i>
+                        /></i> 
                         <span className="badge badge-warning" id="lblCartCount">
                           {" "}
                           {this.state.numOfProductsInWishlist}{" "}
@@ -241,9 +271,9 @@ class App extends Component {
                     id="logoutbtn"
                     style={{ display: this.state.loggedIn ? "block" : "none" }}
                     onClick={() => this.logout()}
+                    title="Log Out"
                   >
-                    {" "}
-                    Logout
+                    {this.state.menuCollapse ? "" :"Logout"}<FiLogOut />
                   </button>
                   {this.state.loggedIn ? (
                     <img
@@ -263,9 +293,11 @@ class App extends Component {
                   <LoginModal
                     reloadNavbar={this.refresh}
                     showButton={this.state.loggedIn ? "none" : "block"}
+                    menuCollapse={this.state.menuCollapse}
                   />
                   <SignupModal
                     showButton={this.state.loggedIn ? "none" : "block"}
+                    menuCollapse={this.state.menuCollapse}
                   />
                 </div>
               </div>

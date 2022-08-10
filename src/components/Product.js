@@ -18,6 +18,7 @@ class Product extends Component {
       price: props.price,
       description: props.description,
       type: props.type,
+      maxAmount: props.maxAmount,
       onUpdateCart: props.onUpdateCart,
       onUpdateWishlist: props.onUpdateWishlist
     };
@@ -106,15 +107,15 @@ class Product extends Component {
         <div className="col-md-2 product-detail">
           <h4>{this.props.name}</h4>
           <div>
-            <h5>{this.props.description}</h5>
           </div>
           <div
             className="circle"
             style={{ background: this.props.color }}
           ></div>
         </div>
-        <div className="col-md-2 product-detail"></div>
+        <div className="col-md-2 product-detail">{this.props.description}</div>
         <div className="col-md-2 product-price">{this.props.price}</div>
+        <div className="col-md-2 product-price">{this.props.maxAmount}</div>
         <div className="col-md-1 product-price">
           {this.state.isInWishList ? (
             <FaHeart
@@ -146,6 +147,7 @@ class Product extends Component {
             price={this.props.price}
             description={this.props.description}
             type={this.props.type}
+            maxAmount={this.state.maxAmount}
           />
         </div>
       </div>
