@@ -1,12 +1,5 @@
-
-
 import React, {Component} from 'react';
-import {
-    Route,
-    NavLink,
-    HashRouter,
-    Routes
-  } from "react-router-dom";
+import {Route, NavLink, HashRouter, Routes} from "react-router-dom";
 import {render} from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import $ from 'jquery'; 
@@ -24,6 +17,7 @@ import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
+import PreChat from './components/PreChat.js';
 //import react pro sidebar components
 import {
   ProSidebar,
@@ -188,7 +182,7 @@ class App extends Component {
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         aria-current="page"
                         to="/about"
@@ -199,7 +193,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/catalog"
                         id="catalog"
@@ -210,7 +204,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/contact"
                         id="contact"
@@ -221,7 +215,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial", display: "none" }}
                         to="/users"
                         id="users"
@@ -232,7 +226,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/cart"
                         id="cart"
@@ -248,7 +242,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/wishlist"
                         id="users"
@@ -264,6 +258,19 @@ class App extends Component {
                         </span>
                       </NavLink>
                     </li>
+                      <li className="nav-item">
+                          <NavLink
+                              className="nav-link"
+                              style={{fontSize: "initial"}}
+                              to="/Chat"
+                              id="users"
+                          >
+                              {this.state.menuCollapse ? ""
+                                  : "chat"}
+                              <i class="fa fa-comments" style={{"font-size": "24px"}}/>
+
+                          </NavLink>
+                      </li>
                   </ul>
                   <button
                     type="button"
@@ -313,6 +320,7 @@ class App extends Component {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/NoPermission" element={<NoPermission />} />
+                <Route path="/Chat" element={<PreChat />} />
               </Routes>
             </div>
 
@@ -334,23 +342,3 @@ const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(<App/>);
 // serviceWorkerRegistration.register();
-
-
-
-
-
-
-
-
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
-
-// // If you want to start measuring performance in your app, pass a function
-// // to log results (for example: reportWebVitals(console.log))
-// // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
