@@ -166,4 +166,51 @@ static async getProfileImage(req, res, next){
   return res.json({profileImage:user.profileImage});
 }
 
+
+static async getUsers(req, res, next){
+  var type = req.body.type;
+  console.log(type);
+  var users = [];
+  if(type == "All" || !type){
+      console.log("all");
+      users = await  UserService.GetALL();
+  } else{
+      console.log(type);
+      users = await  UserService.GetUserBydegree(type);
+  }
+  return res.json({users: users});
+}
+static async addNewUser(req, res, next){
+  var user = req.body.user;
+  user.isActivate = true;
+  const newUser = new User(user);
+  await newUser.save();
+  console.log('User created:' + newUser);
+  var id = newUser._id;
+  console.log(id);
+  return res.json({status: 200, id: id});
+}
+
+static async updateUser(req, res, next){
+  var oldUser = await UserService.FindById(req.body.user._id);
+  if(oldUser){
+      var newUser = req.body.user;
+      newUser = new User(newUser);
+      await UserService.UpdateById(newUser._id, newUser)
+      console.log('user updated:' + newUser);
+  } else{
+      return res.sendStatus(404);
+  }
+  return res.sendStatus(200);
+}
+static async deleteUser(req, res, next){
+  var oldUser = await UserService.FindById(req.body.id);
+  if(oldUser){
+      await UserService.REMOVE(req.body.id)
+      console.log('User deleted:' + req.body.id);
+  } else{
+      return res.sendStatus(404);
+  }
+  return res.sendStatus(200);
+}
 }

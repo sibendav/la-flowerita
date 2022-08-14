@@ -23,6 +23,7 @@ import ResetPassword from './components/ResetPassword.js';
 import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import NoPermission from './components/NoPermission.js';
+import UserList from './components/ManageUsers';
 
 class App extends Component {
     constructor() {
@@ -197,7 +198,7 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link active"
-                        style={{ fontSize: "initial", display: "none" }}
+                        style={{ fontSize: "initial" }}//, display: "none"
                         to="/users"
                         id="users"
                       >
@@ -266,6 +267,7 @@ class App extends Component {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/NoPermission" element={<NoPermission />} />
+                <Route path="/users" element={<UserList />} />
               </Routes>
             </div>
 

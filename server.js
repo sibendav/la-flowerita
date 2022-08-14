@@ -10,6 +10,7 @@ require("./src/Models/products");
 require("./src/Models/orderProducts");
 require("./src/Models/shoppinglists");
 require("./src/Models/userShoppinglists");
+require("./src/Models/orders");
 
 const dbConfig = require("./src/Config/db");
 

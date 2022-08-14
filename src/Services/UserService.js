@@ -19,8 +19,14 @@ module.exports = class UserService {
   static async GetALL() {
     return User.find({ isActivate: true }).exec();
   }
+  static async GetUserBydegree(deg) {
+    return User.find({ isActivate: true, degree: deg }).exec();
+  }
   static async GetClients() {
     return User.find({ isActivate: true, degree: "client" }).exec();
+  }
+  static async GetWorkers() {
+    return User.find({ isActivate: true, degree: "worker" }).exec();
   }
   static async FindById(id) {
     console.log("finding user:" + id);
@@ -35,9 +41,15 @@ module.exports = class UserService {
     return await User.findOne({ email: e, password: p });
   }
 
-  static async REMOVE(e, p) {
+  //static async REMOVE(e, p) {
+    //return User.updateOne(
+      //{ email: e, password: p },
+      //{ $set: { isActivate: false } }
+    //).exec();
+  //}
+  static async REMOVE(id) {
     return User.updateOne(
-      { email: e, password: p },
+      { _id: id },
       { $set: { isActivate: false } }
     ).exec();
   }
