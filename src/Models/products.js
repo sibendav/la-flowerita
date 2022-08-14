@@ -3,7 +3,7 @@ const { Schema } = mongo;
 
 const ProductSchema = new Schema({
       id: Number,
-      sellerId: Number,
+      sellerId: String,
       name: String,
       color: String,
       price: Number,

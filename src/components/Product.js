@@ -20,7 +20,8 @@ class Product extends Component {
       type: props.type,
       maxAmount: props.maxAmount,
       onUpdateCart: props.onUpdateCart,
-      onUpdateWishlist: props.onUpdateWishlist
+      onUpdateWishlist: props.onUpdateWishlist,
+      showModal:false
     };
   }
   
@@ -82,45 +83,26 @@ class Product extends Component {
       this.props.image.contentType +
       ";base64," +
       this.arrayBufferToBase64(this.props.image.data);
-    return (
-      <div  className="row product">
-        <div className="col-md-2">
-          <img
-            style={{
-              maxWidth: "inherit",
-              maxHeight: "50%",
-              borderRadius: "50%",
-            }}
-            src={path}
-            onError={(e) => {
+    return (<div class="column">
+    <div class="product-img">
+      <img src={path} onError={(e) => {
               e.target.src =
                 "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
               e.target.onerror = null; // prevents looping
-            }}
-            alt={this.props.name}
-            height="150"
-          />
-          <div>
-            <h5>{this.props.type}</h5>
-          </div>
-        </div>
-        <div className="col-md-2 product-detail">
-          <h4>{this.props.name}</h4>
-          <div>
-          </div>
-          <div
-            className="circle"
-            style={{ background: this.props.color }}
-          ></div>
-        </div>
-        <div className="col-md-2 product-detail">{this.props.description}</div>
-        <div className="col-md-2 product-price">{this.props.price}</div>
-        <div className="col-md-2 product-price">{this.props.maxAmount}</div>
-        <div className="col-md-1 product-price">
+            }}/>
+    </div>
+    <div class="product-info">
+      <div class="product-text">
+        <h1>{this.props.name}</h1>
+        <h2>Seller {this.props.sellerName}</h2>
+        <p>{this.props.description}</p>
+      </div>
+      <div class="product-price-btn">
+        <p><span className=".product-span">{this.props.price}</span>$</p>
+        <button type="button" onClick={() => this.outOfWishList()}>
           {this.state.isInWishList ? (
             <FaHeart
               id="inWishList"
-              onClick={() => this.outOfWishList()}
               style={{ cursor: "pointer" }}
             />
           ) : (
@@ -130,16 +112,15 @@ class Product extends Component {
               style={{ cursor: "pointer" }}
             />
           )}
-        </div>
-        <div className="col-md-1 product-price">
-          <FaShoppingCart
-            onClick={() => this.intoCart(this.props)}
-            style={{ cursor: "pointer" }}
-          />
-        </div>
-        <div className="col-md-1 product-price">
-          <DetailsProductModal
-            id={this.props.id}
+    </button>
+    <button type="button" onClick={() => this.intoCart(this.props)}>
+      <FaShoppingCart
+          style={{ cursor: "pointer" }}
+        />
+    </button>
+    <button  type="button" onClick={() => this.setState({showModal:true})}>
+        <FaEye/>
+        {this.state.showModal? <DetailsProductModal id={this.props.id}
             image={this.props.image}
             path={path}
             name={this.props.name}
@@ -148,10 +129,85 @@ class Product extends Component {
             description={this.props.description}
             type={this.props.type}
             maxAmount={this.state.maxAmount}
-          />
-        </div>
+            sellerName={this.state.sellerName}
+            showModal={true}
+          />: ""}
+      </button>
       </div>
-    );
+    </div>
+  </div>);
+      // return (
+    //   <div  className="row product">
+    //     <div className="col-md-2">
+    //       <img
+    //         style={{
+    //           maxWidth: "inherit",
+    //           maxHeight: "50%",
+    //           borderRadius: "50%",
+    //         }}
+    //         src={path}
+    //         onError={(e) => {
+    //           e.target.src =
+    //             "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
+    //           e.target.onerror = null; // prevents looping
+    //         }}
+    //         alt={this.props.name}
+    //         height="150"
+    //       />
+    //       <div>
+    //         <h5>{this.props.type}</h5>
+    //       </div>
+    //     </div>
+    //     <div className="col-md-2 product-detail">
+    //       <h4>{this.props.name}</h4>
+    //       <div>
+    //       </div>
+    //       <div
+    //         className="circle"
+    //         style={{ background: this.props.color }}
+    //       ></div>
+    //     </div>
+    //     <div className="col-md-2 product-detail">{this.props.description}</div>
+    //     <div className="col-md-2 product-price">{this.props.price}</div>
+    //     <div className="col-md-2 product-price">{this.props.maxAmount}</div>
+    //     <div className="col-md-2 product-price">{this.props.sellerName}</div>
+    //     <div className="col-md-1 product-price">
+    //       {this.state.isInWishList ? (
+    //         <FaHeart
+    //           id="inWishList"
+    //           onClick={() => this.outOfWishList()}
+    //           style={{ cursor: "pointer" }}
+    //         />
+    //       ) : (
+    //         <FaRegHeart
+    //           id="outWishList"
+    //           onClick={() => this.intoWishList()}
+    //           style={{ cursor: "pointer" }}
+    //         />
+    //       )}
+    //     </div>
+    //     <div className="col-md-1 product-price">
+    //       <FaShoppingCart
+    //         onClick={() => this.intoCart(this.props)}
+    //         style={{ cursor: "pointer" }}
+    //       />
+    //     </div>
+    //     <div className="col-md-1 product-price">
+    //       <DetailsProductModal
+    //         id={this.props.id}
+    //         image={this.props.image}
+    //         path={path}
+    //         name={this.props.name}
+    //         color={this.props.color}
+    //         price={this.props.price}
+    //         description={this.props.description}
+    //         type={this.props.type}
+    //         maxAmount={this.state.maxAmount}
+    //         sellerName={this.state.sellerName}
+    //       />
+    //     </div>
+    //   </div>
+    // );
   }
 }
 

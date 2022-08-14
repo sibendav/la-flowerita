@@ -8,7 +8,7 @@ module.exports = class ProductService {
     return Product.find({ isActivate: true }).exec();
   }
   static async GetCatalogByType(type) {
-    return Product.find({ isActivate: true, type:type }).lean().exec();
+    return Product.find({ isActivate: true, type:type }).exec();
   }
 
   static async CREATE(product) {
@@ -44,7 +44,7 @@ module.exports = class ProductService {
           price: product.price,
           type: product.type,
           maxAmount: product.maxAmount,
-          sellerId: product.sellerId
+          // sellerId: product.sellerId
           // image: product.image,
           // isActivate: product.isActivate
         },

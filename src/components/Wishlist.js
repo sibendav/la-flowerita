@@ -5,6 +5,8 @@ import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 import OrderedProduct from "./OrderedProduct.js";
 import swal from "sweetalert";
 import { Container, Table, Row, Button } from "react-bootstrap";
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 
 class Wishlist extends Component {
   constructor(props) {
@@ -24,7 +26,8 @@ class Wishlist extends Component {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    await fetch("/getCurrentWishlist", options)
+    trackPromise(
+    fetch("/getCurrentWishlist", options)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -43,7 +46,7 @@ class Wishlist extends Component {
         (error) => {
           console.log(error);
         }
-      );
+      ));
   };
   componentDidUpdate(prevProps, prevState) {
     if (this.state.products.length != prevState.products.length) {
@@ -66,6 +69,7 @@ class Wishlist extends Component {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ productId: id }),
         };
+        trackPromise(
         fetch("/deleteProductFromWishlist", options)
           .then((res) => res.json())
           .then(
@@ -84,9 +88,10 @@ class Wishlist extends Component {
             (error) => {
               console.log(error);
             }
-          );
+          ));
       }
     });
+    swal("Success","Product Deleted Successfully From Cart", "success")
   }
 
   async updateQuantity(e, id) {
@@ -136,7 +141,8 @@ class Wishlist extends Component {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId: id }),
       };
-      await fetch("/addNewProductToCart", options).then(res => res.json()).then(
+      trackPromise(
+      fetch("/addNewProductToCart", options).then(res => res.json()).then(
         (result) => {
           if (result.status == 200) {
             this.state.onUpdateCart(result.cart.products.length);
@@ -146,7 +152,7 @@ class Wishlist extends Component {
         (error) => {
           console.log(error);
         }
-      );
+      ));
     swal("Success","Product Added Successfully To Cart", "success")
   }
   render() {
@@ -167,6 +173,7 @@ class Wishlist extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                  <LoadingIndicator />
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}

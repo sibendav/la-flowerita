@@ -2,6 +2,7 @@ const ProductService = require('../Services/ProductService');
 const WishlistService = require('../Services/WishlistService');
 const mongoose = require('mongoose');
 const Products = mongoose.model('Products');
+const Users = mongoose.model('Users');
 var fs = require("fs");
 const imagesMiddleware = require("../Middleware/uploadImage");
 
@@ -17,11 +18,20 @@ module.exports = class Catalog {
             console.log(type);
             products = await  ProductService.GetCatalogByType(type);
         }
+        for (let i = 0; i < products.length; i++) {
+            console.log("sellerid")
+            console.log(products[i].sellerId)
+            products[i].sellerId = (await Users.findById(products[i].sellerId)).name;
+        }
        return res.json({products: products});
     }
     static async addNewProduct(req, res, next){
+        if(!req.user){
+            return res.json({status: 403});
+        }
         var product = req.body.product;
         product.isActivate = true;
+        product.sellerId = req.user._id;
         const newProduct = new Products(product);
         await newProduct.save();
         console.log('Product created:' + newProduct);

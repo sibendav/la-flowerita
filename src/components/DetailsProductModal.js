@@ -13,9 +13,9 @@ import swal from 'sweetalert';
 class DetailsProductModal extends Component {
   constructor(props) {
     super(props);
-    console.log(props.image.data);
+    console.log(props);
     this.state = {
-      showModal: false,
+      showModal: props.showModal,
       isUpdate: false,
       name: props.name,
       price: props.price,
@@ -191,13 +191,6 @@ class DetailsProductModal extends Component {
   render() {
     return (
       <div>
-        <a
-          role="button"
-          style={{ display: this.state.showButton }}
-          onClick={() => this.handleShow()}
-        >
-          <FaEye/>
-        </a>
         <Modal
           style={{ opacity: 1 }}
           show={this.state.showModal}
