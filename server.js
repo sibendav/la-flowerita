@@ -54,31 +54,30 @@ mongoose.connect(uri, {
 const port = 5000;
 app.use(express.static(path.join(__dirname, "/public")));
 
-const server = app.listen(port, () => {
-    console.log(`app listening on port ${port}!`);});
+// app.listen(port, () => {
+//     console.log(`app listening on port ${port}!`);});
 
 indexRouter = require("./src/Routes/indexRouter");
 app.use("/", indexRouter);
 
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
-var io = require("socket.io")(server)
-io.use(function(socket, next){
-        // Wrap the express middleware
-        session(socket.request, {}, next);
-    })
-io.on("connection", (socket) => {
-    console.log(`User Connected: ${socket.id}`);
-
-    socket.on("join_room", (data) => {
-        socket.join(data);
-        console.log(`User with ID: ${socket.id} joined room: ${data}`);
-    });
-
-    socket.on("send_message", (data) => {
-        socket.to(data.room).emit("receive_message", data);
-    });
-
-    socket.on("disconnect", () => {
-        console.log("User Disconnected", socket.id);
-    });
+http.listen(process.env.PORT || 5000, function() {
+  var host = http.address().address
+  var port = http.address().port
+  console.log('App listening at http://%s:%s', host, port)
 });
+
+io.on('connection', function(socket) {
+  console.log('Client connected to the WebSocket');
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+
+  socket.on('chat message', function(msg) {
+    console.log("Received a chat message");
+    io.emit('chat message', msg);
+  });
+})
