@@ -12,9 +12,10 @@ const WishlistService = require('../Services/WishlistService');
 
 module.exports = class User {
   static async auth(req, res, next) {
+    // alert();
     console.log("inside auth function");
     let exist = await UserService.FindByEmail(req.body.email);
-    // console.log("/auth" + exist);
+    console.log("/auth" + exist);
     if (exist) {
       passport.authenticate("local", function (err, user, info) {
         if (err || !user) {

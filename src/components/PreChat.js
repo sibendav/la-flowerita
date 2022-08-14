@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("http://localhost:5000");
 
 function PreChat() {
     const [username, setUsername] = useState("");
@@ -18,7 +18,7 @@ function PreChat() {
     };
 
     return (
-        <div className="App">
+        <div className="Chat">
             {!showChat ? (
                 <div className="joinChatContainer">
                     <h3>Join A Chat</h3>

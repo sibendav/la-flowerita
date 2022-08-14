@@ -3,9 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import swal from 'sweetalert';
-import {
-  FiLogIn,
-} from "react-icons/fi";
+import {FiLogIn,} from "react-icons/fi";
 class LoginModal extends Component {
   constructor(props) {
     super(props);
@@ -26,9 +24,10 @@ class LoginModal extends Component {
   };
   async dofetch() {
     // check inputs
+    // alert("Im in dofetch");
     var email = this.state.email;
     var password = this.state.password;
-    if (email == "" || password == "") {
+    if (email === "" || password === "") {
       this.setState({ ERROR: "Please fill all the fields" });
       return;
     }
@@ -44,20 +43,20 @@ class LoginModal extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
     };
-    
+    // alert("Im before the fetch");
     await fetch("/auth", options)
     .then(
       (res) => {
-        console.log(res);
-        if (res.status == 200) {
+        // alert(res.status);
+        if (res.status === 200) {
           swal("Success!", "You Logged In!", "success");
           document.location.href = "/";
         }
-        else if(res.status == 404){
+        else if(res.status === 404){
           this.setState({ ERROR: "Email or password is not correct." });
           return;
         }
-        else if(res.status == 400){
+        else if(res.status === 400){
           this.setState({ ERROR: "There was an error. Please try again" });
           return;
         }

@@ -3,7 +3,38 @@ const app = express();
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
+const path = require("path");
+var bodyParser = require("body-parser");
+var jsonParser = bodyParser.json()
+var mongoose = require("mongoose");
+
+require("./src/Models/users");
+require("./src/Models/products");
+require("./src/Models/orderProducts");
+require("./src/Models/shoppinglists");
+require("./src/Models/userShoppinglists");
+require("./src/Config/passport");
+
+// AUTHENTIATION
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const passport = require('passport');
+const LocalStrategy = require('passport-local')
+const dbConfig = require("./src/Config/db");
+
 app.use(cors());
+app.use(session(
+    { secret: 'secret',
+        algorithms: ['RS256'],
+        cookie: { maxAge: 15 * 60 * 1000 },
+        resave: false,
+        saveUninitialized: false,
+    }));
+
+app.use(passport.initialize())
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, "/public")));
+
 
 const server = http.createServer(app);
 
@@ -30,48 +61,6 @@ io.on("connection", (socket) => {
         console.log("User Disconnected", socket.id);
     });
 });
-const port = 3001;
-server.listen(port, () => {
-    console.log('Server Running on port ${port}!');
-});
-
-
-const path = require("path");
-var bodyParser = require("body-parser");
-var jsonParser = bodyParser.json()
-var mongoose = require("mongoose");
-
-require("./src/Models/users");
-require("./src/Models/products");
-require("./src/Models/orderProducts");
-require("./src/Models/shoppinglists");
-require("./src/Models/userShoppinglists");
-require("./src/Config/passport");
-
-// AUTHENTIATION
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
-const passport = require('passport');
-const LocalStrategy = require('passport-local')
-const dbConfig = require("./src/Config/db");
-
-
-app.use(session(
-    { secret: 'secret',
-    algorithms: ['RS256'],
-    cookie: { maxAge: 15 * 60 * 1000 },
-    resave: false,
-    saveUninitialized: false,
-     }));
-
-app.use(passport.initialize())
-app.use(passport.session());
-app.use(express.static(path.join(__dirname, "/public")));
-
-
-indexRouter = require("./src/Routes/indexRouter");
-app.use("/", indexRouter);
-
 // connect to database
 const uri = dbConfig.url;
 mongoose.connect(uri, {
@@ -87,6 +76,16 @@ mongoose.connect(uri, {
     .catch(err => {
         console.error('Error connecting to mongo', err);
     });
+const port = 5000;
+server.listen(port, () => {
+    console.log(`Server Running on port ${port}`);
+});
+
+indexRouter = require("./src/Routes/indexRouter");
+app.use("/", indexRouter);
+
+
+
 
 
 
