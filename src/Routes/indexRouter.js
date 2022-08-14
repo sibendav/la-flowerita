@@ -37,5 +37,4 @@ router.get("/getSession", jsonParser, UserCtrl.getSession);
 router.get("/payNow",jsonParser, ShoppinglistCtrl.payNow)
 
 
-
 module.exports =  router;
