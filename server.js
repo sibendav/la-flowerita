@@ -14,21 +14,21 @@ require("./src/Models/userShoppinglists");
 const dbConfig = require("./src/Config/db");
 
 // AUTHENTIATION
-const session = require('express-session');
+const expressSession = require('express-session');
 const MongoStore = require('connect-mongo');
-
-app.use(session(
+const session = expressSession(
     { secret: 'secret', 
     algorithms: ['RS256'], 
-    cookie: { maxAge: 15 * 60 * 1000 }, 
+    cookie: { maxAge: 60 * 60 * 24 * 1000 }, 
     resave: false, 
     saveUninitialized: false,
-    // store: MongoStore.create({
-    //     mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
-    //     ttl: 15 * 60 * 1000 ,
-    //     autoRemove: 'native' 
-    // })
-     }));
+    store: MongoStore.create({
+        mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
+        ttl: 15 * 60 * 1000 ,
+        autoRemove: 'native' 
+    })
+     })
+app.use(session);
 const passport = require('passport');
 const LocalStrategy = require('passport-local')
 app.use(passport.initialize())
@@ -54,10 +54,31 @@ mongoose.connect(uri, {
 const port = 5000;
 app.use(express.static(path.join(__dirname, "/public")));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`app listening on port ${port}!`);});
 
 indexRouter = require("./src/Routes/indexRouter");
 app.use("/", indexRouter);
 
 
+var io = require("socket.io")(server)
+io.use(function(socket, next){
+        // Wrap the express middleware
+        session(socket.request, {}, next);
+    })
+io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`);
+
+    socket.on("join_room", (data) => {
+        socket.join(data);
+        console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    });
+
+    socket.on("send_message", (data) => {
+        socket.to(data.room).emit("receive_message", data);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User Disconnected", socket.id);
+    });
+});

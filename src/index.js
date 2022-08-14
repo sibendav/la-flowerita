@@ -24,6 +24,7 @@ import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
+import PreChat from './components/PreChat.js';
 //import react pro sidebar components
 import {
   ProSidebar,
@@ -264,6 +265,19 @@ class App extends Component {
                         </span>
                       </NavLink>
                     </li>
+                    <li className="nav-item">
+                          <NavLink
+                              className="nav-link"
+                              style={{fontSize: "initial"}}
+                              to="/Chat"
+                              id="users"
+                          >
+                              {this.state.menuCollapse ? ""
+                                  : "chat"}
+                              <i class="fa fa-comments" style={{"font-size": "24px"}}/>
+
+                          </NavLink>
+                      </li>
                   </ul>
                   <button
                     type="button"
@@ -313,6 +327,7 @@ class App extends Component {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/NoPermission" element={<NoPermission />} />
+                <Route path="/Chat" element={<PreChat />} />
               </Routes>
             </div>
 

@@ -23,6 +23,7 @@ passport.use(new LocalStrategy({
 
 passport.serializeUser( (userObj, done) => {
   console.log("serializeUser")
+  console.log(userObj);
   done(null, userObj)
 })
 
