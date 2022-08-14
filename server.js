@@ -5,6 +5,7 @@ const path = require("path");
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json()
 var mongoose = require("mongoose");
+
 require("./src/Models/users");
 require("./src/Models/products");
 require("./src/Models/orderProducts");
@@ -35,6 +36,7 @@ app.use(passport.initialize())
 app.use(passport.session());
 require("./src/Config/passport");
 
+
 // const uri = "mongodb://tratzon:tratzon1@cluster0-shard-00-00.l39y0.mongodb.net:27017,cluster0-shard-00-01.l39y0.mongodb.net:27017,Users-shard-00-02.l39y0.mongodb.net:27017/FlowersShop?ssl=true&replicaSet=atlas-2i336t-shard-0&authSource=admin&retryWrites=true&w=majority";
 const uri = dbConfig.url;
 mongoose.connect(uri, {
@@ -51,33 +53,45 @@ mongoose.connect(uri, {
         console.error('Error connecting to mongo', err);
     });
 
-const port = 5000;
-app.use(express.static(path.join(__dirname, "/public")));
 
-// app.listen(port, () => {
-//     console.log(`app listening on port ${port}!`);});
+app.use(express.static(path.join(__dirname, "/public")));
 
 indexRouter = require("./src/Routes/indexRouter");
 app.use("/", indexRouter);
 
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
 
-http.listen(process.env.PORT || 5000, function() {
-  var host = http.address().address
-  var port = http.address().port
-  console.log('App listening at http://%s:%s', host, port)
+// Connection to the socket
+const http = require("http");
+const { Server } = require("socket.io");
+app.use(cors());
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+  },
 });
 
+
+
 io.on('connection', function(socket) {
-  console.log('Client connected to the WebSocket');
+  console.log(`User Connected: ${socket.id}`);
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
+    socket.on("join_room", (data) => {
+        socket.join(data);
+        console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    });
 
-  socket.on('chat message', function(msg) {
-    console.log("Received a chat message");
-    io.emit('chat message', msg);
-  });
+    socket.on("send_message", (data) => {
+        socket.to(data.room).emit("receive_message", data);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User Disconnected", socket.id);
+    });
 })
+
+const port = 5000;
+server.listen(port, () => {
+    console.log(`Server Running on port ${port}!`);
+});
