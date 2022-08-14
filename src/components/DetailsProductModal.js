@@ -13,9 +13,9 @@ import swal from 'sweetalert';
 class DetailsProductModal extends Component {
   constructor(props) {
     super(props);
-    console.log(props.image.data);
+    console.log(props);
     this.state = {
-      showModal: false,
+      showModal: props.showModal,
       isUpdate: false,
       name: props.name,
       price: props.price,
@@ -26,6 +26,7 @@ class DetailsProductModal extends Component {
       image:props.image,
       picture: false,
       src: false,
+      maxAmount:props.maxAmount,
       ERROR: "",
     };
   }
@@ -89,12 +90,14 @@ class DetailsProductModal extends Component {
     var description = this.state.description;
     var color = this.state.color;
     var type = this.state.type;
+    var maxAmount = this.state.maxAmount;
     if (
       name == "" ||
       price == "" ||
       description == "" ||
       color == "" ||
-      type == ""
+      type == "" || 
+      maxAmount == ""
       ) {
       this.setState({ ERROR: "Please fill all the fields." });
       return;
@@ -105,6 +108,7 @@ class DetailsProductModal extends Component {
       description: description,
       price: price,
       type: type,
+      maxAmount: maxAmount,
       _id: this.state.id
     };
 
@@ -187,13 +191,6 @@ class DetailsProductModal extends Component {
   render() {
     return (
       <div>
-        <a
-          role="button"
-          style={{ display: this.state.showButton }}
-          onClick={() => this.handleShow()}
-        >
-          <FaEye/>
-        </a>
         <Modal
           style={{ opacity: 1 }}
           show={this.state.showModal}
@@ -261,6 +258,19 @@ class DetailsProductModal extends Component {
                   placeholder="Price"
                   onChange={this.inputsHandler}
                   defaultValue={this.state.price}
+                  required
+                  disabled = {this.state.isUpdate? "" :"disabled"}
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="number"
+                  name="maxAmount"
+                  id="maxAmount"
+                  className="form-control"
+                  placeholder="Max Amount"
+                  onChange={this.inputsHandler}
+                  defaultValue={this.state.maxAmount}
                   required
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />

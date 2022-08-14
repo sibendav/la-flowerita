@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import '../css/newProductModal.css';
-
+import swal from 'sweetalert';
+import {FaPenSquare} from "react-icons/fa"
 class SignupModal extends Component {
   constructor() {
     super();
@@ -77,6 +78,9 @@ class SignupModal extends Component {
         else if(res.status == 422){
           this.setState({ ERROR: "Please fill all the fields correctly." });
           return;
+        } else if(res.status == 500){
+          this.setState({ ERROR: "There was an error. Please try again" });
+          return;
         }
       },
       // Note: it's important to handle errors here
@@ -90,9 +94,10 @@ class SignupModal extends Component {
       }
     )
     if (id != 0) {
+      var message = degree == "Customer" ? "You may login to your account": "To finish the process of signing up you will need to wait for the manager's approval \n You will get an answer to your email.";
       if (!this.state.picture) {
-        alert("you signedup successfully! You may login to your account");
-        document.location.href = "/";
+        swal("You signedup successfully!", message, "success");
+        return;
       }
       if (
         this.state.picture.type.includes("png") ||
@@ -110,8 +115,8 @@ class SignupModal extends Component {
         body: myFormData,
       });
       if (response.status == 200) {
-        alert("you signedup successfully! You may login to your account");
-        document.location.href = "/";
+        swal("You signedup successfully!", message, "success");
+        // document.location.href = "/";
       }
     } else {
       alert("Didn't get id");
@@ -151,11 +156,12 @@ class SignupModal extends Component {
     return (
       <div>
         <Button
-          style={{ display: this.props.showButton }}
-          className="button-17"
+          title="Sign Up"
+          class="btn btn-primary btn-lg btn-floating" 
+          style={{display: this.props.showButton,"background-color": "#17c0eb"}}
           onClick={() => this.handleShow()}
         >
-          Signup
+        {this.props.menuCollapse ? "" :"SignUp"}<FaPenSquare/>
         </Button>
         <Modal
           style={{ opacity: 1 }}
@@ -211,8 +217,8 @@ class SignupModal extends Component {
               <div className="mb-3">
               <input type="radio" name="degree" id="Customer" onChange={this.radioHandler}/>
               <label for="rd1">Customer</label>
-              <input type="radio" name="degree" id="Saler" onChange={this.radioHandler}/>
-              <label for="rd2">Saler</label>
+              <input type="radio" name="degree" id="Seller" onChange={this.radioHandler}/>
+              <label for="rd2">Seller</label>
               <input type="radio" name="degree" id="Manager" onChange={this.radioHandler}/>
               <label for="rd2">Manager</label>
               </div>

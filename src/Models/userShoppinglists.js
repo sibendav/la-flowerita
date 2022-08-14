@@ -2,7 +2,7 @@ const mongo = require("mongoose");
 const { Schema } = mongo;
 
 const UserShoppinglistsSchema = new Schema({
-      userId: Number,
+      userId: String,
       shoppinglists: Array,
     }, { autoIndex: false });
 

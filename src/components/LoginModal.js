@@ -3,7 +3,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import swal from 'sweetalert';
-
+import {
+  FiLogIn,
+} from "react-icons/fi";
 class LoginModal extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +14,7 @@ class LoginModal extends Component {
       email: "",
       password: "",
       ERROR: "",
-      reloadNavbar: props.reloadNavbar
+      reloadNavbar: props.reloadNavbar,
     };
   }
 
@@ -49,7 +51,7 @@ class LoginModal extends Component {
         console.log(res);
         if (res.status == 200) {
           swal("Success!", "You Logged In!", "success");
-          // document.location.href = "/";
+          document.location.href = "/";
         }
         else if(res.status == 404){
           this.setState({ ERROR: "Email or password is not correct." });
@@ -70,17 +72,17 @@ class LoginModal extends Component {
         return;
       }
     )
-    options = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-      };
-    await fetch("/getCurrentUser", options).then(res => res.json()).then((res) => {
-      sessionStorage.setItem("profileImage", JSON.stringify(res.profileImage));
-      sessionStorage.setItem("email", JSON.stringify(res.user.email));
-      // alert(res.profileImage);
-      this.state.reloadNavbar();
-      // document.location.href = "/";
-    })
+    // options = {
+    //   method: "GET",
+    //   headers: { "Content-Type": "application/json" }
+    //   };
+    // await fetch("/getCurrentUser", options).then(res => res.json()).then((res) => {
+    //   sessionStorage.setItem("profileImage", JSON.stringify(res.profileImage));
+    //   sessionStorage.setItem("email", JSON.stringify(res.user.email));
+    //   // alert(res.profileImage);
+    //   this.state.reloadNavbar();
+    //   // document.location.href = "/";
+    // })
     }
 
 
@@ -91,11 +93,12 @@ class LoginModal extends Component {
     return (
       <div>
         <Button
-          style={{ display: this.props.showButton }}
-          className="button-17"
+          title="Log In"
+          class="btn btn-primary btn-lg btn-floating" 
+          style={{display: this.props.showButton,"background-color": "#17c0eb"}}
           onClick={() => this.handleShow()}
         >
-          Login
+          {this.props.menuCollapse ? "" :"Login"}<FiLogIn/>
         </Button>
         {/* <button style={{"float":"right"}} type="button" id="login"  data-bs-toggle="modal" data-bs-target="#myModal">
                       Login */}

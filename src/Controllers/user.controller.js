@@ -7,6 +7,8 @@ const Users = mongoose.model('Users');
 const crypto = require('crypto');
 var fs = require('fs');
 const imagesMiddleware = require("../Middleware/uploadImage");
+const ShoppinglistsService = require('../Services/ShoppinglistService');
+const WishlistService = require('../Services/WishlistService');
 
 module.exports = class User {
   static async auth(req, res, next) {
@@ -16,7 +18,7 @@ module.exports = class User {
     if (exist) {
       passport.authenticate("local", function (err, user, info) {
         if (err || !user) {
-          if(info.status == 404){
+          if(info && info.status == 404){
             return res.sendStatus(404);
           }
           else{
@@ -31,6 +33,20 @@ module.exports = class User {
             // return res.status(404).send("Username or password incorrect");
           }
         });
+        console.log(req.session.cart);
+        if(req.session.cart && req.session.cart.products != []){
+          for(let i = 0; i < req.session.cart.products.length; i++){
+            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
+          ShoppinglistsService.AddProductFromSession(req.user._id, req.session.cart.products[i])
+          }
+        }
+        console.log(req.session.wishlist);
+        if(req.session.wishlist && req.session.wishlist.products != []){
+          for(let i = 0; i < req.session.wishlist.products.length; i++){
+            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
+          WishlistService.AddProductFromSession(req.user._id, req.session.wishlist.products[i].id)
+          }
+        }
         return res.sendStatus(200);
       })(req, res, next);
     } else {
@@ -101,11 +117,11 @@ module.exports = class User {
   
       console.log("I am in resetPassword function");
     if(!user){
-      console.log(user);
+      // console.log(user);
       return res.json({status: 404});
     }
     console.log("finished checking resetPassword function");
-    console.log(user);
+    // console.log(user);
     return res.json({id: user._id, status: 200});
   }
 
@@ -138,10 +154,10 @@ module.exports = class User {
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
-    newUser.isActivate = true;
+    newUser.isActivate = user.degree != "Customer" ? false: true;
     await newUser.save();
     console.log("user added successfullly");
-    console.log(newUser);
+    // console.log(newUser);
     return res.json({status:200, id:newUser._id});
   }
 
@@ -153,7 +169,7 @@ static async addUserProfile(req, res, next){
     var user = await UserService.FindById(id);
     if(user){
         user.profileImage = {data:req.file.buffer, contentType: req.file.mimetype};
-        console.log(user);
+        // console.log(user);
         await UserService.UpdateById(id,user)
     }
     return res.sendStatus(200);
@@ -165,6 +181,7 @@ static async getProfileImage(req, res, next){
   var user = await UserService.FindByEmail(req.user.email);
   return res.json({profileImage:user.profileImage});
 }
+
 
 
 static async getUsers(req, res, next){
@@ -212,5 +229,36 @@ static async deleteUser(req, res, next){
       return res.sendStatus(404);
   }
   return res.sendStatus(200);
+}
+  static async isLogged(req, res, next){
+  if(req.user)
+    return res.sendStatus(200);
+  return res.sendStatus(404);
+}
+
+static async getSession(req, res, next){
+  var profileImage = {data:"", contentType:""};
+  var cart = {products: []}
+  var wishlist = {products: []}
+  var isLogged = false;
+  console.log("getsession");
+  if(req.user){
+    profileImage = await Users.findById(req.user._id).profileImage;
+    cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
+    wishlist = await WishlistService.GetCurrentWishlist(req.user._id);
+    isLogged = true;
+  } else{
+    if(req.session.cart)
+      {
+        cart = req.session.cart;
+      }
+    if(req.session.wishlist){
+      console.log("hi")
+        wishlist = req.session.wishlist;
+      }
+  }
+  var result = {isLogged: isLogged, profileImage:profileImage, cart: cart, wishlist: wishlist}
+  console.log(req.session);
+  return res.json(result)
 }
 }

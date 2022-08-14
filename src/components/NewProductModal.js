@@ -8,10 +8,10 @@ import withAuth from "./Auth.js"
 import swal from 'sweetalert';
 
 class NewProductModal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      showModal: false,
+      showModal: props.showModal,
       name: "",
       price: 0,
       description: "",
@@ -20,6 +20,7 @@ class NewProductModal extends Component {
       picture: false,
       src: false,
       id: 0,
+      maxAmount:"",
       ERROR: "",
     };
   }
@@ -38,12 +39,14 @@ class NewProductModal extends Component {
     var color = this.state.color;
     var type = this.state.type;
     var picture = this.state.picture;
+    var maxAmount = this.state.maxAmount;
     if (
       name == "" ||
       price == "" ||
       description == "" ||
       color == "" ||
       type == "" ||
+      maxAmount == "" ||
       !picture
     ) {
       this.setState({ ERROR: "Please fill all the fields." });
@@ -55,6 +58,7 @@ class NewProductModal extends Component {
       description: description,
       price: price,
       type: type,
+      maxAmount: maxAmount
     };
 
     var options = {
@@ -66,6 +70,10 @@ class NewProductModal extends Component {
     await fetch("/addNewProduct", options).then(res => res.json()).then(
       (res) => {
         console.log(res);
+        if(res.status == 403){
+          swal("No permission","You don't have permission for this option","error");
+          return;
+        }
         if (res.status == 200) {
           id = res.id;
         } else if (res.status == 400) {
@@ -137,16 +145,7 @@ class NewProductModal extends Component {
   render() {
     return (
       <div>
-        <button
-          className="button-17"
-          role="button"
-          style={{ display: this.props.showButton }}
-          //   className="nav-item ml-auto btn btn-outline-success"
-          onClick={() => this.handleShow()}
-        >
-          <FaPlus />
-          Add New Product
-        </button>
+        <br/>
         <Modal
           style={{ opacity: 1 }}
           show={this.state.showModal}
@@ -155,7 +154,7 @@ class NewProductModal extends Component {
           <Modal.Header>
             <Modal.Title>
               <div className="modal-header">
-                <img src="images\login.png" width="72" height="72" />
+                {/* <img src="images\login.png" width="72" height="72" /> */}
                 <h5 className="modal-title" id="exampleModalLabel">
                   Add new Flower
                 </h5>
@@ -205,12 +204,23 @@ class NewProductModal extends Component {
               </div>
               <div className="mb-3">
                 <input
+                  type="number"
+                  name="maxAmount"
+                  id="maxAmount"
+                  className="form-control"
+                  placeholder="Max Amount"
+                  onChange={this.inputsHandler}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
                   type="radio"
                   name="type"
-                  id="Bouquet"
+                  id="Bouquest"
                   onChange={this.radioHandler}
                 />
-                <label for="rd1">Bouquet</label>
+                <label for="rd1">Bouquest</label>
                 <input
                   type="radio"
                   name="type"

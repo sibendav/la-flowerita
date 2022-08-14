@@ -13,65 +13,35 @@ class ShoppingCart extends Component {
       id: -1,
       totalPrice: 0,
       products: [],
-      deleted: [],
       loggedIn: false,
       onUpdateCart: props.onUpdateCart,
     };
   }
-  componentDidMount() {
-    const isAuth = sessionStorage.getItem("email");
-    console.log(sessionStorage);
-    if (isAuth) {
-      this.cartForLoggedUser();
-    } else {
-      this.cartForNoUser();
-    }
-  }
-  cartForLoggedUser(){
-    console.log("logged in");
-    // var products = [];
-    // var options = {
-    //   method: "GET",
-    //   headers: { "Content-Type": "application/json" },
-    // };
-    // await fetch("/getCurrentCart", options).then(res => res.json()).then(
-    //   (result) => {
-    //     if (result.status == 200) {
-    //       this.setState({
-    //         id: result.cart.id,
-    //         products: res.cart.products,
-    //         totalPrice: products.reduce(
-    //           (acc, item) => acc + item.price * item.quantity,
-    //           0
-    //         ),
-    //       });
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
-
-  }
-  cartForNoUser() {
-    console.log("no user");
-    var products = JSON.stringify([]);
-    if (sessionStorage.getItem("cart")) {
-      var cart = JSON.parse(sessionStorage.getItem("cart"));
-      console.log(cart);
-      if (cart) {
-        products = cart.products;
+  componentDidMount = async () => {
+    var options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    await fetch("/getCurrentCart", options).then(res => res.json()).then(
+      (result) => {
+        console.log(result)
+        if (result.status == 200) {
+          this.setState({
+            id: result.cart._id,
+            products: result.cart.products,
+            totalPrice: result.cart.products.reduce(
+              (acc, item) => acc + item.price * item.quantity,
+              0
+            ),
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
       }
-      sessionStorage.setItem("cart", JSON.stringify({ products: products }));
-      this.setState({
-        products: products,
-        totalPrice: products.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0
-        ),
-      });
-    }
+    );
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state.products.length != prevState.products.length) {
       this.state.onUpdateCart(this.state.products.length);
@@ -88,36 +58,82 @@ class ShoppingCart extends Component {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        var cart = JSON.parse(sessionStorage.getItem("cart"));
-        console.log(id);
-        cart.products = cart.products.filter((p) => p.id != id);
-        sessionStorage.setItem("cart", JSON.stringify(cart));
-        this.setState({
-          products: cart.products,
-          totalPrice: cart.products.reduce(
-            (acc, item) => acc + item.price * item.quantity,
-            0
-          ),
-        });
+        var options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({productId: id})
+        };
+        fetch("/deleteProductFromCart", options).then(res => res.json()).then(
+          (result) => {
+            console.log(result)
+            if (result.status == 200) {
+              this.setState({
+                products: result.cart.products,
+                totalPrice: result.cart.products.reduce(
+                  (acc, item) => acc + item.price * item.quantity,
+                  0
+                ),
+              });
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       }
-    });
+      })
+    }
+  async payNow(){
+    if(this.state.products.length < 1){
+      swal("Error", "Please add atleast one product to the cart","error")
+    }
+    var options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    await fetch("/payNow", options).then(res => {
+      if(res.status == 200){
+          swal("Success","Payment is successful","success");
+          this.setState({products:[], totalPrice: 0});
+          this.onUpdateCart(this.state.products.length);
+    }
+      else{
+        swal("Error","There was an error","error");
+      }
+    })
+
   }
   async updateQuantity(e, id) {
     var quantity = Number(e.target.value);
-    var cart = JSON.parse(sessionStorage.getItem("cart"));
-    cart.products.map((p) => {
-      if (p.id == id) p.quantity = quantity;
-    });
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    console.log(cart);
-    this.setState({
-      products: cart.products,
-      totalPrice: cart.products.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      ),
-    });
+    var product = this.state.products.filter(p => p.id == id);
+    product = product[0]    
+    product.quantity = quantity;
+    var products = this.state.products;
+    products.map((p) => {if(p.id == id) p = product})
+    var options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body:JSON.stringify({product:{productId: product.id, price: product.price, quantity: product.quantity}})
+    };
+    await fetch("/updateProductInCart", options).then(res => res.json()).then(
+      (result) => {
+        console.log(result)
+        if (result.status == 200) {
+          this.setState({
+            products: result.cart.products,
+            totalPrice: result.cart.products.reduce(
+              (acc, item) => acc + item.price * item.quantity,
+              0
+            ),
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
+
   render() {
     return (
       <div className="productSlider mb-5 mt-5">
@@ -133,13 +149,14 @@ class ShoppingCart extends Component {
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Sub Total</th>
-                    <th>Action</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}
+                      isCart={true}
                       product={product}
                       onDelete={(id) => this.deleteFromCart(id)}
                       onUpdate={(e, id) => this.updateQuantity(e, id)}
@@ -162,7 +179,7 @@ class ShoppingCart extends Component {
                 <h6>Total Price :</h6>
                 <span>{this.state.totalPrice}$</span>
               </div>
-              <Button variant="dark" size="md" className="mt-4 w-100">
+              <Button  onClick={() => this.payNow()} variant="dark" size="md" className="mt-4 w-100">
                 pay now
               </Button>
             </div>

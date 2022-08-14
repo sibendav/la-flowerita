@@ -3,20 +3,24 @@
 import React, { Component } from "react";
 import Product from "./Product";
 import NewProductModal from "./NewProductModal";
-
-
-
+import "../css/catalog.css";
+import { FaPlus } from "react-icons/fa";
+import { FiRefreshCcw } from "react-icons/fi";
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class ProductList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      products: [],
-      type: false
+      products: false,
+      type: false,
+      wishlist: [],
+      showModal:false
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount(){
     var type = this.state.type ? this.state.type : "All";
     var options = {
         method: "POST",
@@ -24,11 +28,22 @@ class ProductList extends Component {
         body:JSON.stringify({type: type})
     };
     console.log(type);
-    await fetch("/getCatalog", options).then(res => res.json())
+    trackPromise(
+    fetch("/getCatalog", options).then(res => res.json())
     .then((result) => {
       this.setState({ products: result.products });
-      console.log(this.state.products);
-    });
+      // console.log(this.state.products);
+    }));
+    options = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+  };
+  trackPromise(
+    fetch("/getCurrentWishlist", options).then(res => res.json())
+    .then((result) => {
+      console.log(result.wishlist.products[0]);
+      this.setState({ wishlist: result.wishlist.products.map(p => p.id) });
+    }));
   }
 
   componentDidUpdate = async(prevProps,prevState) =>  {
@@ -41,12 +56,13 @@ class ProductList extends Component {
         body:JSON.stringify({type: type})
     };
     console.log(type);
-    await fetch("/getCatalog", options).then(res => res.json())
+    trackPromise(
+    fetch("/getCatalog", options).then(res => res.json())
     .then((result) => {
       console.log("hi");
       this.setState({ products: result.products });
       console.log(this.state.products);
-    });
+    }));
  }
 }
   refreshPage() {
@@ -55,23 +71,21 @@ class ProductList extends Component {
 
   async changeType(e){
     var type = e.target.value;
-    this.setState({type:type});
+    this.setState({type:type, products:false});
   }
 
   render() {
     return (
-      <div className="container main-content">
-        <NewProductModal />
-        
-      <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" onClick={(e) => this.changeType(e)} value="Flower" className="button-17">Flowers</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="Bouquest" className="button-17">Bouquest</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
-        <button type="button" onClick={() => this.refreshPage()} style={{"width":"10%","height":"5%",margin:"20px"}}>
-          <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
-      </button>
+      <div className="container main-content">      
+      <div className="catalog-btn" role="group" aria-label="Basic example">
+      <button type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
+      <button type="button" onClick={() => this.setState({showModal:true})} title="Add New Product"><FaPlus />{this.state.showModal? <NewProductModal showModal={true}/>:""}</button>
+      <button style={{width:"100px", height:"40px"}} type="button" onClick={(e) => this.changeType(e)} title="Show Flowers Only" value="Flower" >Flowers</button>
+      <button style={{width:"120px", height:"40px"}} type="button" onClick={(e) => this.changeType(e)} title="Show Bouquests Only" value="Bouquest">Bouquests</button>
+      <button className="sortersButtons" type="button" onClick={(e) => this.changeType(e)} title="Show All products" value="All">All</button>
       </div>
-        { !this.state.products || this.state.products.length > 0 ? 
+      <LoadingIndicator/>
+        { this.state.products && this.state.products.length > 0 ? 
         this.state.products.map((product) => {
           return (
             <Product
@@ -83,10 +97,15 @@ class ProductList extends Component {
               description={product.description}
               type={product.type}
               onUpdateCart={(num) => this.props.onUpdateCart(num)}
+              onUpdateWishlist={(num) => this.props.onUpdateWishlist(num)}
+              isInWishList={this.state.wishlist.indexOf(product._id) == -1 ? false: true}
+              maxAmount={product.maxAmount}
+              sellerName={product.sellerId}
             />
           );
-        }): <h1> There are no products for this category</h1>
-      }
+        }):""}{ this.state.products && this.state.products.length == 0 ? 
+        <h1> There are no products for this category</h1>
+      :""}
         <br />
         <br />
         <br />
