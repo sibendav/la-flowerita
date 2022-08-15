@@ -13,7 +13,6 @@ import swal from 'sweetalert';
 class UpdateUserModal extends Component {
   constructor(props) {
     super(props);
-    console.log(props.image.data);
     this.state = {
       showModal: false,
       isUpdate: false,
@@ -159,6 +158,7 @@ class UpdateUserModal extends Component {
         color : e.target.value});
   };
   render() {
+    
     return (
       <div>
         <a
@@ -167,6 +167,13 @@ class UpdateUserModal extends Component {
           onClick={() => this.handleShow()}
         >
           <FaEye/>
+        </a>
+        <a
+            role="button"
+            style={{display: !this.state.isUpdate? "block" : "none"}}
+            onClick={() => this.showConfirmDialog()}
+        >
+          <FaTrash/>
         </a>
         <Modal
           style={{ opacity: 1 }}
@@ -177,21 +184,20 @@ class UpdateUserModal extends Component {
           <Modal.Header>
             <Modal.Title>
               <div className="modal-header">
-              <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src={this.props.path} 
+              
+              <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src ="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                 onError={( e ) => {
-                  e.target.src='https://www.freeiconspng.com/uploads/no-image-icon-11.PNG';
+                  e.target.src="https://cdn-icons-png.flaticon.com/512/149/149071.png";
                   e.target.onerror = null; // prevents looping
                 }}
                 alt={this.state.name} height="150" />
-                <h5 className="modal-title" id="exampleModalLabel">
-                  {this.state.name}
-                </h5>
               </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <form key={this.state.id}>
               <div className="mb-3">
+              <h1>full name:</h1>
                 <input
                   type="text"
                   name="name"
@@ -205,24 +211,22 @@ class UpdateUserModal extends Component {
                   disabled = {this.state.isUpdate? "" : "disabled"}
                 />
               </div>
-              
-              <div className="mb-3" style={{display:!this.state.isUpdate? "block" : "none"}}>
-                <input type="color" value={this.state.color} disabled = "disabled"/>
-              </div>
               <div className="mb-3">
+              <h1>phone number:</h1>
                 <input
                   type="text"
                   name="phone"
                   id="phone"
                   className="form-control"
                   placeholder="phone number"
-                  defaultValue={this.state.description}
+                  defaultValue={this.state.phone}
                   onChange={this.inputsHandler}
                   required
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />
               </div>
               <div className="mb-3">
+                <h1>address:</h1>
                 <input
                   type="text"
                   name="address"
@@ -230,19 +234,20 @@ class UpdateUserModal extends Component {
                   className="form-control"
                   placeholder="Address"
                   onChange={this.inputsHandler}
-                  defaultValue={this.state.price}
+                  defaultValue={this.state.address}
                   required
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />
               </div>
               <div className="mb-3" style={{display: this.state.isUpdate? "none" : "block"}}>
+              <h1>email:</h1>
               <input
                   type="text"
                   name="email"
                   id="email"
                   className="form-control"
                   placeholder="Email"
-                  defaultValue={this.state.type}
+                  defaultValue={this.state.email}
                   onChange={this.inputsHandler}
                   required
                   disabled = "disabled" 
@@ -254,7 +259,7 @@ class UpdateUserModal extends Component {
                   name="degree"
                   id="Worker"
                   onChange={this.radioHandler}
-                  checked = {this.state.degree == "Worker" ? "checked" : null}
+                  checked = {this.state.degree == "Seller" ? "checked" : null}
                 />
                 <label for="rd1">Worker</label>
                 <input
@@ -262,7 +267,7 @@ class UpdateUserModal extends Component {
                   name="degree"
                   id="Client"
                   onChange={this.radioHandler}
-                  checked = {this.state.degree == "Client" ? "checked" : null}
+                  checked = {this.state.degree == "Customer" ? "checked" : null}
                 />
                 <label for="rd2">Client</label>
               </div>
@@ -282,18 +287,11 @@ class UpdateUserModal extends Component {
             <a
               role="button"
               style={{display: !this.state.isUpdate? "block" : "none"}}
-              onClick={() => this.showConfirmDialog()}
-            >
-              <FaTrash/>
-            </a>
-            <a
-              role="button"
-              style={{display: !this.state.isUpdate? "block" : "none"}}
               onClick={() => this.changeUpdate()}
             >
               <FaPen/>
             </a>
-            <button onClick={() => this.updateProduct()} className="button-17" style={{display: this.state.isUpdate? "block" : "none"}}>Update</button>
+            <button onClick={() => this.updateUser()} className="button-17" style={{display: this.state.isUpdate? "block" : "none"}}>Update</button>
             </div>
           </Modal.Footer>
         </Modal>

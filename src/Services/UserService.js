@@ -64,7 +64,7 @@ module.exports = class UserService {
   static async UpdateById(id, user) {
     return User.updateOne(
       { _id: id },
-      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree, profileImage: user.profileImage } }
+      { $set: { email: user.email, degree: user.degree, profileImage: user.profileImage,phone:user.phone, name:user.name} }
     ).exec();
   }
 

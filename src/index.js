@@ -53,6 +53,7 @@ import { BiCog } from "react-icons/bi";
 
 //import sidebar css from react-pro-sidebar module and our custom css
 import "react-pro-sidebar/dist/css/styles.css";
+import ManageOrders from './components/ManageOrders';
 class App extends Component {
     constructor() {
         super();
@@ -238,6 +239,17 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link active"
+                        style={{ fontSize: "initial" }}//, display: "none"
+                        to="/orders"
+                        id="orders"
+                        title="Orders"
+                      >
+                        {this.state.menuCollapse ? "" : "Manage Orders "}<FaUsers />
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
                         style={{ fontSize: "initial" }}
                         to="/cart"
                         id="cart"
@@ -333,6 +345,8 @@ class App extends Component {
                 <Route path="/NoPermission" element={<NoPermission />} />
 
                 <Route path="/users" element={<UserList />} />
+
+                <Route path="/orders" element={<ManageOrders />} />
 
                 <Route path="/Chat" element={<PreChat />} />
 
