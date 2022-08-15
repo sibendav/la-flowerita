@@ -12,12 +12,13 @@ module.exports = class UserService {
       isActivate: true,
       email: user.email,
       password: user.password,
-      image: user.image
+      image: user.image,
+      isApproved: user.degree !="Customer" ? false: true
     });
   }
 
   static async GetALL() {
-    return User.find({ isActivate: true }).exec();
+    return User.find({ isApproved:true, isActivate: true }).exec();
   }
   static async GetClients() {
     return User.find({ isActivate: true, degree: "client" }).exec();
@@ -28,11 +29,11 @@ module.exports = class UserService {
   }
   static async FindByEmail(e) {
     console.log("finding user by email:" + e);
-    return User.findOne({ email: e });
+    return User.findOne({ email: e , isApproved: true, isActivate:true});
   }
   static async FIND(e, p) {
     console.log("finding user:" + e + "" + p);
-    return await User.findOne({ email: e, password: p });
+    return await User.findOne({ email: e, password: p, isApproved: true, isActivate:true});
   }
 
   static async REMOVE(e, p) {

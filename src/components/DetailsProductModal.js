@@ -9,7 +9,8 @@ import '../css/newProductModal.css';
 import withAuth from "./Auth.js";
 import {FaEye, FaPen, FaTrash } from "react-icons/fa";
 import swal from 'sweetalert';
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class DetailsProductModal extends Component {
   constructor(props) {
     super(props);
@@ -63,7 +64,8 @@ class DetailsProductModal extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({id: this.state.id}),
     };
-    await fetch("/deleteProduct", options).then(
+    trackPromise(
+      fetch("/deleteProduct", options).then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
@@ -81,7 +83,7 @@ class DetailsProductModal extends Component {
           ERROR: error,
         });
       }
-    );
+    ));
     swal("Deleted!", "Product deleted successfully!", "success");
   }
   async updateProduct() {
@@ -117,7 +119,8 @@ class DetailsProductModal extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({product: product}),
     };
-    await fetch("/updateProduct", options).then(
+    trackPromise(
+      fetch("/updateProduct", options).then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
@@ -133,7 +136,7 @@ class DetailsProductModal extends Component {
           ERROR: error,
         });
       }
-    );
+    ));
     if (!this.state.picture) {
       swal("Updated!", "Product updated successfully!", "success");
     }else{
@@ -213,6 +216,7 @@ class DetailsProductModal extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+          <LoadingIndicator/>
             <form key={this.state.id}>
               <div className="mb-3">
                 <input

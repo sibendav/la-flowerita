@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 import '../css/newProductModal.css';
 import swal from 'sweetalert';
 import {FaPenSquare} from "react-icons/fa"
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class SignupModal extends Component {
   constructor() {
     super();
@@ -31,7 +33,6 @@ class SignupModal extends Component {
     this.setState({ showModal: true });
   };
   async signup() {
-    alert("hii");
     // check inputs
     var email = this.state.email;
     var password = this.state.password;
@@ -60,12 +61,42 @@ class SignupModal extends Component {
       body: JSON.stringify({user: user}),
     };
     var id = 0;
-    await fetch("/signup", options).then(res => res.json())
+    trackPromise(
+    fetch("/signup", options).then(res => res.json())
     .then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
           id = res.id;
+          if (id != 0) {
+            var message = degree == "Customer" ? "You may login to your account": "To finish the process of signing up you will need to wait for the manager's approval \n You will get an answer to your email.";
+            if (!this.state.picture) {
+              swal("You signedup successfully!", message, "success");
+              return;
+            }
+            if (
+              this.state.picture.type.includes("png") ||
+              this.state.picture.type.includes("jpg")
+            ) {
+              this.setState({ ERROR: "Only types: PNG or JPG" });
+              return;
+            }
+            var myFormData = new FormData();
+            myFormData.append("file", this.state.picture);
+            myFormData.append("id", id);
+      
+            fetch("/addUserProfile", {
+              method: "POST",
+              body: myFormData,
+            }).then(response =>{
+            if (response.status == 200) {
+              swal("You signedup successfully!", message, "success");
+              // document.location.href = "/";
+            }
+           else {
+            swal("Error","Didn't get id","error");
+          }})
+        }
         }
         else if(res.status == 409){
           this.setState({ ERROR: "Email already exists." });
@@ -92,35 +123,8 @@ class SignupModal extends Component {
         });
         return;
       }
-    )
-    if (id != 0) {
-      var message = degree == "Customer" ? "You may login to your account": "To finish the process of signing up you will need to wait for the manager's approval \n You will get an answer to your email.";
-      if (!this.state.picture) {
-        swal("You signedup successfully!", message, "success");
-        return;
-      }
-      if (
-        this.state.picture.type.includes("png") ||
-        this.state.picture.type.includes("jpg")
-      ) {
-        this.setState({ ERROR: "Only types: PNG or JPG" });
-        return;
-      }
-      var myFormData = new FormData();
-      myFormData.append("file", this.state.picture);
-      myFormData.append("id", id);
-
-      const response = await fetch("/addUserProfile", {
-        method: "POST",
-        body: myFormData,
-      });
-      if (response.status == 200) {
-        swal("You signedup successfully!", message, "success");
-        // document.location.href = "/";
-      }
-    } else {
-      alert("Didn't get id");
-    }
+    ))
+   
   }
 
   renderPreview() {
@@ -179,6 +183,7 @@ class SignupModal extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+          <LoadingIndicator/>
             <form>
               <div className="mb-3">
                 <input

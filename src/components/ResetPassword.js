@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Button from "react-bootstrap/Button";
 import { Route, NavLink, HashRouter, Routes } from "react-router-dom";
 import "../css/resetPassword.css"
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
+import swal from 'sweetalert';
 
 class ResetPassword extends Component {
   constructor() {
@@ -24,7 +26,8 @@ class ResetPassword extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({email:email}),
     };
-    await fetch("/emailForResetPassword", options)
+    trackPromise(
+      fetch("/emailForResetPassword", options)
     .then(
       (res) => {
         console.log(res);
@@ -45,7 +48,7 @@ class ResetPassword extends Component {
           ERROR: error
         });
       }
-    )
+    ))
      };
 
   checkToken = async () => {
@@ -55,7 +58,8 @@ class ResetPassword extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({token:token}),
     };
-    await fetch("/checkToken", options).then(res => res.json())
+    trackPromise(
+      fetch("/checkToken", options).then(res => res.json())
     .then(
       (res ) => {
         console.log(res);
@@ -76,7 +80,7 @@ class ResetPassword extends Component {
           ERROR: error
         });
       }
-    )
+    ))
   };
 
   updatePassword = async () => {
@@ -92,13 +96,14 @@ class ResetPassword extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({password:password, id: this.state.id}),
     };
-    await fetch("/updatePassword", options)
+    trackPromise(
+      fetch("/updatePassword", options)
     .then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
           console.log("update password was successful!");
-          alert("update password was successful! Please login.")
+          swal("Successful!","update password was successful! Please login.", "success")
           document.location.href = "/";
         }
       },
@@ -110,7 +115,7 @@ class ResetPassword extends Component {
           ERROR: error
         });
       }
-    )
+    ))
      };
   render() {
     if(!this.state.emailSent){
@@ -133,6 +138,7 @@ class GetEmailForReset extends Component{
   render(){
     return (
       <div id="divForResetPassword" className="container d-flex justify-content-center align-items-center vh-100">
+            <LoadingIndicator/>
            <div className="bg-white text-center p-5 mt-3 center">
               <h3>Forgot Password </h3>
               <p>Please enter your email and we will send you a link to reset your password.</p>
@@ -153,6 +159,7 @@ class GetToken extends Component{
     render(){
       return(
         <div className="container d-flex justify-content-center align-items-center vh-100">
+              <LoadingIndicator/>
         <div className="bg-white text-center p-5 mt-3 center">
            <h3>Forgot Password </h3>
            <p>Please enter the token you got to your mail.</p>
@@ -181,6 +188,7 @@ class UpdatePassword extends Component{
     render() {
       return (
       <div className="container d-flex justify-content-center align-items-center vh-100">
+                 <LoadingIndicator/>
            <div className="bg-white text-center p-5 mt-3 center">
               <h3>Change Password </h3>
               <p>Please enter a new paswword.</p>
