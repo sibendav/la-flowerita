@@ -16,7 +16,7 @@ class UpdateUserModal extends Component {
     this.state = {
       showModal: false,
       isUpdate: false,
-      id: props.id,
+      _id: props._id,
       name: props.name,
       phone: props.phone,
       degree: props.degree,
@@ -102,9 +102,9 @@ class UpdateUserModal extends Component {
       degree: degree,
       address: address,
       email: email,
-      _id: this.state.id
+      _id: this.state._id
     };
-
+    console.log(user)
     var options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -115,8 +115,9 @@ class UpdateUserModal extends Component {
         console.log(res);
         if (res.status == 200) {
           console.log("updating user was successful");
+          swal("Updated!", "User updated successfully!", "success");
         } else if (res.status == 400) {
-          this.setState({ ERROR: "There was an error. Please try again" });
+          this.setState({ ERROR: "This email already exists" });
         } else if (res.status == 500) {
           this.setState({ ERROR: "There was an error on our side" });
         }

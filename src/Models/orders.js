@@ -2,7 +2,7 @@ const mongo = require("mongoose");
 const { Schema } = mongo;
 
 const OrderSchema = new Schema({
-      userId: Number,
+      userId: String,
       products: Array,
       totalPrice: Number,
       date: Date,

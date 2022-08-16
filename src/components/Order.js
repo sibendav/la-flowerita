@@ -15,7 +15,7 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        id : props.id,
+        _id : props._id,
         userId :  props.userId,
         products : props.products,
         totalPrice :  props.totalPrice,
@@ -30,6 +30,7 @@ class Order extends Component {
         var options = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({_id: this.state._id, status: this.state.status})
         };
          fetch("/updateOrderStatus", options).then((res) => {
             if(res.status == 200){
@@ -45,14 +46,13 @@ class Order extends Component {
   
   render() {
       
-    var currentItem = this.props.order;
     return (
         
-      <tr key={currentItem.id}>
-        <td>{this.props.id}
+      <tr key={this.props._id}>
+        <td>{this.props._id}
         </td>
         <td>{this.props.date}</td>
-        <td>{this.props.products}</td>
+        {/* <td>{this.props.products}</td> */}
         <td className="price-new">{this.props.totalPrice}$</td>
         
           <td>
@@ -62,7 +62,7 @@ class Order extends Component {
               defaultValue={this.props.status}
               onChange={(e) => {
                 this.setState({ status: String(e.target.value) });
-                this.props.onUpdate(e, currentItem.id);
+                this.props.onUpdate(e, this.props._id);
               }}>
               <option value ="Pending" >Pending</option>
               <option value ="InProcess" >In process</option>

@@ -16,9 +16,9 @@ static async getOrders(req, res, next){
         console.log("all");
         orders = await  OrderService.GetALL();
     } else{
-        console.log(type);
         orders = await  OrderService.GetOrderByStatus(status);
     }
+    console.log(orders);
     return res.json({orders: orders});
 }
 static async getClientOrders(req, res, next){
@@ -54,11 +54,11 @@ static async updateOrder(req, res, next){
   return res.sendStatus(200);
 }
 static async updateOrderStatus(req, res, next){
-    var oldOrder = await OrderService.FindById(req.body.id);
+    var oldOrder = await OrderService.FindById(req.body._id);
     var status = req.body.status
     if(oldOrder){
-        await OrderService.UpdateStatus(req.body.id,status)
-        console.log('Order status updated:' + req.body.id);
+        await OrderService.UpdateStatus(req.body._id,status)
+        console.log('Order status updated:' + req.body._id);
     } else{
         return res.sendStatus(404);
     }

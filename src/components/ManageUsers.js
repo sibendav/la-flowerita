@@ -81,9 +81,13 @@ class UserList extends Component {
                   <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                     <table class="table manage-candidates-top mb-0">
                       <thead>
+                      <tr>
+                        <th>Candidate Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="action text-right">Action</th>
+                      </tr>
                       </thead>
                       <tbody>
-                        <tr>
                         { !this.state.users || this.state.users.length > 0 ? 
                           this.state.users.map((user) => {
                             return (
@@ -102,7 +106,6 @@ class UserList extends Component {
                           }) :""}{ this.state.users && this.state.users.length == 0 ? 
                             <h1> There are no users for this category</h1>
                           :""}
-                        </tr>
                       </tbody>
                     </table>
                   </div>

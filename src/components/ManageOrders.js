@@ -26,7 +26,6 @@ class ManageOrders extends Component {
     .then((result) => {
       console.log(result); 
       this.setState({ orders: result.orders });
-      console.log(this.state.orders);
     });
   }
 
@@ -89,7 +88,7 @@ class ManageOrders extends Component {
                   {this.state.orders.map((order, idx) => (
                     <Order
                       key={order._id}
-                      id = {order._id}
+                      _id = {order._id}
                       userId =  {order.userId}
                       products = {order.products} 
                       totalPrice =  {order.totalPrice}

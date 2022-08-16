@@ -157,6 +157,7 @@ module.exports = class User {
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
+    newUser.isActivate = true;
     newUser.isApproved = user.degree != "Customer" ? false: true;
     await newUser.save();
     console.log("user added successfullly");
@@ -213,10 +214,13 @@ static async addNewUser(req, res, next){
 
 static async updateUser(req, res, next){
   var oldUser = await UserService.FindById(req.body.user._id);
+  var exists = await UserService.FindByEmail(req.body.user.email)
+  if(exists && exists._id != req.body.user._id){
+    return res.sendStatus(400);
+  }
   if(oldUser){
       var newUser = req.body.user;
-      newUser = new User(newUser);
-      await UserService.UpdateById(newUser._id, newUser)
+      await UserService.UpdateById(req.body.user._id, newUser)
       console.log('user updated:' + newUser);
   } else{
       return res.sendStatus(404);

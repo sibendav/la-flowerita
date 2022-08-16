@@ -181,11 +181,17 @@ module.exports = class Shoppinglist {
     if (req.user) {
       var cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
       await ShoppinglistsService.CartPaid(req.user._id);
+      cart.products = await ShoppinglistsService.GetProductsDetails(
+        cart.products
+      );
+      console.log("cart" + cart);
+      var totalPrice = cart.products.reduce((acc, item) => acc + item.price * item.quantity,0);
+      console.log(totalPrice)
       var order = new Orders({userId: req.user._id, 
                             products:cart.products, 
-                            totalPrice: cart.products.reduce((acc, item) => acc + item.price * item.quantity,0),
+                            totalPrice: totalPrice,
                             date: Date.now(),
-                            status:"pending"
+                            status:"Pending"
                           })
       await order.save();
       return res.sendStatus(200);

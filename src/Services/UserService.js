@@ -21,13 +21,7 @@ module.exports = class UserService {
     return User.find({ isApproved:true, isActivate: true }).exec();
   }
   static async GetUserBydegree(deg) {
-    return User.find({ isActivate: true, degree: deg }).exec();
-  }
-  static async GetClients() {
-    return User.find({ isActivate: true, degree: "client" }).exec();
-  }
-  static async GetWorkers() {
-    return User.find({ isActivate: true, degree: "worker" }).exec();
+    return User.find({isApproved:true ,isActivate: true, degree: deg }).exec();
   }
   static async FindById(id) {
     console.log("finding user:" + id);
