@@ -77,8 +77,8 @@ class MyOrders extends Component {
                 <tbody>
                   {this.state.orders.map((order, idx) => (
                     <MyOrder
-                      key={order.id}
-                      id = {order.id}
+                      key={order._id}
+                      id = {order._id}
                       userId =  {order.userId}
                       products = {order.products} 
                       totalPrice =  {order.totalPrice}
