@@ -26,6 +26,8 @@ import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
 
 import UserList from './components/ManageUsers';
+import ManageOrders from './components/ManageOrders';
+import MyOrders from './components/MyOrders';
 
 import PreChat from './components/PreChat.js';
 //import react pro sidebar components
@@ -53,7 +55,7 @@ import { BiCog } from "react-icons/bi";
 
 //import sidebar css from react-pro-sidebar module and our custom css
 import "react-pro-sidebar/dist/css/styles.css";
-import ManageOrders from './components/ManageOrders';
+
 class App extends Component {
     constructor() {
         super();
@@ -250,6 +252,17 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link active"
+                        style={{ fontSize: "initial" }}//, display: "none"
+                        to="/myOrders"
+                        id="myOrders"
+                        title="myOrders"
+                      >
+                        {this.state.menuCollapse ? "" : "My Orders "}<FaUsers />
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
                         style={{ fontSize: "initial" }}
                         to="/cart"
                         id="cart"
@@ -347,6 +360,7 @@ class App extends Component {
                 <Route path="/users" element={<UserList />} />
 
                 <Route path="/orders" element={<ManageOrders />} />
+                <Route path="/myOrders" element={<MyOrders />} />
 
                 <Route path="/Chat" element={<PreChat />} />
 

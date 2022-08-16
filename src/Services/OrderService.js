@@ -5,7 +5,6 @@ const Order = mongoose.model('Orders');
 module.exports = class OrderService {
   static async CREATE(order) {
     return Order.create({
-     id : order.id,
      userId: order.userId,
      products: order.products,
      totalPrice: order.totalPrice,

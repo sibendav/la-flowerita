@@ -2,7 +2,6 @@ const mongo = require("mongoose");
 const { Schema } = mongo;
 
 const OrderSchema = new Schema({
-      id : Number,
       userId: Number,
       products: Array,
       totalPrice: Number,

@@ -1,4 +1,5 @@
 const OrderService = require("../Services/OrderService");
+const UserService = require("../Services/UserService");
 const mongoose = require('mongoose');
 const Orders = mongoose.model('Orders');
 const crypto = require('crypto');
@@ -21,7 +22,9 @@ static async getOrders(req, res, next){
     return res.json({orders: orders});
 }
 static async getClientOrders(req, res, next){
-    var id = req.body.clientId;
+    var id = req.user._id;
+    var olduser = await UserService.FindById(id);
+    if(olduser)
     console.log(id);
     var orders = [];
     orders = await  OrderService.GetClientOrders(id);
