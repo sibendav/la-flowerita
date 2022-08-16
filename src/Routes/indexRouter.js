@@ -22,48 +22,20 @@ router.post("/updatePassword", jsonParser, UserCtrl.updatePassword);
 router.post("/signup", jsonParser, UserCtrl.signup);
 router.get("/getProfileImage", jsonParser, UserCtrl.getProfileImage);
 router.post("/addUserProfile", jsonParser, UserCtrl.addUserProfile);
-<<<<<<< HEAD
-=======
-
 router.post("/getUsers", jsonParser, UserCtrl.getUsers);
 router.post("/addNewUser", jsonParser, UserCtrl.addNewUser);
 router.post("/updateUser", jsonParser, UserCtrl.updateUser);
 router.post("/deleteUser", jsonParser, UserCtrl.deleteUser);
-
->>>>>>> 86943ae30f3b7fbc55df2336613c339931f1691f
 router.post("/getCatalog", jsonParser, CatalogCtrl.getCatalog);
 router.post("/addNewProduct", jsonParser, CatalogCtrl.addNewProduct);
 router.post("/addProductPicture", jsonParser, CatalogCtrl.addProductPicture);
 router.post("/updateProduct", jsonParser, CatalogCtrl.updateProduct);
 router.post("/deleteProduct", jsonParser, CatalogCtrl.deleteProduct);
-<<<<<<< HEAD
-=======
-
-
 router.post("/getOrders", jsonParser, OrderCtrl.getOrders);
 router.post("/getClientOrders", jsonParser, OrderCtrl.getClientOrders);
 router.post("/addNewOrder", jsonParser, OrderCtrl.addNewOrder);
 router.post("/updateOrder", jsonParser, OrderCtrl.updateOrder);
 router.post("/updateOrderStatus", jsonParser, OrderCtrl.updateOrderStatus);
-
-
-router.post("/api/auth", jsonParser, UserCtrl.auth);
-router.get("/api/getCurrentUser", jsonParser, UserCtrl.getCurrentUser);
-router.get("/api/logout", jsonParser, UserCtrl.logout);
-router.post("/api/emailForResetPassword", jsonParser, UserCtrl.emailForResetPassword);
-router.post("/api/checkToken", jsonParser, UserCtrl.checkToken);
-router.post("/api/updatePassword", jsonParser, UserCtrl.updatePassword);
-router.post("/api/signup", jsonParser, UserCtrl.signup);
-router.get("/api/getProfileImage", jsonParser, UserCtrl.getProfileImage);
-router.post("/api/addUserProfile", jsonParser, UserCtrl.addUserProfile);
-router.post("/api/getCatalog", jsonParser, CatalogCtrl.getCatalog);
-router.post("/api/addNewProduct", jsonParser, CatalogCtrl.addNewProduct);
-router.post("/api/addProductPicture", jsonParser, CatalogCtrl.addProductPicture);
-router.post("/api/updateProduct", jsonParser, CatalogCtrl.updateProduct);
-router.post("/api/deleteProduct", jsonParser, CatalogCtrl.deleteProduct);
-
->>>>>>> 86943ae30f3b7fbc55df2336613c339931f1691f
-// router.post("addProductToCart", jsonParser, ShoppinglistCtrl.addProduct);
 router.get("/getCurrentCart", jsonParser, ShoppinglistCtrl.getCurrentCart);
 router.get("/getCurrentWishlist", jsonParser, WishlistCtrl.getCurrentWishlist);
 router.get("/isLogged", jsonParser, UserCtrl.isLogged);
