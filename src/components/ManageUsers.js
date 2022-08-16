@@ -92,7 +92,8 @@ class UserList extends Component {
                           this.state.users.map((user) => {
                             return (
                               <User
-                                key = {user.id}
+                                _id = {user._id}
+                                key = {user._id}
                                 user = {user}
                                 name={user.name}
                                 degree={user.degree}

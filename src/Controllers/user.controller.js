@@ -228,10 +228,11 @@ static async updateUser(req, res, next){
   return res.sendStatus(200);
 }
 static async deleteUser(req, res, next){
-  var oldUser = await UserService.FindById(req.body.id);
+  console.log(req.body);
+  var oldUser = await UserService.FindById(req.body._id);
   if(oldUser){
-      await UserService.REMOVE(req.body.id)
-      console.log('User deleted:' + req.body.id);
+      await UserService.REMOVE(req.body._id)
+      console.log('User deleted:' + req.body._id);
   } else{
       return res.sendStatus(404);
   }

@@ -25,6 +25,7 @@ class UpdateUserModal extends Component {
       email: props.email,
       ERROR: "",
     };
+    console.log(props);
   }
 
   handleClose = () => {
@@ -45,7 +46,7 @@ class UpdateUserModal extends Component {
       buttons: [
         {
           label: 'Yes',
-          onClick: () => this.deleteProduct()
+          onClick: () => this.deleteUser()
         },
         {
           label: 'No',
@@ -54,16 +55,18 @@ class UpdateUserModal extends Component {
     });
   };
   async deleteUser(){
+    console.log(this.state);
     var options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({id: this.state.id}),
+      body: JSON.stringify({_id: this.state._id}),
     };
     await fetch("/deleteUser", options).then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
           console.log("deleting user was successful");
+          swal("Deleted!", "User deleted successfully!", "success");
         } else if (res.status == 404) {
           this.setState({ ERROR: "User does not exist already" });
         } else if (res.status == 400) {
@@ -78,7 +81,6 @@ class UpdateUserModal extends Component {
         });
       }
     );
-    swal("Deleted!", "User deleted successfully!", "success");
   }
   async updateUser() {
     var name = this.state.name;
@@ -143,6 +145,16 @@ class UpdateUserModal extends Component {
     }
   }
 
+  handlePictureSelected(event) {
+    var picture = event.target.files[0];
+    var src     = URL.createObjectURL(picture);
+
+    this.setState({
+      picture: picture,
+      src: src
+    });
+  }
+
 
   inputsHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -184,19 +196,20 @@ class UpdateUserModal extends Component {
           
           <Modal.Header>
             <Modal.Title>
+            <Modal.Title>
               <div className="modal-header">
-              
-              <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src ="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src={this.props.path} 
                 onError={( e ) => {
-                  e.target.src="https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                  e.target.src='https://www.freeiconspng.com/uploads/no-image-icon-11.PNG';
                   e.target.onerror = null; // prevents looping
                 }}
                 alt={this.state.name} height="150" />
               </div>
             </Modal.Title>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form key={this.state.id}>
+            <form key={this.state._id}>
               <div className="mb-3">
               <h1>full name:</h1>
                 <input
@@ -240,7 +253,7 @@ class UpdateUserModal extends Component {
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />
               </div>
-              <div className="mb-3" style={{display: this.state.isUpdate? "none" : "block"}}>
+              <div className="mb-3" >
               <h1>email:</h1>
               <input
                   type="text"
@@ -254,25 +267,38 @@ class UpdateUserModal extends Component {
                   disabled = "disabled" 
                   />
                   </div>
-                  <div className="mb-3" style={{display:this.state.isUpdate? "block" : "none"}}>
+                  <div className="mb-3" >
                 <input
                   type="radio"
                   name="degree"
-                  id="Worker"
+                  id="Seller"
                   onChange={this.radioHandler}
                   checked = {this.state.degree == "Seller" ? "checked" : null}
                 />
-                <label for="rd1">Worker</label>
+                <label for="rd1">Seller</label>
                 <input
                   type="radio"
                   name="degree"
-                  id="Client"
+                  id="Customer"
                   onChange={this.radioHandler}
                   checked = {this.state.degree == "Customer" ? "checked" : null}
                 />
-                <label for="rd2">Client</label>
+                <label for="rd2">Customer</label>
               </div>
-              
+              <div style={{display:this.state.isUpdate? "block" : "none"}} className="mb-3">
+                <h2>Upload Product Image</h2>
+                <input 
+                  name="file"  
+                  id="file"
+                  type="file"
+                  onChange={this.handlePictureSelected.bind(this)}
+                />
+                <br/>
+                <div style={{"maxWidth": "80%", "maxHeight": "80%"}}>
+                {this.renderPreview()}
+                </div>
+                <hr/>
+              </div>
             </form>
           </Modal.Body>
           <Modal.Footer>

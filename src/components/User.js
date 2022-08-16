@@ -9,6 +9,7 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      _id: props._id,
       name: props.name,
       phone: props.phone,
       degree: props.degree,
@@ -66,13 +67,13 @@ class User extends Component {
                     <td class="candidate-list-favourite-time text-center">
                     <ul class="list-unstyled mb-0 d-flex justify-content-end">
                     <UpdateUserModal
-                            _id={currentUser._id}
+                            _id={this.props._id}
                             name={this.props.name}
                             phone={this.props.phone}
                             degree={this.props.degree}
                             address={this.props.address}
                             email={this.props.email}
-                          // path = {path}
+                            path = {path}
                           />
                     </ul>
                       </td>
