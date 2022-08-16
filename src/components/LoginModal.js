@@ -51,6 +51,7 @@ class LoginModal extends Component {
         console.log(res);
         if (res.status == 200) {
           swal("Success!", "You Logged In!", "success");
+          this.props.setState({user: email});
           document.location.href = "/";
         }
         else if(res.status == 404){

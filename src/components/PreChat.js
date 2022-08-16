@@ -2,14 +2,18 @@ import "../css/chat.css";
 import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
+import Conversation from "./conversation";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 
 const socket = io.connect("http://localhost:5000");
 
 
-function PreChat() {
-    const [username, setUsername] = useState("");
+function PreChat(userName) {
+    const username = "simha"; //*initialize
     const [room, setRoom] = useState("");
+    const [newroom, setNewroom] = useState("");
+    const [rooms, setRooms] = useState(["friends", "Collis", "Family"]); //*initialize
     const [showChat, setShowChat] = useState(false);
 
     const joinRoom = () => {
@@ -20,31 +24,54 @@ function PreChat() {
     };
 
     return (
-        <div className="PreChat">
-
-            {!showChat ? (
-                <div className="joinChatContainer">
-                    <h3>Join A Chat</h3>
-                    <input
-                        type="text"
-                        placeholder="user name..."
-                        onChange={(event) => {
-                            setUsername(event.target.value);
-                        }}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Room ID..."
-                        onChange={(event) => {
-                            setRoom(event.target.value);
-                        }}
-                    />
-                    <button onClick={joinRoom}>Join A Room</button>
+        <>
+            <div className="messenger">
+                <div className="chatMenu">
+                    <div className="chatMenuWrapper">
+                        <div className="joinChatContainer">
+                        <input
+                            type="text"
+                            placeholder="New Group"
+                            value={newroom}
+                            onChange={(event) => {
+                                setNewroom(event.target.value);
+                            }}
+                        />
+                        <button onClick={() => {
+                            if (newroom!="") {
+                            setRooms((prev) => [...prev, newroom]);
+                            setRoom(newroom);
+                            joinRoom();
+                            setNewroom("");
+                            }
+                        }}>Join A Room</button>
+                        </div>
+                        <ScrollToBottom>
+                        {rooms.map((c) => (
+                            <div onClick={() => {
+                                setRoom(c);
+                                joinRoom()}}>
+                                <Conversation roomName={c} />
+                        </div>
+                        ))}
+                        </ScrollToBottom>
+                    </div>                    
                 </div>
-            ) : (
-                <Chat socket={socket} username={username} room={room} />
-            )}
-        </div>
+                <div className="chatBox">
+                    <div className="chatBoxWrapper">
+                        {room ? (
+                            <>
+                            <Chat socket={socket} username={username} room={room} />
+                            </>
+                        ) : (
+                        <span className="noConversationText">
+                        Open a conversation to start a chat.
+                        </span>
+                        )}
+                    </div>
+                </div>            
+            </div>
+        </>
     );
 }
 
