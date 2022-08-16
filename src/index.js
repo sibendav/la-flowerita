@@ -24,6 +24,11 @@ import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
+
+import UserList from './components/ManageUsers';
+import ManageOrders from './components/ManageOrders';
+import MyOrders from './components/MyOrders';
+
 import PreChat from './components/PreChat.js';
 //import react pro sidebar components
 import {
@@ -34,6 +39,7 @@ import {
   SidebarFooter,
   SidebarContent
 } from "react-pro-sidebar";
+
 
 //import icons from react icons
 import { FaList, FaMailBulk, FaHeart, FaQuestion, FaUsers } from "react-icons/fa";
@@ -49,6 +55,7 @@ import { BiCog } from "react-icons/bi";
 
 //import sidebar css from react-pro-sidebar module and our custom css
 import "react-pro-sidebar/dist/css/styles.css";
+
 class App extends Component {
     constructor() {
         super();
@@ -223,12 +230,34 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link active"
-                        style={{ fontSize: "initial", display: "none" }}
+                        style={{ fontSize: "initial" }}//, display: "none"
                         to="/users"
                         id="users"
                         title="Users"
                       >
                         {this.state.menuCollapse ? "" : "Manage Users "}<FaUsers />
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}//, display: "none"
+                        to="/orders"
+                        id="orders"
+                        title="Orders"
+                      >
+                        {this.state.menuCollapse ? "" : "Manage Orders "}<FaUsers />
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link active"
+                        style={{ fontSize: "initial" }}//, display: "none"
+                        to="/myOrders"
+                        id="myOrders"
+                        title="myOrders"
+                      >
+                        {this.state.menuCollapse ? "" : "My Orders "}<FaUsers />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -327,7 +356,14 @@ class App extends Component {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />
                 <Route path="/NoPermission" element={<NoPermission />} />
+
+                <Route path="/users" element={<UserList />} />
+
+                <Route path="/orders" element={<ManageOrders />} />
+                <Route path="/myOrders" element={<MyOrders />} />
+
                 <Route path="/Chat" element={<PreChat />} />
+
               </Routes>
             </div>
 
