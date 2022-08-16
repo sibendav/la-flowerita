@@ -2,7 +2,7 @@ import { React, Component } from "react";
 import sampleImage from "../logo.svg";
 import "../css/catalog.css";
 import "../css/orderedProduct.css";
-
+import swal from "sweetalert";
 import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 
 import Card from "react-bootstrap/Card";
@@ -11,94 +11,68 @@ import { ButtonGroup, Container } from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import ReactStars from "react-rating-stars-component";
 
-class OrderedProduct extends Component {
+class Order extends Component {
   constructor(props) {
     super(props);
-    console.log(props.product);
     this.state = {
-      isInCart: true,
-      id: props.product.id,
-      name: props.product.name,
-      price: props.product.price,
-      quantity: props.product.quantity,
-      image: props.product.image,
-      subTotal: props.product.price * props.product.quantity,
+        id : props.id,
+        userId :  props.userId,
+        products : props.products,
+        totalPrice :  props.totalPrice,
+        date: props.date,
+        status : props.status,
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.quantity !== prevState.quantity) {
-      this.setState({ subTotal: this.state.quantity * this.state.price });
+    if (this.state.status !== prevState.status) {
+        console.log(this.state.status);
+        var options = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        };
+         fetch("/updateOrderStatus", options).then((res) => {
+            if(res.status == 200){
+                swal("Updated","order is successfuly update","success");
+          }
+            else{
+              swal("Error","There was an error","error");
+            }
+        });
     }
   }
 
-  arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = [].slice.call(new Uint8Array(buffer.data));
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
-    return window.btoa(binary);
-  }
+  
   render() {
-    var path = "";
-    try {
-      path =
-        "data:/" +
-        this.state.image.contentType +
-        ";base64," +
-        this.arrayBufferToBase64(this.state.image.data);
-    } catch (e) {
-      console.log("couldn't find path of profile image");
-    }
-    var currentItem = this.props.product;
+      
+    var currentItem = this.props.order;
     return (
+        
       <tr key={currentItem.id}>
-        <td>
-          <img src={path} alt="productImg" />
+        <td>{this.props.id}
         </td>
-        <td>{currentItem.name}</td>
-        <td className="price-new">{currentItem.price}$</td>
-        {this.props.isCart ? (
+        <td>{this.props.date}</td>
+        <td>{this.props.products}</td>
+        <td className="price-new">{this.props.totalPrice}$</td>
+        
           <td>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              min="1"
-              // max={props.product.maxQuantity}
-              step="1"
-              defaultValue={currentItem.quantity}
+            <select
+              name="status"
+              id="status"
+              defaultValue={this.props.status}
               onChange={(e) => {
-                this.setState({ quantity: Number(e.target.value) });
+                this.setState({ status: String(e.target.value) });
                 this.props.onUpdate(e, currentItem.id);
-              }}
-            />
+              }}>
+              <option value ="Pending" >Pending</option>
+              <option value ="InProcess" >In process</option>
+              <option value ="Completed" >Completed</option>
+              
+            </select>
           </td>
-        ) : (
-          <td>
-            <FaShoppingCart
-              onClick={() => this.props.onAdd(currentItem.id)}
-              style={{ cursor: "pointer" }}
-            />
-          </td>
-        )}
-        {this.props.isCart ? (
-          <td className="subTotalShow">{this.state.subTotal}</td>
-        ) : (
-          ""
-        )}
-        <td>
-          <Button
-            variant="dark"
-            size="sm"
-            className="ms-2"
-            onClick={() => this.props.onDelete(currentItem.id)}
-          >
-            <Icon.Trash></Icon.Trash>
-          </Button>
-        </td>
       </tr>
     );
   }
 }
 
-export default OrderedProduct;
+export default Order;

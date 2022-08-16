@@ -35,19 +35,17 @@ module.exports = class User {
         });
         console.log(req.session.cart);
         if(req.session.cart && req.session.cart.products != []){
-          for(let i = 0; i < req.session.cart.products.length; i++){
-            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
-          ShoppinglistsService.AddProductFromSession(req.user._id, req.session.cart.products[i])
-          }
-        }
-        console.log(req.session.wishlist);
-        if(req.session.wishlist && req.session.wishlist.products != []){
-          for(let i = 0; i < req.session.wishlist.products.length; i++){
-            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
-          WishlistService.AddProductFromSession(req.user._id, req.session.wishlist.products[i].id)
-          }
-        }
-        return res.sendStatus(200);
+          ShoppinglistsService.AddProductsFromSession(req.user._id, req.session.cart.products)
+         } 
+         if(req.session.wishlist && req.session.wishlist.products != []){
+         WishlistService.AddProductsFromSession(req.user._id, req.session.wishlist.products)
+          } 
+          req.session.cart = {products:[]}
+          req.session.wishlist = {products:[]}
+          req.session.save((err) => {
+              console.log(err);
+            });
+          return res.sendStatus(200);
       })(req, res, next);
     } else {
       return res.sendStatus(404);
@@ -154,7 +152,7 @@ module.exports = class User {
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
-    newUser.isActivate = user.degree != "Customer" ? false: true;
+    newUser.isApproved = user.degree != "Customer" ? false: true;
     await newUser.save();
     console.log("user added successfullly");
     // console.log(newUser);

@@ -10,7 +10,6 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.id,
       name: props.name,
       phone: props.phone,
       degree: props.degree,
@@ -30,14 +29,15 @@ class User extends Component {
     //var path = "data:/" +
       //this.props.profileImage.contentType+
       //";base64," + this.arrayBufferToBase64(this.props.profileImage.data);
+    var currentUser = this.props.user;
     return (
       <div>
-              <tr>
+              <tr key={currentUser.id}>
                  <td class="title">
                     <div class="thumb">
                       <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""></img>
                     </div>
-                  
+                 
                     <div class="candidate-list-details">
                       <div class="candidate-list-info">
                         <div class="candidate-list-title">
@@ -67,7 +67,7 @@ class User extends Component {
                         </div>
                       </div>
                     </div>
-                </td>
+                    </td>
                 </tr>  
             </div>
     //   <div  className="row product">

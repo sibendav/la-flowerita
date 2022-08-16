@@ -76,7 +76,7 @@ module.exports = class Shoppinglist {
       if (req.user) {
         var id = req.user._id;
         console.log(product);
-        await ShoppinglistsService.UpdateProduct(product);
+        await ShoppinglistsService.UpdateProduct(id, product);
         var cart = await ShoppinglistsService.GetCurrentCart(id);
         cart.products = await ShoppinglistsService.GetProductsDetails(
           cart.products
@@ -152,7 +152,7 @@ module.exports = class Shoppinglist {
         cart = await ShoppinglistsService.GetCurrentCart(id);
         // console.log("found cart");
         // console.log(cart);
-        if (cart) {
+        if (cart && cart.products.length >= 1) {
           cart.products = await ShoppinglistsService.GetProductsDetails(
             cart.products
           );

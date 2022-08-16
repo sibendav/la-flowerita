@@ -9,12 +9,13 @@ module.exports = class OrderService {
      userId: order.userId,
      products: order.products,
      totalPrice: order.totalPrice,
+     date:order.date,
      status: order.status,
     });
   }
 
   static async GetALL() {
-    return Order.find({ isActivate: true }).exec();
+    return Order.find({ }).exec();
   }
   static async GetOrderByStatus(s) {
     return Order.find({ status: s }).exec();
@@ -24,7 +25,7 @@ module.exports = class OrderService {
   }
   
   static async FindById(id) {
-    console.log("finding user:" + id);
+    console.log("finding order:" + id);
     return Order.findOne({ _id: id });
   }
 
@@ -38,7 +39,7 @@ module.exports = class OrderService {
   static async UpdateById(id, order) {
     return Order.updateOne(
       { _id: id },
-      { $set: { userId: order.userId, products: order.products, totalPrice: order.totalPrice, status: order.status, } }
+      { $set: { userId: order.userId, products: order.products, totalPrice: order.totalPrice, status: order.status, date : order.date} }
     ).exec();
   }
 

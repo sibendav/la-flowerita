@@ -6,6 +6,7 @@ const OrderSchema = new Schema({
       userId: Number,
       products: Array,
       totalPrice: Number,
+      date: Date,
       status: String,
     }, { autoIndex: false });
 

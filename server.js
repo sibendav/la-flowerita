@@ -24,11 +24,11 @@ const session = expressSession(
     cookie: { maxAge: 60 * 60 * 24 * 1000 }, 
     resave: false, 
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
-        ttl: 15 * 60 * 1000 ,
-        autoRemove: 'native' 
-    })
+    // store: MongoStore.create({
+    //     mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
+    //     ttl: 15 * 60 * 1000 ,
+    //     autoRemove: 'native' 
+    // })
      })
 app.use(session);
 const passport = require('passport');
@@ -92,7 +92,7 @@ io.on('connection', function(socket) {
     });
 })
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log(`Server Running on port ${port}!`);
 });

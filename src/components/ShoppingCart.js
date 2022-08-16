@@ -5,12 +5,12 @@ import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 import OrderedProduct from "./OrderedProduct.js"
 import swal from "sweetalert";
 import { Container, Table, Row, Button } from "react-bootstrap";
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class ShoppingCart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: -1,
       totalPrice: 0,
       products: [],
       loggedIn: false,
@@ -22,12 +22,12 @@ class ShoppingCart extends Component {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    await fetch("/getCurrentCart", options).then(res => res.json()).then(
+    trackPromise(
+      fetch("/getCurrentCart", options).then(res => res.json()).then(
       (result) => {
         console.log(result)
         if (result.status == 200) {
           this.setState({
-            id: result.cart._id,
             products: result.cart.products,
             totalPrice: result.cart.products.reduce(
               (acc, item) => acc + item.price * item.quantity,
@@ -39,7 +39,7 @@ class ShoppingCart extends Component {
       (error) => {
         console.log(error);
       }
-    );
+    ));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -63,7 +63,8 @@ class ShoppingCart extends Component {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({productId: id})
         };
-        fetch("/deleteProductFromCart", options).then(res => res.json()).then(
+        trackPromise(
+          fetch("/deleteProductFromCart", options).then(res => res.json()).then(
           (result) => {
             console.log(result)
             if (result.status == 200) {
@@ -74,24 +75,27 @@ class ShoppingCart extends Component {
                   0
                 ),
               });
+              swal("Success","Product Deleted Successfully From Cart", "success")
             }
           },
           (error) => {
             console.log(error);
           }
-        );
+        ));
       }
       })
     }
   async payNow(){
     if(this.state.products.length < 1){
       swal("Error", "Please add atleast one product to the cart","error")
+      return;
     }
     var options = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    await fetch("/payNow", options).then(res => {
+    trackPromise(
+      await fetch("/payNow", options).then(res => {
       if(res.status == 200){
           swal("Success","Payment is successful","success");
           this.setState({products:[], totalPrice: 0});
@@ -100,7 +104,7 @@ class ShoppingCart extends Component {
       else{
         swal("Error","There was an error","error");
       }
-    })
+    }))
 
   }
   async updateQuantity(e, id) {
@@ -115,7 +119,7 @@ class ShoppingCart extends Component {
       headers: { "Content-Type": "application/json" },
       body:JSON.stringify({product:{productId: product.id, price: product.price, quantity: product.quantity}})
     };
-    await fetch("/updateProductInCart", options).then(res => res.json()).then(
+      fetch("/updateProductInCart", options).then(res => res.json()).then(
       (result) => {
         console.log(result)
         if (result.status == 200) {
@@ -153,6 +157,7 @@ class ShoppingCart extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                <LoadingIndicator/>
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}

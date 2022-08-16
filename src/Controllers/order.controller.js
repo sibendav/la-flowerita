@@ -52,7 +52,7 @@ static async updateOrder(req, res, next){
 }
 static async updateOrderStatus(req, res, next){
     var oldOrder = await OrderService.FindById(req.body.id);
-    var status = eq.body.status
+    var status = req.body.status
     if(oldOrder){
         await OrderService.UpdateStatus(req.body.id,status)
         console.log('Order status updated:' + req.body.id);

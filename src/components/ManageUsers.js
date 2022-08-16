@@ -80,13 +80,16 @@ class UserList extends Component {
                 <div class="col-md-12">
                   <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                     <table class="table manage-candidates-top mb-0">
+                      <thead>
+                      </thead>
                       <tbody>
                         <tr>
                         { !this.state.users || this.state.users.length > 0 ? 
                           this.state.users.map((user) => {
                             return (
                               <User
-                                id={user._id}
+                                key = {user.id}
+                                user = {user}
                                 name={user.name}
                                 degree={user.degree}
                                 phone = {user.phone}

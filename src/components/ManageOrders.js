@@ -10,19 +10,18 @@ class ManageOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: -1,
       orders: [],
-      type: false,
+      status: false,
     };
   }
   componentDidMount = async () => {
-    var type = this.state.type ? this.state.type : "All";
+    var status = this.state.status ? this.state.status : "All";
     var options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:JSON.stringify({type: type})
+        body:JSON.stringify({status: status})
     };
-    console.log(type);
+    console.log(status);
     await fetch("/getOrders", options).then(res => res.json())
     .then((result) => {
       console.log(result); 
@@ -32,15 +31,15 @@ class ManageOrders extends Component {
   }
 
   componentDidUpdate = async(prevProps,prevState) =>  {
-    if (this.state.type !== prevState.type) {
+    if (this.state.status !== prevState.status) {
     console.log('type changed');
-    var type = this.state.type ? this.state.type : "All";
+    var status = this.state.status ? this.state.status : "All";
     var options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:JSON.stringify({type: type})
+        body:JSON.stringify({status: status})
     };
-    console.log(type);
+    console.log(status);
     await fetch("/getOrders", options).then(res => res.json())
     .then((result) => {
       console.log("hi");
@@ -54,87 +53,33 @@ class ManageOrders extends Component {
   }
 
   async changeType(e){
-    var type = e.target.value;
-    this.setState({type:type});
+    var status = e.target.value;
+    this.setState({status:status});
   }
 
-  async deleteFromCart(id) {
-    swal({
-      title: "Are you sure?",
-      text: "Do you want to delete this product from cart?",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        var options = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({productId: id})
-        };
-        fetch("/deleteProductFromCart", options).then(res => res.json()).then(
-          (result) => {
-            console.log(result)
-            if (result.status == 200) {
-              this.setState({
-                products: result.cart.products,
-                totalPrice: result.cart.products.reduce(
-                  (acc, item) => acc + item.price * item.quantity,
-                  0
-                ),
-              });
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      })
-    }
-
-  async updateQuantity(e, id) {
-    var quantity = Number(e.target.value);
-    var product = this.state.products.filter(p => p.id == id);
-    product = product[0]    
-    product.quantity = quantity;
-    var products = this.state.products;
-    products.map((p) => {if(p.id == id) p = product})
-    var options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body:JSON.stringify({product:{productId: product.id, price: product.price, quantity: product.quantity}})
-    };
-    await fetch("/updateProductInCart", options).then(res => res.json()).then(
-      (result) => {
-        console.log(result)
-        if (result.status == 200) {
-          this.setState({
-            products: result.cart.products,
-            totalPrice: result.cart.products.reduce(
-              (acc, item) => acc + item.price * item.quantity,
-              0
-            ),
-          });
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+  
 
   render() {
     return (
       <div className="productSlider mb-5 mt-5">
         <Container>
           <h5 className="text-left mb-4 ps-2">Order List</h5>
+          <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" onClick={(e) => this.changeType(e)} value="Pending" className="button-17">Pending</button>
+          <button type="button" onClick={(e) => this.changeType(e)} value="InProcess" className="button-17">In process</button>
+          <button type="button" onClick={(e) => this.changeType(e)} value="Completed" className="button-17">Completed</button>
+          <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
+          <button type="button" onClick={() => this.refreshPage()} style={{"width":"10%","height":"5%",margin:"20px"}}>
+            <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
+          </button>
+          </div>
           <Row>
             <div className="col-9 cartShow">
               <Table bordered hover responsive="sm">
                 <thead>
                   <tr>
                     <th>Order </th>
+                    <th>Date </th>
                     <th>Products </th>
                     <th>Sub Total</th>
                     <th>Status</th>
@@ -143,11 +88,12 @@ class ManageOrders extends Component {
                 <tbody>
                   {this.state.orders.map((order, idx) => (
                     <Order
-                      
+                      key={order.id}
                       id = {order.id}
                       userId =  {order.userId}
-                      products = {order.product} 
+                      products = {order.products} 
                       totalPrice =  {order.totalPrice}
+                      date = {order.date}
                       status = {order.status}
                     />
                   ))}
