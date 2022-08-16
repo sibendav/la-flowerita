@@ -4,7 +4,7 @@ import "../css/catalog.css";
 import "../css/orderedProduct.css";
 import swal from "sweetalert";
 import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
-
+import OrderDetailsModal from "./OrderDetailsModal.js";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { ButtonGroup, Container } from "react-bootstrap";
@@ -54,7 +54,6 @@ class Order extends Component {
         <td>{this.props.date}</td>
         {/* <td>{this.props.products}</td> */}
         <td className="price-new">{this.props.totalPrice}$</td>
-        
           <td>
             <select
               name="status"
@@ -70,6 +69,11 @@ class Order extends Component {
               
             </select>
           </td>
+          <td>
+            <OrderDetailsModal
+              products = {this.props.products}
+            />
+            </td>
       </tr>
     );
   }

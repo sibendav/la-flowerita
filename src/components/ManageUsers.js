@@ -82,7 +82,7 @@ class UserList extends Component {
                     <table class="table manage-candidates-top mb-0">
                       <thead>
                       <tr>
-                        <th>Candidate Name</th>
+                        <th>User Name</th>
                         <th class="text-center">Status</th>
                         <th class="action text-right">Action</th>
                       </tr>

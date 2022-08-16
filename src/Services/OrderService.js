@@ -19,6 +19,7 @@ module.exports = class OrderService {
   static async GetOrderByStatus(s) {
     return Order.find({ status: s }).exec();
   }
+  
   static async GetClientOrders(id) {
     return Order.find({ userId: id }).exec();
   }

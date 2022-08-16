@@ -79,9 +79,9 @@ class ManageOrders extends Component {
                   <tr>
                     <th>Order </th>
                     <th>Date </th>
-                    <th>Products </th>
                     <th>Sub Total</th>
                     <th>Status</th>
+                    <th>Order details </th>
                   </tr>
                 </thead>
                 <tbody>
