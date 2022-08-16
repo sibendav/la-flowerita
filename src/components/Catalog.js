@@ -59,7 +59,6 @@ class ProductList extends Component {
     trackPromise(
     fetch("/getCatalog", options).then(res => res.json())
     .then((result) => {
-      console.log("hi");
       this.setState({ products: result.products });
       console.log(this.state.products);
     }));

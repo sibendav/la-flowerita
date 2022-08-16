@@ -26,28 +26,29 @@ module.exports = class User {
           return res.sendStatus(400);
           }
         }
-
-        req.logIn(user, function (err) {
-          if (err) {
-            return next(err);
-            // return res.status(404).send("Username or password incorrect");
+        var cart = req.session.cart;
+        var wishlist = req.session.wishlist;
+        req.logIn(user, function(err) {
+          if (err) return next(err);
+        
+          console.log('is authenticated?: ' + req.isAuthenticated());
+          console.log(req.session);
+          if(cart && cart.products != []){
+            ShoppinglistsService.AddProductsFromSession(req.user._id, cart.products)
+           } 
+           if(wishlist && wishlist.products != []){
+           WishlistService.AddProductsFromSession(req.user._id, wishlist.products)
+            } 
+            // req.session.cart = {products:[]}
+            // req.session.wishlist = {products:[]}
+            // req.session.save((err) => {
+            //     console.log(err);
+            //   });
+          return res.sendStatus(200);
           }
-        });
-        console.log(req.session.cart);
-        if(req.session.cart && req.session.cart.products != []){
-          for(let i = 0; i < req.session.cart.products.length; i++){
-            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
-          ShoppinglistsService.AddProductFromSession(req.user._id, req.session.cart.products[i])
-          }
-        }
-        console.log(req.session.wishlist);
-        if(req.session.wishlist && req.session.wishlist.products != []){
-          for(let i = 0; i < req.session.wishlist.products.length; i++){
-            // console.log("from session" + JSON.stringify(req.session.cart.products[i]))
-          WishlistService.AddProductFromSession(req.user._id, req.session.wishlist.products[i].id)
-          }
-        }
-        return res.sendStatus(200);
+        );
+        
+          
       })(req, res, next);
     } else {
       return res.sendStatus(404);
@@ -67,8 +68,10 @@ module.exports = class User {
 
   static async logout(req, res, next) {
     console.log("logout");
-    req.logout();
-    return res.sendStatus(200);
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      return res.sendStatus(200);
+        });    
   }
 
   static async emailForResetPassword(req, res, next) {
@@ -154,7 +157,8 @@ module.exports = class User {
     }
     const newUser = new Users(user);
     newUser.setPassword(user.password);
-    newUser.isActivate = user.degree != "Customer" ? false: true;
+    newUser.isActivate = true;
+    newUser.isApproved = user.degree != "Customer" ? false: true;
     await newUser.save();
     console.log("user added successfullly");
     // console.log(newUser);
@@ -182,7 +186,58 @@ static async getProfileImage(req, res, next){
   return res.json({profileImage:user.profileImage});
 }
 
-static async isLogged(req, res, next){
+
+
+static async getUsers(req, res, next){
+  var type = req.body.type;
+  console.log(type);
+  var users = [];
+  if(type == "All" || !type){
+      console.log("all");
+      users = await  UserService.GetALL();
+  } else{
+      console.log(type);
+      users = await  UserService.GetUserBydegree(type);
+  }
+  return res.json({users: users});
+}
+static async addNewUser(req, res, next){
+  var user = req.body.user;
+  user.isActivate = true;
+  const newUser = new User(user);
+  await newUser.save();
+  console.log('User created:' + newUser);
+  var id = newUser._id;
+  console.log(id);
+  return res.json({status: 200, id: id});
+}
+
+static async updateUser(req, res, next){
+  var oldUser = await UserService.FindById(req.body.user._id);
+  var exists = await UserService.FindByEmail(req.body.user.email)
+  if(exists && exists._id != req.body.user._id){
+    return res.sendStatus(400);
+  }
+  if(oldUser){
+      var newUser = req.body.user;
+      await UserService.UpdateById(req.body.user._id, newUser)
+      console.log('user updated:' + newUser);
+  } else{
+      return res.sendStatus(404);
+  }
+  return res.sendStatus(200);
+}
+static async deleteUser(req, res, next){
+  var oldUser = await UserService.FindById(req.body.id);
+  if(oldUser){
+      await UserService.REMOVE(req.body.id)
+      console.log('User deleted:' + req.body.id);
+  } else{
+      return res.sendStatus(404);
+  }
+  return res.sendStatus(200);
+}
+  static async isLogged(req, res, next){
   if(req.user)
     return res.sendStatus(200);
   return res.sendStatus(404);

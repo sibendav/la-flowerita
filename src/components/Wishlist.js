@@ -83,6 +83,7 @@ class Wishlist extends Component {
                     0
                   ),
                 });
+                swal("Success","Product Deleted Successfully From Wish List", "success")
               }
             },
             (error) => {
@@ -91,7 +92,6 @@ class Wishlist extends Component {
           ));
       }
     });
-    swal("Success","Product Deleted Successfully From Cart", "success")
   }
 
   async updateQuantity(e, id) {
@@ -141,19 +141,17 @@ class Wishlist extends Component {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId: id }),
       };
-      trackPromise(
       fetch("/addNewProductToCart", options).then(res => res.json()).then(
         (result) => {
           if (result.status == 200) {
             this.state.onUpdateCart(result.cart.products.length);
-            swal("Success!", "Product Added To Cart!", "success");
+            swal("Success","Product Added Successfully To Cart", "success")
           }
         },
         (error) => {
           console.log(error);
         }
-      ));
-    swal("Success","Product Added Successfully To Cart", "success")
+      );
   }
   render() {
     return (

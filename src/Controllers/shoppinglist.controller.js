@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Shoppinglists = mongoose.model('Shoppinglists');
 const Users = mongoose.model('Users');
 const Products = mongoose.model('Products');
+const Orders = mongoose.model('Orders');
 
 module.exports = class Shoppinglist {
   static async addNewProductToCart(req, res, next) {
@@ -76,7 +77,7 @@ module.exports = class Shoppinglist {
       if (req.user) {
         var id = req.user._id;
         console.log(product);
-        await ShoppinglistsService.UpdateProduct(product);
+        await ShoppinglistsService.UpdateProduct(id, product);
         var cart = await ShoppinglistsService.GetCurrentCart(id);
         cart.products = await ShoppinglistsService.GetProductsDetails(
           cart.products
@@ -152,7 +153,7 @@ module.exports = class Shoppinglist {
         cart = await ShoppinglistsService.GetCurrentCart(id);
         // console.log("found cart");
         // console.log(cart);
-        if (cart) {
+        if (cart && cart.products.length >= 1) {
           cart.products = await ShoppinglistsService.GetProductsDetails(
             cart.products
           );
@@ -178,7 +179,21 @@ module.exports = class Shoppinglist {
   }
   static async payNow(req, res, next) {
     if (req.user) {
+      var cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
       await ShoppinglistsService.CartPaid(req.user._id);
+      cart.products = await ShoppinglistsService.GetProductsDetails(
+        cart.products
+      );
+      console.log("cart" + cart);
+      var totalPrice = cart.products.reduce((acc, item) => acc + item.price * item.quantity,0);
+      console.log(totalPrice);
+      var order = new Orders({userId: req.user._id, 
+                            products:cart.products, 
+                            totalPrice: totalPrice,
+                            date: Date.now(),
+                            status:"Pending"
+                          })
+      await order.save();
       return res.sendStatus(200);
     }
     return res.sendStatus(404);

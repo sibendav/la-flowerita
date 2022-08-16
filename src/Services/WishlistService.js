@@ -81,6 +81,11 @@ module.exports = class ProductService {
     );
   }
 
+  static async AddProductsFromSession(userId, products){
+    for(let i = 0; i < products.length; i++){
+      await this.AddProductFromSession(userId, products[i].id)
+    }
+  }
   static async AddProductFromSession(id, productId) {
     var wishlist = await this.GetCurrentWishlist(id)
     var exists = wishlist.products.indexOf(productId) == -1 ? false: true;

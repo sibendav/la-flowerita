@@ -12,15 +12,16 @@ module.exports = class UserService {
       isActivate: true,
       email: user.email,
       password: user.password,
-      image: user.image
+      image: user.image,
+      isApproved: user.degree !="Customer" ? false: true
     });
   }
 
   static async GetALL() {
-    return User.find({ isActivate: true }).exec();
+    return User.find({ isApproved:true, isActivate: true }).exec();
   }
-  static async GetClients() {
-    return User.find({ isActivate: true, degree: "client" }).exec();
+  static async GetUserBydegree(deg) {
+    return User.find({isApproved:true ,isActivate: true, degree: deg }).exec();
   }
   static async FindById(id) {
     console.log("finding user:" + id);
@@ -28,16 +29,22 @@ module.exports = class UserService {
   }
   static async FindByEmail(e) {
     console.log("finding user by email:" + e);
-    return User.findOne({ email: e });
+    return User.findOne({ email: e , isApproved: true, isActivate:true});
   }
   static async FIND(e, p) {
     console.log("finding user:" + e + "" + p);
-    return await User.findOne({ email: e, password: p });
+    return await User.findOne({ email: e, password: p, isApproved: true, isActivate:true});
   }
 
-  static async REMOVE(e, p) {
+  //static async REMOVE(e, p) {
+    //return User.updateOne(
+      //{ email: e, password: p },
+      //{ $set: { isActivate: false } }
+    //).exec();
+  //}
+  static async REMOVE(id) {
     return User.updateOne(
-      { email: e, password: p },
+      { _id: id },
       { $set: { isActivate: false } }
     ).exec();
   }
@@ -52,7 +59,7 @@ module.exports = class UserService {
   static async UpdateById(id, user) {
     return User.updateOne(
       { _id: id },
-      { $set: { email: user.email, hash: user.hash, salt:user.salt, degree: user.degree, profileImage: user.profileImage } }
+      { $set: { email: user.email, degree: user.degree, profileImage: user.profileImage,phone:user.phone, name:user.name} }
     ).exec();
   }
 

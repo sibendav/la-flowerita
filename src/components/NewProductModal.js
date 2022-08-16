@@ -6,7 +6,8 @@ import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
 import withAuth from "./Auth.js"
 import swal from 'sweetalert';
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class NewProductModal extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,8 @@ class NewProductModal extends Component {
       body: JSON.stringify({product: product}),
     };
     var id = 0;
-    await fetch("/addNewProduct", options).then(res => res.json()).then(
+    trackPromise(
+      fetch("/addNewProduct", options).then(res => res.json()).then(
       (res) => {
         console.log(res);
         if(res.status == 403){
@@ -87,7 +89,7 @@ class NewProductModal extends Component {
           ERROR: error,
         });
       }
-    );
+    ));
 
     if(id != 0){
     var myFormData = new FormData();
@@ -162,6 +164,7 @@ class NewProductModal extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+          <LoadingIndicator/>
             <form>
               <div className="mb-3">
                 <input

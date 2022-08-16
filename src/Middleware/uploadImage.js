@@ -1,7 +1,7 @@
 const util = require("util");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
-const dbConfig = require("../config/db");
+const dbConfig = require("../Config/db");
 const MongoClient = require('mongodb').MongoClient;
 var Server = require('mongodb').Server;
 // const uri = "mongodb+srv://tratzon:tratzon1@cluster0.l39y0.mongodb.net/?retryWrites=true&w=majority";

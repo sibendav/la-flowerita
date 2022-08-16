@@ -11,6 +11,7 @@ require("./src/Models/products");
 require("./src/Models/orderProducts");
 require("./src/Models/shoppinglists");
 require("./src/Models/userShoppinglists");
+require("./src/Models/orders");
 
 const dbConfig = require("./src/Config/db");
 
@@ -20,7 +21,7 @@ const MongoStore = require('connect-mongo');
 const session = expressSession(
     { secret: 'secret', 
     algorithms: ['RS256'], 
-    cookie: { maxAge: 60 * 60 * 24 * 1000 }, 
+    cookie: { maxAge: 60 * 15 * 1000 }, 
     resave: false, 
     saveUninitialized: false,
     store: MongoStore.create({
@@ -91,7 +92,7 @@ io.on('connection', function(socket) {
     });
 })
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log(`Server Running on port ${port}!`);
 });

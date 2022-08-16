@@ -14,6 +14,7 @@ const UserSchema = new Schema({
       hash: String,
       salt: String,
       profileImage: {data: Buffer, contentType: String},
+      isApproved: Boolean,
       resetPasswordToken: String,
     }, { autoIndex: true });
     
