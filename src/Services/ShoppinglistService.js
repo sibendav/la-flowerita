@@ -77,7 +77,7 @@ module.exports = class ProductService {
     if(orderProduct){
       console.log("update quantity")
       await OrderProducts.updateOne(
-        { productId:product.id },
+        { _id:orderProduct._id },
         { $set: { quantity:  orderProduct.quantity + product.quantity } }
       );
       return;

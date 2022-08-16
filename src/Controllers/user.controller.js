@@ -26,26 +26,29 @@ module.exports = class User {
           return res.sendStatus(400);
           }
         }
-
-        req.logIn(user, function (err) {
-          if (err) {
-            return next(err);
-            // return res.status(404).send("Username or password incorrect");
-          }
-        });
-        console.log(req.session.cart);
-        if(req.session.cart && req.session.cart.products != []){
-          ShoppinglistsService.AddProductsFromSession(req.user._id, req.session.cart.products)
-         } 
-         if(req.session.wishlist && req.session.wishlist.products != []){
-         WishlistService.AddProductsFromSession(req.user._id, req.session.wishlist.products)
-          } 
-          req.session.cart = {products:[]}
-          req.session.wishlist = {products:[]}
-          req.session.save((err) => {
-              console.log(err);
-            });
+        var cart = req.session.cart;
+        var wishlist = req.session.wishlist;
+        req.logIn(user, function(err) {
+          if (err) return next(err);
+        
+          console.log('is authenticated?: ' + req.isAuthenticated());
+          console.log(req.session);
+          if(cart && cart.products != []){
+            ShoppinglistsService.AddProductsFromSession(req.user._id, cart.products)
+           } 
+           if(wishlist && wishlist.products != []){
+           WishlistService.AddProductsFromSession(req.user._id, wishlist.products)
+            } 
+            // req.session.cart = {products:[]}
+            // req.session.wishlist = {products:[]}
+            // req.session.save((err) => {
+            //     console.log(err);
+            //   });
           return res.sendStatus(200);
+          }
+        );
+        
+          
       })(req, res, next);
     } else {
       return res.sendStatus(404);
@@ -65,8 +68,10 @@ module.exports = class User {
 
   static async logout(req, res, next) {
     console.log("logout");
-    req.logout();
-    return res.sendStatus(200);
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      return res.sendStatus(200);
+        });    
   }
 
   static async emailForResetPassword(req, res, next) {

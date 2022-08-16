@@ -20,14 +20,14 @@ const MongoStore = require('connect-mongo');
 const session = expressSession(
     { secret: 'secret', 
     algorithms: ['RS256'], 
-    cookie: { maxAge: 60 * 60 * 24 * 1000 }, 
+    cookie: { maxAge: 60 * 15 * 1000 }, 
     resave: false, 
     saveUninitialized: false,
-    // store: MongoStore.create({
-    //     mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
-    //     ttl: 15 * 60 * 1000 ,
-    //     autoRemove: 'native' 
-    // })
+    store: MongoStore.create({
+        mongoUrl: 'mongodb://localhost/FlowersShop', //YOUR MONGODB URL
+        ttl: 15 * 60 * 1000 ,
+        autoRemove: 'native' 
+    })
      })
 app.use(session);
 const passport = require('passport');

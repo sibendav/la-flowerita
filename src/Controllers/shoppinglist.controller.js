@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Shoppinglists = mongoose.model('Shoppinglists');
 const Users = mongoose.model('Users');
 const Products = mongoose.model('Products');
+const Orders = mongoose.model('Orders');
 
 module.exports = class Shoppinglist {
   static async addNewProductToCart(req, res, next) {
@@ -178,7 +179,15 @@ module.exports = class Shoppinglist {
   }
   static async payNow(req, res, next) {
     if (req.user) {
+      var cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
       await ShoppinglistsService.CartPaid(req.user._id);
+      var order = new Orders({userId: req.user._id, 
+                            products:cart.products, 
+                            totalPrice: cart.products.reduce((acc, item) => acc + item.price * item.quantity,0),
+                            date: Date.now(),
+                            status:"pending"
+                          })
+      await order.save();
       return res.sendStatus(200);
     }
     return res.sendStatus(404);
