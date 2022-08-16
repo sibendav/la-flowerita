@@ -33,7 +33,7 @@ module.exports = class ProductService {
     console.log("got order product")
     var product = await Products.findById(orderProduct.productId)
     console.log("got product")
-    var result = {id: product._id, name:product.name, price: product.price, quantity: orderProduct.quantity, image: product.image}
+    var result = {id: product._id, name:product.name, price: product.price, quantity: orderProduct.quantity, image: product.image, sellerId:product.sellerId}
     return result;
   }
 

@@ -15,7 +15,7 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        id : props.id,
+        _id : props._id,
         userId :  props.userId,
         products : props.products,
         totalPrice :  props.totalPrice,
@@ -45,16 +45,15 @@ class Order extends Component {
   
   render() {
       
-    var currentItem = this.props.order;
     return (
         
-      <tr key={currentItem.id}>
-        <td>{this.props.id}
+      <tr key={this.props._id}>
+        <td>{this.props._id}
         </td>
         <td>{this.props.date}</td>
-        <td>{this.props.products}</td>
+        {/* <td>{this.props.products}</td> */}
         <td className="price-new">{this.props.totalPrice}$</td>
-        <td>{this.props.products}</td>
+        <td>{this.props.status}</td>
       </tr>
     );
   }

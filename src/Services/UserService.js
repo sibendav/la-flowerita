@@ -25,7 +25,7 @@ module.exports = class UserService {
   }
   static async FindById(id) {
     console.log("finding user:" + id);
-    return User.findOne({ _id: id });
+    return User.findOne({ _id: id }).exec();
   }
   static async FindByEmail(e) {
     console.log("finding user by email:" + e);

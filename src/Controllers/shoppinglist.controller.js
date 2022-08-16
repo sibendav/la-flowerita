@@ -186,7 +186,7 @@ module.exports = class Shoppinglist {
       );
       console.log("cart" + cart);
       var totalPrice = cart.products.reduce((acc, item) => acc + item.price * item.quantity,0);
-      console.log(totalPrice)
+      console.log(totalPrice);
       var order = new Orders({userId: req.user._id, 
                             products:cart.products, 
                             totalPrice: totalPrice,
