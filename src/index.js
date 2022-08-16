@@ -65,8 +65,8 @@ class App extends Component {
             profileImage: false,
             numOfProductsInCart: false,
             numOfProductsInWishlist: false,
-            menuCollapse: false
-
+            menuCollapse: false,
+            userName:""
         };
     }
 
@@ -82,7 +82,8 @@ class App extends Component {
                 loggedIn: result.isLogged,
                 profileImage: result.profileImage || "",
                 numOfProductsInCart: result.cart.products.length,
-                numOfProductsInWishlist: result.wishlist.products.length
+                numOfProductsInWishlist: result.wishlist.products.length,
+                userName: result.userName
               });
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");
@@ -296,16 +297,17 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                           <NavLink
-                              className="nav-link"
-                              style={{fontSize: "initial"}}
-                              to="/Chat"
-                              id="users"
-                          >
-                              {this.state.menuCollapse ? ""
-                                  : "chat"}
-                              <i class="fa fa-comments" style={{"font-size": "24px"}}/>
+                            className="nav-link"
+                            style={{fontSize: "initial"}}
+                            to="/PreChat"
+                            id="users"
+                        >
+                            {this.state.menuCollapse ? ""
+                                : "chat"}
+                            <i class="fa fa-comments" style={{"font-size": "24px"}}/>
 
-                          </NavLink>
+                        </NavLink>
+                          {/* )} */}
                       </li>
                   </ul>
                   <button
@@ -362,7 +364,7 @@ class App extends Component {
                 <Route path="/orders" element={<ManageOrders />} />
                 <Route path="/myOrders" element={<MyOrders />} />
 
-                <Route path="/Chat" element={<PreChat />} />
+                <Route path="/PreChat" element={<PreChat userName={this.state.userName}/>} />
 
               </Routes>
             </div>
