@@ -68,8 +68,7 @@ class NewProductModal extends Component {
       body: JSON.stringify({product: product}),
     };
     var id = 0;
-    trackPromise(
-      fetch("/addNewProduct", options).then(res => res.json()).then(
+      await fetch("/addNewProduct", options).then(res => res.json()).then(
       (res) => {
         console.log(res);
         if(res.status == 403){
@@ -89,8 +88,8 @@ class NewProductModal extends Component {
           ERROR: error,
         });
       }
-    ));
-
+    );
+      
     if(id != 0){
     var myFormData = new FormData();
     myFormData.append('file', this.state.picture);

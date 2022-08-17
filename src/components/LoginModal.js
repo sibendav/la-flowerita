@@ -92,14 +92,14 @@ class LoginModal extends Component {
   render() {
     return (
       <div>
-        <Button
+        <button
           title="Log In"
-          className="btn btn-primary btn-lg btn-floating" 
-          style={{display: this.props.showButton,"backgroundColor": "#17c0eb"}}
+          className="button-la-flowerita" 
+          style={{display: this.props.showButton}}
           onClick={() => this.handleShow()}
         >
           {this.props.menuCollapse ? "" :"Login"}<FiLogIn/>
-        </Button>
+        </button>
         {/* <button style={{"float":"right"}} type="button" id="login"  data-bs-toggle="modal" data-bs-target="#myModal">
                       Login */}
 
@@ -149,7 +149,8 @@ class LoginModal extends Component {
             <h5>{this.state.ERROR}</h5>
             <div className="modal-footer">
               <button
-                className="btn btn-lg btn-primary btn-block"
+                className="button-la-flowerita" 
+                // className="btn btn-lg btn-primary btn-block"
                 onClick={() => this.dofetch()}
                 type="submit"
               >

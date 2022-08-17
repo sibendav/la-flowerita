@@ -14,6 +14,9 @@ static async getOrders(req, res, next){
     console.log(status);
     console.log(user.degree);
     var orders = [];
+    if(!req.user){
+      return res.json({status:403, orders:[]});
+    }
     if((status == "All" || !status) && user.degree=="Manager"){
         console.log("all-manager");
         orders = await  OrderService.GetALL();
@@ -24,8 +27,24 @@ static async getOrders(req, res, next){
     else if(status == "All"|| !status){
       console.log("all-Seller");
       orders = await  OrderService.GetALL();
+      // console.log(orders);
+      orders = orders.filter(x=>x.products.find((p) => {
+        if (p.sellerId==req.user._id) {
+          return true;
+        }
+        return false;
+      }))
+      // console.log(orders[0].products);
+      //orders =  orders.filter(x=> console.log(x.products.find((p)=>{p.sellerId==req.user._id})));
+      orders = orders.map(p=> p ={products:p.products.filter((p)=>
+        {if (p.sellerId==req.user._id) {
+          console.log("true")
+          return true;
+        }
+        return false;
+    }),_id:p._id, userId:p.userId, totalPrice:p.totalPrice, status:p.status, date:p.date});
       console.log(orders);
-      orders =  orders.filter((x)=> {return x.products.find((p)=>{p.sellerId==req.user._id})});
+      console.log(req.user._id);
     }
     else{
       console.log("status-Seller");

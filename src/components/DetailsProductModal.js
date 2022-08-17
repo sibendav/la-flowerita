@@ -326,6 +326,7 @@ class DetailsProductModal extends Component {
               </div>
             </form>
           </Modal.Body>
+          {this.props.degree && this.props.degree != "Customer"?
           <Modal.Footer>
             <h5>{this.state.ERROR}</h5>
             <div className="modal-footer">
@@ -352,7 +353,7 @@ class DetailsProductModal extends Component {
             </a>
             <button onClick={() => this.updateProduct()} className="button-17" style={{display: this.state.isUpdate? "block" : "none"}}>Update</button>
             </div>
-          </Modal.Footer>
+          </Modal.Footer>:""}
         </Modal>
       </div>
     );

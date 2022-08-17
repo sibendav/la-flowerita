@@ -12,7 +12,7 @@ module.exports = class UserService {
       isActivate: true,
       email: user.email,
       password: user.password,
-      image: user.image,
+      profileImage: user.profileImage,
       isApproved: user.degree !="Customer" ? false: true
     });
   }
@@ -65,7 +65,16 @@ module.exports = class UserService {
       { $set: { isApproved: user.isApproved, email: user.email, degree: user.degree, profileImage: user.profileImage,phone:user.phone, name:user.name} }
     ).exec();
   }
-
+  static async UpdatePicture(id, user) {
+    return User.updateOne(
+      { _id: id },
+      {
+        $set: {
+          profileImage: user.profileImage,
+        },
+      }
+    ).exec();
+  }
   
 
 

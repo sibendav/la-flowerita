@@ -24,6 +24,8 @@ class UpdateUserModal extends Component {
       isActivate: props.isActivate,
       isApproved: props.isApproved,
       email: props.email,
+      picture: false,
+      src: false,
       ERROR: "",
     };
     console.log(props);
@@ -89,6 +91,7 @@ class UpdateUserModal extends Component {
     var degree = this.state.degree;
     var address = this.state.address;
     var email = this.state.email;
+    var isApproved =  this.state.isApproved
     if (
       name == "" ||
       phone == "" ||
@@ -105,7 +108,9 @@ class UpdateUserModal extends Component {
       degree: degree,
       address: address,
       email: email,
-      _id: this.state._id
+      _id: this.state._id,
+      isApproved: isApproved
+      
     };
     console.log(user)
     var options = {
@@ -113,7 +118,7 @@ class UpdateUserModal extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({user: user}),
     };
-    await fetch("/updateUser", options).then(
+     await fetch("/updateUser", options).then(
       (res) => {
         console.log(res);
         if (res.status == 200) {
@@ -130,7 +135,24 @@ class UpdateUserModal extends Component {
           ERROR: error,
         });
       }
+      
     );
+    if (!this.state.picture) {
+      console.log("innnnn");
+      swal("Updated!", "User updated successfully!", "success");
+    }else{
+    var myFormData = new FormData();
+    myFormData.append('file', this.state.picture);
+    myFormData.append('id', this.state._id);
+
+    const response = await fetch("/addUserPicture", {
+      method: "POST",
+      body: myFormData, 
+    });
+    if (response.status == 200) {
+      swal("Updated!", "user updated successfully!", "success");
+    }
+  }  
   }
   renderPreview() {
     if(this.state.src) {
@@ -167,6 +189,18 @@ class UpdateUserModal extends Component {
       ).id,
     });
   };
+  radioHandler1 = (e) => {
+    if(e.target.id =="notApproved"){
+    this.setState({
+      isApproved :false
+    });
+  }
+  if(e.target.id =="isApproved"){
+    this.setState({
+      isApproved :true
+    });
+  }
+  };
   colorSelected = (e) => {
     this.setState({
         color : e.target.value});
@@ -196,10 +230,9 @@ class UpdateUserModal extends Component {
         >
           
           <Modal.Header>
-            <Modal.Title>
-            <Modal.Title>
-              <div className="modal-header">
-              <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src={this.props.path} 
+            <Modal.Title class = "center">
+              <div className="modal-header" >
+              <img  style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src={this.props.path} 
                 onError={( e ) => {
                   e.target.src='https://www.freeiconspng.com/uploads/no-image-icon-11.PNG';
                   e.target.onerror = null; // prevents looping
@@ -207,12 +240,11 @@ class UpdateUserModal extends Component {
                 alt={this.state.name} height="150" />
               </div>
             </Modal.Title>
-            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <form key={this.state._id}>
               <div className="mb-3">
-              <h1>full name:</h1>
+              <h5>full name:</h5>
                 <input
                   type="text"
                   name="name"
@@ -227,7 +259,7 @@ class UpdateUserModal extends Component {
                 />
               </div>
               <div className="mb-3">
-              <h1>phone number:</h1>
+              <h5>phone number:</h5>
                 <input
                   type="text"
                   name="phone"
@@ -241,7 +273,7 @@ class UpdateUserModal extends Component {
                 />
               </div>
               <div className="mb-3">
-                <h1>address:</h1>
+                <h5>address:</h5>
                 <input
                   type="text"
                   name="address"
@@ -255,7 +287,7 @@ class UpdateUserModal extends Component {
                 />
               </div>
               <div className="mb-3" >
-              <h1>email:</h1>
+              <h5>email:</h5>
               <input
                   type="text"
                   name="email"
@@ -291,18 +323,18 @@ class UpdateUserModal extends Component {
               <div className="mb-3" >
                 <input
                   type="radio"
-                  name="Approved"
+                  name="isApproved"
                   id="isApproved"
-                  onChange={this.radioHandler}
+                  onChange={this.radioHandler1}
                   checked = {this.state.isApproved == true ? "checked" : null}
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />
                 <label for="rd1">Approved</label>
                 <input
                   type="radio"
-                  name="Approved"
-                  id="NotApprove"
-                  onChange={this.radioHandler}
+                  name = "isApproved"
+                  id="notApproved"
+                  onChange={this.radioHandler1}
                   checked = {this.state.isApproved == false ? "checked" : null}
                   disabled = {this.state.isUpdate? "" :"disabled"}
                 />

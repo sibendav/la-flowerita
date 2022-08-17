@@ -87,14 +87,14 @@ class OrderedProduct extends Component {
           ""
         )}
         <td>
-          <Button
+          <button
             variant="dark"
             size="sm"
-            className="ms-2"
+            className="ms-2 button-la-flowerita"
             onClick={() => this.props.onDelete(currentItem.id)}
           >
             <Icon.Trash></Icon.Trash>
-          </Button>
+          </button>
         </td>
       </tr>
     );

@@ -159,14 +159,14 @@ class SignupModal extends Component {
   render() {
     return (
       <div>
-        <Button
+        <button
           title="Sign Up"
-          className="btn btn-primary btn-lg btn-floating" 
-          style={{display: this.props.showButton,"backgroundColor": "#17c0eb"}}
+          className="button-la-flowerita" 
+          style={{display: this.props.showButton}}
           onClick={() => this.handleShow()}
         >
         {this.props.menuCollapse ? "" :"SignUp"}<FaPenSquare/>
-        </Button>
+        </button>
         <Modal
           style={{ opacity: 1 }}
           show={this.state.showModal}
