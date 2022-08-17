@@ -205,7 +205,7 @@ class App extends Component {
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         aria-current="page"
                         to="/about"
@@ -364,7 +364,7 @@ class App extends Component {
               className="container-fluid text-center"
               style={{ backgroundColor: "#ffdab9", float: "bottom" }}
             >
-              <p>© Simha Franko & Adi Malachi Yosef 2022</p>
+              <p>© Simha Franko & Adi Malachi Yosef & Talya Ratzon Geuli 2022</p>
             </footer>
           
         </>

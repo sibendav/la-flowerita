@@ -5,7 +5,8 @@ import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 import Order from "./Order.js"
 import swal from "sweetalert";
 import { Container, Table, Row, Button } from "react-bootstrap";
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 class ManageOrders extends Component {
   constructor(props) {
     super(props);
@@ -22,11 +23,11 @@ class ManageOrders extends Component {
         body:JSON.stringify({status: status})
     };
     console.log(status);
-    await fetch("/getOrders", options).then(res => res.json())
+    trackPromise(fetch("/getOrders", options).then(res => res.json())
     .then((result) => {
       console.log(result); 
       this.setState({ orders: result.orders });
-    });
+    }));
   }
 
   componentDidUpdate = async(prevProps,prevState) =>  {
@@ -39,12 +40,12 @@ class ManageOrders extends Component {
         body:JSON.stringify({status: status})
     };
     console.log(status);
-    await fetch("/getOrders", options).then(res => res.json())
+    trackPromise(fetch("/getOrders", options).then(res => res.json())
     .then((result) => {
       console.log("hi");
       this.setState({ orders: result.orders });
       console.log(this.state.orders);
-    });
+    }));
  }
 }
   refreshPage() {
@@ -62,6 +63,7 @@ class ManageOrders extends Component {
     return (
       <div className="productSlider mb-5 mt-5">
         <Container>
+          
           <h5 className="text-left mb-4 ps-2">Order List</h5>
           <div style={{"marginTop":"inherit"}} className="btn-group" role="group" aria-label="Basic example">
           <button type="button" onClick={(e) => this.changeType(e)} value="Pending" className="button-17">Pending</button>
@@ -85,6 +87,7 @@ class ManageOrders extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                <LoadingIndicator/>
                   {this.state.orders.map((order, idx) => (
                     <Order
                       key={order._id}

@@ -3,9 +3,9 @@
 import React, { Component } from "react";
 import User from "./User";
 import "../css/users.css";
-import LoadingIndicator from "./Spinner";
 //import NewProductModal from "./NewProductModal";
-
+import LoadingIndicator from "./Spinner";
+import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
 
 
 class UserList extends Component {
@@ -13,7 +13,7 @@ class UserList extends Component {
     super(props);
 
     this.state = {
-      users: [],
+      users: false,
       type: false
     };
   }
@@ -26,12 +26,12 @@ class UserList extends Component {
         body:JSON.stringify({type: type})
     };
     console.log(type);
-    await fetch("/getUsers", options).then(res => res.json())
+    trackPromise(fetch("/getUsers", options).then(res => res.json())
     .then((result) => {
       console.log(result); 
       this.setState({ users: result.users });
       console.log(this.state.users);
-    });
+    }));
   }
 
   componentDidUpdate = async(prevProps,prevState) =>  {
@@ -44,12 +44,12 @@ class UserList extends Component {
         body:JSON.stringify({type: type})
     };
     console.log(type);
-    await fetch("/getUsers", options).then(res => res.json())
+    trackPromise(fetch("/getUsers", options).then(res => res.json())
     .then((result) => {
       console.log("hi");
       this.setState({ users: result.users });
       console.log(this.state.users);
-    });
+    }));
  }
 }
   refreshPage() {
@@ -83,6 +83,7 @@ class UserList extends Component {
                 <div className="col-md-12">
                   <div className="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                     <table className="table manage-candidates-top mb-0">
+                    
                       <thead>
                       <tr>
                         <th>User Name</th>
@@ -91,7 +92,8 @@ class UserList extends Component {
                       </tr>
                       </thead>
                       <tbody>
-                        { !this.state.users || this.state.users.length > 0 ? 
+                      <LoadingIndicator/>
+                        { this.state.users || this.state.users.length > 0 ? 
                           this.state.users.map((user) => {
                             return (
                               <User
