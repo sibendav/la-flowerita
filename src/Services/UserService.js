@@ -16,9 +16,12 @@ module.exports = class UserService {
       isApproved: user.degree !="Customer" ? false: true
     });
   }
-
+  
   static async GetALL() {
     return User.find({ isApproved:true, isActivate: true }).exec();
+  }
+  static async GetNotApproved() {
+    return User.find({ isApproved:false, isActivate: true }).exec();
   }
   static async GetUserBydegree(deg) {
     return User.find({isApproved:true ,isActivate: true, degree: deg }).exec();
@@ -59,7 +62,7 @@ module.exports = class UserService {
   static async UpdateById(id, user) {
     return User.updateOne(
       { _id: id },
-      { $set: { email: user.email, degree: user.degree, profileImage: user.profileImage,phone:user.phone, name:user.name} }
+      { $set: { isApproved: user.isApproved, email: user.email, degree: user.degree, profileImage: user.profileImage,phone:user.phone, name:user.name} }
     ).exec();
   }
 

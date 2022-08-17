@@ -10,21 +10,28 @@ module.exports = class Order {
   
 static async getOrders(req, res, next){
     var status = req.body.status;
+    var user = await UserService.FindById(req.user._id)
     console.log(status);
+    console.log(user.degree);
     var orders = [];
     if((status == "All" || !status) && user.degree=="Manager"){
-        console.log("all");
+        console.log("all-manager");
         orders = await  OrderService.GetALL();
     } else if(user.degree=="Manager"){
+        console.log("satus-manager");
         orders = await  OrderService.GetOrderByStatus(status);
     }
     else if(status == "All"|| !status){
+      console.log("all-Seller");
       orders = await  OrderService.GetALL();
-      orders =  orders.filter((x)=> {return x.product.find((p)=>{p.sellerId==req.user._id})});
+      console.log(orders);
+      orders =  orders.filter((x)=> {return x.products.find((p)=>{p.sellerId==req.user._id})});
     }
     else{
+      console.log("status-Seller");
       orders = await  OrderService.GetOrderByStatus(status);
-      orders =  orders.filter((x)=> {return x.product.find((p)=>{p.sellerId==req.user._id})});
+      console.log(orders);
+      orders =  orders.filter((x)=> {return x.products.find((p)=>{p.sellerId==req.user._id})});
     }
     console.log(orders);
     return res.json({orders: orders});

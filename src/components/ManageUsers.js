@@ -65,9 +65,11 @@ class UserList extends Component {
     return (
       <div className="container main-content">
       <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+        
+        <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
         <button type="button" onClick={(e) => this.changeType(e)} value="Seller" className="button-17">Sellers</button>
         <button type="button" onClick={(e) => this.changeType(e)} value="Customer" className="button-17">Customers</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
+        <button type="button" onClick={(e) => this.changeType(e)} value="NotApproved" className="button-17">Not Approved</button>
         <button type="button" onClick={() => this.refreshPage()} style={{"width":"10%","height":"5%",margin:"20px"}}>
           <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
       </button>
@@ -100,6 +102,7 @@ class UserList extends Component {
                                 phone = {user.phone}
                                 address = {user.address}
                                 email={user.email}
+                                isApproved = {user.isApproved}
                                 profileImage = {user.profileImage}
                               />
                               

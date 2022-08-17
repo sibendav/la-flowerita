@@ -22,6 +22,7 @@ class UpdateUserModal extends Component {
       degree: props.degree,
       address: props.address,
       isActivate: props.isActivate,
+      isApproved: props.isApproved,
       email: props.email,
       ERROR: "",
     };
@@ -264,7 +265,7 @@ class UpdateUserModal extends Component {
                   defaultValue={this.state.email}
                   onChange={this.inputsHandler}
                   required
-                  disabled = "disabled" 
+                  disabled = {this.state.isUpdate? "" :"disabled"}
                   />
                   </div>
                   <div className="mb-3" >
@@ -274,6 +275,7 @@ class UpdateUserModal extends Component {
                   id="Seller"
                   onChange={this.radioHandler}
                   checked = {this.state.degree == "Seller" ? "checked" : null}
+                  disabled = {this.state.isUpdate? "" :"disabled"}
                 />
                 <label for="rd1">Seller</label>
                 <input
@@ -282,8 +284,29 @@ class UpdateUserModal extends Component {
                   id="Customer"
                   onChange={this.radioHandler}
                   checked = {this.state.degree == "Customer" ? "checked" : null}
+                  disabled = {this.state.isUpdate? "" :"disabled"}
                 />
                 <label for="rd2">Customer</label>
+              </div>
+              <div className="mb-3" >
+                <input
+                  type="radio"
+                  name="Approved"
+                  id="isApproved"
+                  onChange={this.radioHandler}
+                  checked = {this.state.isApproved == true ? "checked" : null}
+                  disabled = {this.state.isUpdate? "" :"disabled"}
+                />
+                <label for="rd1">Approved</label>
+                <input
+                  type="radio"
+                  name="Approved"
+                  id="NotApprove"
+                  onChange={this.radioHandler}
+                  checked = {this.state.isApproved == false ? "checked" : null}
+                  disabled = {this.state.isUpdate? "" :"disabled"}
+                />
+                <label for="rd2">Not Approved</label>
               </div>
               <div style={{display:this.state.isUpdate? "block" : "none"}} className="mb-3">
                 <h2>Upload Product Image</h2>
