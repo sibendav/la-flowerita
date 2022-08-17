@@ -12,7 +12,7 @@ export default function Conversation({ roomName }) {
       src={
         user?.profilePicture
           ? PF + user.profilePicture
-          : PF + "../../../public/images/icon1.jpg"
+          : PF + "../../../images/icon1.jpg"
       }
       alt=""
     />

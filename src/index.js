@@ -15,7 +15,6 @@ import './css/index.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.min.js';
 import Contact from './components/Contact.js';
-import Catalog from './components/Catalog.js';
 import About from './components/About.js';
 import LoginModal from './components/LoginModal.js';
 import SignupModal from './components/SignupModal.js';
@@ -24,12 +23,14 @@ import ProductList from './components/Catalog.js';
 import ShoppingCart from './components/ShoppingCart.js';
 import Wishlist from './components/Wishlist.js';
 import NoPermission from './components/NoPermission.js';
-
 import UserList from './components/ManageUsers';
 import ManageOrders from './components/ManageOrders';
 import MyOrders from './components/MyOrders';
-
 import PreChat from './components/PreChat.js';
+import Button from "react-bootstrap/Button";
+
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
 //import react pro sidebar components
 import {
   ProSidebar,
@@ -53,8 +54,6 @@ import {
 import { RiPencilLine } from "react-icons/ri";
 import { BiCog } from "react-icons/bi";
 
-//import sidebar css from react-pro-sidebar module and our custom css
-import "react-pro-sidebar/dist/css/styles.css";
 
 class App extends Component {
     constructor() {
@@ -163,7 +162,7 @@ class App extends Component {
       console.log("couldn't find path of profile image");
       }
       return (
-        <div>
+        <>
           <HashRouter>
             <nav 
               className="navbar navbar-expand-lg"
@@ -174,20 +173,27 @@ class App extends Component {
                 marginTop: "auto",
               }}
             >
-              {this.state.menuCollapse ? <FiArrowDownCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/> : <FiArrowUpCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/>}
+              {/* {this.state.menuCollapse ? <FiArrowDownCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/> : <FiArrowUpCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/>} */}
               <div className="container-fluid">
+              {this.state.loggedIn ? (
+                    <img
+                      src={path}
+                      className="avatar"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
+                        e.target.onerror = null; // prevents looping
+                      }}
+                      alt={this.props.name}
+                      height="150"
+                    /> 
+                  ) : (
+                    ""
+                  )}{this.state.userName? <span>Hello {this.state.userName}</span>: ""}
                 <a className="navbar-brand" exact="true" to="/">
-                  <img className="avatar" src="images/flower_shop.png" height="60" />
+                  <img className="avatar" src="images/icon.jpg" height="60" />
                 </a>
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarNav"
-                  aria-controls="navbarNav"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span className="navbar-toggler-icon"></span>
                 </button>
                 <div
@@ -208,7 +214,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/catalog"
                         id="catalog"
@@ -219,7 +225,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/contact"
                         id="contact"
@@ -230,7 +236,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}//, display: "none"
                         to="/users"
                         id="users"
@@ -241,7 +247,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}//, display: "none"
                         to="/orders"
                         id="orders"
@@ -252,7 +258,7 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}//, display: "none"
                         to="/myOrders"
                         id="myOrders"
@@ -263,12 +269,12 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/cart"
                         id="cart"
                       >
-                        {this.state.menuCollapse ? "" : "Cart"}<i class="fa" style={{ "font-size": "24px" }}>
+                        {this.state.menuCollapse ? "" : "Cart"}<i className="fa" style={{ "fontSize": "24px" }}>
                           &#xf07a;
                         </i>  
                         <span className="badge badge-warning" id="lblCartCount">
@@ -279,13 +285,13 @@ class App extends Component {
                     </li>
                     <li className="nav-item">
                       <NavLink
-                        className="nav-link active"
+                        className="nav-link"
                         style={{ fontSize: "initial" }}
                         to="/wishlist"
                         id="users"
                       >
                         {this.state.menuCollapse ?""
-                        : "Wish List"}<i class="fa" style={{ "font-size": "24px" }}>
+                        : "Wish List"}<i className="fa" style={{ "fontSize": "24px" }}>
                         <FaHeart
                           style={{ cursor: "pointer" }}
                         /></i> 
@@ -304,37 +310,21 @@ class App extends Component {
                         >
                             {this.state.menuCollapse ? ""
                                 : "chat"}
-                            <i class="fa fa-comments" style={{"font-size": "24px"}}/>
+                            <i className="fa fa-comments" style={{"fontSize": "24px"}}/>
 
                         </NavLink>
-                          {/* )} */}
                       </li>
                   </ul>
-                  <button
+                  <Button
                     type="button"
-                    className="button-17"
+                    className="btn btn-primary btn-lg btn-floating" 
                     id="logoutbtn"
-                    style={{ display: this.state.loggedIn ? "block" : "none" }}
+                    style={{width:"100px",height:"50px", display: this.state.loggedIn ? "block" : "none" }}
                     onClick={() => this.logout()}
                     title="Log Out"
                   >
                     {this.state.menuCollapse ? "" :"Logout"}<FiLogOut />
-                  </button>
-                  {this.state.loggedIn ? (
-                    <img
-                      src={path}
-                      className="avatar"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
-                        e.target.onerror = null; // prevents looping
-                      }}
-                      alt={this.props.name}
-                      height="150"
-                    />
-                  ) : (
-                    ""
-                  )}
+                  </Button>
                   <LoginModal
                     reloadNavbar={this.refresh}
                     showButton={this.state.loggedIn ? "none" : "block"}
@@ -347,7 +337,6 @@ class App extends Component {
                 </div>
               </div>
             </nav>
-
             <div id="content">
               <Routes>
                 <Route exact="true" path="/" element={<About />} />
@@ -368,15 +357,15 @@ class App extends Component {
 
               </Routes>
             </div>
-
+            </HashRouter>
             <footer
               className="container-fluid text-center"
               style={{ backgroundColor: "#e3f2fd", float: "bottom" }}
             >
               <p>© Simha Franko & Adi Malachi Yosef 2022</p>
             </footer>
-          </HashRouter>
-        </div>
+          
+        </>
       );
     }
 }

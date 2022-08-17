@@ -63,7 +63,7 @@ class ManageOrders extends Component {
       <div className="productSlider mb-5 mt-5">
         <Container>
           <h5 className="text-left mb-4 ps-2">Order List</h5>
-          <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+          <div style={{"marginTop":"inherit"}} className="btn-group" role="group" aria-label="Basic example">
           <button type="button" onClick={(e) => this.changeType(e)} value="Pending" className="button-17">Pending</button>
           <button type="button" onClick={(e) => this.changeType(e)} value="InProcess" className="button-17">In process</button>
           <button type="button" onClick={(e) => this.changeType(e)} value="Completed" className="button-17">Completed</button>

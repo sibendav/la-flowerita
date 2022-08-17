@@ -94,8 +94,8 @@ class LoginModal extends Component {
       <div>
         <Button
           title="Log In"
-          class="btn btn-primary btn-lg btn-floating" 
-          style={{display: this.props.showButton,"background-color": "#17c0eb"}}
+          className="btn btn-primary btn-lg btn-floating" 
+          style={{display: this.props.showButton,"backgroundColor": "#17c0eb"}}
           onClick={() => this.handleShow()}
         >
           {this.props.menuCollapse ? "" :"Login"}<FiLogIn/>

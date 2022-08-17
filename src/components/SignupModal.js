@@ -161,8 +161,8 @@ class SignupModal extends Component {
       <div>
         <Button
           title="Sign Up"
-          class="btn btn-primary btn-lg btn-floating" 
-          style={{display: this.props.showButton,"background-color": "#17c0eb"}}
+          className="btn btn-primary btn-lg btn-floating" 
+          style={{display: this.props.showButton,"backgroundColor": "#17c0eb"}}
           onClick={() => this.handleShow()}
         >
         {this.props.menuCollapse ? "" :"SignUp"}<FaPenSquare/>
@@ -228,7 +228,7 @@ class SignupModal extends Component {
               <label for="rd2">Manager</label>
               </div>
               <div className="mb-3">
-              {/* <span><i aria-hidden="true" class="fa fa-envelope"></i></span> */}
+              {/* <span><i aria-hidden="true" className="fa fa-envelope"></i></span> */}
                 <input
                   type="email"
                   name="email"

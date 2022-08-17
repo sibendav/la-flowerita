@@ -64,7 +64,7 @@ class UserList extends Component {
   render() {
     return (
       <div className="container main-content">
-      <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+      <div style={{"marginTop":"inherit"}} className="btn-group" role="group" aria-label="Basic example">
         <button type="button" onClick={(e) => this.changeType(e)} value="Seller" className="button-17">Sellers</button>
         <button type="button" onClick={(e) => this.changeType(e)} value="Customer" className="button-17">Customers</button>
         <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
@@ -74,17 +74,17 @@ class UserList extends Component {
       </div>
        <div>
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
-          <div class="container mt-3 mb-4">
-          <div class="col-lg-9 mt-4 mt-lg-0">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
-                    <table class="table manage-candidates-top mb-0">
+          <div className="container mt-3 mb-4">
+          <div className="col-lg-9 mt-4 mt-lg-0">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                    <table className="table manage-candidates-top mb-0">
                       <thead>
                       <tr>
                         <th>Candidate Name</th>
-                        <th class="text-center">Status</th>
-                        <th class="action text-right">Action</th>
+                        <th className="text-center">Status</th>
+                        <th className="action text-right">Action</th>
                       </tr>
                       </thead>
                       <tbody>
