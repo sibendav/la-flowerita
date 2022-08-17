@@ -15,6 +15,7 @@ class User extends Component {
       degree: props.degree,
       address: props.address,
       email: props.email,
+      isApproved: props.isApproved,
       profileImage: props.profileImage,
     };
     console.log(props);
@@ -72,6 +73,7 @@ class User extends Component {
                             phone={this.props.phone}
                             degree={this.props.degree}
                             address={this.props.address}
+                            isApproved = {this.props.isApproved}
                             email={this.props.email}
                             path = {path}
                           />

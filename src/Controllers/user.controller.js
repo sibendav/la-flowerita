@@ -194,8 +194,12 @@ static async getUsers(req, res, next){
   var users = [];
   if(type == "All" || !type){
       console.log("all");
-      users = await  UserService.GetALL();
-  } else{
+      users = await  UserService.GetALL();}
+  else if(type == "NotApproved"){
+    console.log("NotApproved");
+    users = await  UserService.GetNotApproved();
+  }
+   else{
       console.log(type);
       users = await  UserService.GetUserBydegree(type);
   }

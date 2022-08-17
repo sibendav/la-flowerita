@@ -6,8 +6,10 @@ import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
+import '../css/shoppingCart.css';
 import withAuth from "./Auth.js";
 import {FaEye, FaPen, FaTrash } from "react-icons/fa";
+import { Container, Table } from "react-bootstrap";
 import swal from 'sweetalert';
 
 class OrderDetailsModal extends Component {
@@ -77,6 +79,16 @@ class OrderDetailsModal extends Component {
     bytes.forEach((b) => (binary += String.fromCharCode(b)));
     return window.btoa(binary);
   }
+  returnPath(product){
+    var path = '';
+    if(product.image){
+     path = "data:/" +
+     product.image.contentType+
+    ";base64," + this.arrayBufferToBase64(product.image.data)}
+    console.log(product.image.data);
+    console.log(this.arrayBufferToBase64(product.image.data));
+    return path;
+  }
   render() {
     
     return (
@@ -88,13 +100,6 @@ class OrderDetailsModal extends Component {
         >
           <FaEye/>
         </a>
-        <a
-            role="button"
-            style={{display: !this.state.isUpdate? "block" : "none"}}
-            onClick={() => this.showConfirmDialog()}
-        >
-          <FaTrash/>
-        </a>
         <Modal
         
           style={{ opacity: 1 }}
@@ -105,37 +110,41 @@ class OrderDetailsModal extends Component {
           <Modal.Header>
             <Modal.Title>
             <Modal.Title>
+              <h1>order details</h1>
             </Modal.Title>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+          <Container>
           <div className="col-9 cartShow">
-              <table class="table manage-candidates-top mb-0">
-                <thead>
+              <Table bordered hover responsive="sm">
+              <thead>
                   <tr>
                     <th>produt name </th>
                     <th>price </th>
                     <th>quantity</th>
-                    <th>image</th>
+                     <th>image</th> 
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.products.map((product, idx) => (
-                    // path = "";
-                    // if(product.image)
-                    // path = "data:/" +
-                    // product.image.contentType+
-                    // ";base64," + this.arrayBufferToBase64(product.image.data)
-                    <tr>
+                    <tr key = {product._id}>
                         <td>{product.name}</td>
                         <td>{product.price}</td>
                         <td>{product.quantity}</td>
-                        <td>{product.image}</td>
+                        <td>
+                        <img style={{"maxWidth": "inherit", "maxHeight": "50%","borderRadius":"50%"}} src={this.returnPath(product)} 
+                            onError={( e ) => {
+                              e.target.src='https://www.freeiconspng.com/uploads/no-image-icon-11.PNG';
+                              e.target.onerror = null; // prevents looping
+                            }} />
+                        </td>
                     </tr>
                   ))}
                 </tbody>
-              </table> 
+              </Table>
             </div>
+            </Container>
           </Modal.Body>
           <Modal.Footer>
           </Modal.Footer>
