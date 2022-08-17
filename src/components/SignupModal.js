@@ -74,13 +74,13 @@ class SignupModal extends Component {
               swal("You signedup successfully!", message, "success");
               return;
             }
-            if (
-              this.state.picture.type.includes("png") ||
-              this.state.picture.type.includes("jpg")
-            ) {
-              this.setState({ ERROR: "Only types: PNG or JPG" });
-              return;
-            }
+            // if (
+            //   !this.state.picture.type.includes("png") ||
+            //   !this.state.picture.type.includes("jpg")
+            // ) {
+            //   this.setState({ ERROR: "Only types: PNG or JPG" });
+            //   return;
+            // }
             var myFormData = new FormData();
             myFormData.append("file", this.state.picture);
             myFormData.append("id", id);
