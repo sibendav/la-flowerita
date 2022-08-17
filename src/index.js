@@ -66,7 +66,9 @@ class App extends Component {
             numOfProductsInWishlist: false,
             menuCollapse: true,
             userName:"",
+
             degree:null
+
         };
     }
 
@@ -85,6 +87,7 @@ class App extends Component {
                 numOfProductsInWishlist: result.wishlist.products.length,
                 userName: result.userName,
                 degree: result.degree
+
               });
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");

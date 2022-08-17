@@ -229,6 +229,22 @@ static async updateUser(req, res, next){
   } else{
       return res.sendStatus(404);
   }
+  if(!oldUser.isApproved && oldUser.isApproved != newUser.isApproved){
+    const message = `You are receiving this email because you have been approved by the manager.`
+    try {
+      await sendEmail({
+      email: newUser.email,
+      subject: 'Approved',
+      message: message,
+      
+      })
+      
+      } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+      }
+    }
+  
   return res.sendStatus(200);
 }
 static async deleteUser(req, res, next){
@@ -247,7 +263,18 @@ static async deleteUser(req, res, next){
     return res.sendStatus(200);
   return res.sendStatus(404);
 }
-
+static async addUserPicture(req, res, next){
+  await imagesMiddleware.uploadFile(req, res);
+  var id = req.body.id;
+  console.log(id);
+  var user = await UserService.FindById(id);
+  if(user){
+      user.profileImage = {data: req.file.buffer, contentType:req.file.mimetype};
+      console.log("good");
+      await UserService.UpdatePicture(id,user)
+  }
+  return res.sendStatus(200);
+}
 static async getSession(req, res, next){
   var profileImage = {data:"", contentType:""};
   var cart = {products: []}

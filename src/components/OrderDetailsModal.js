@@ -83,7 +83,7 @@ class OrderDetailsModal extends Component {
     if(product.image){
      path = "data:/" +
      product.image.contentType+
-    ";base64," + this.arrayBufferToBase64(product.image.data)}
+    ";base64," + product.image.data}
     console.log(product.image.data);
     console.log(this.arrayBufferToBase64(product.image.data));
     return path;
@@ -109,7 +109,7 @@ class OrderDetailsModal extends Component {
           <Modal.Header>
             <Modal.Title>
             <Modal.Title>
-              <h1>order details</h1>
+              <h4>order details</h4>
             </Modal.Title>
             </Modal.Title>
           </Modal.Header>

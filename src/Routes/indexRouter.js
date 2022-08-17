@@ -26,6 +26,7 @@ router.post("/addUserProfile", jsonParser, UserCtrl.addUserProfile);
 router.post("/getUsers", jsonParser, UserCtrl.getUsers);
 router.post("/addNewUser", jsonParser, UserCtrl.addNewUser);
 router.post("/updateUser", jsonParser, UserCtrl.updateUser);
+router.post("/addUserPicture", jsonParser, UserCtrl.addUserPicture);
 router.post("/deleteUser", jsonParser, UserCtrl.deleteUser);
 router.post("/getCatalog", jsonParser, CatalogCtrl.getCatalog);
 router.post("/addNewProduct", jsonParser, CatalogCtrl.addNewProduct);

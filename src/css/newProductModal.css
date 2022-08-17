@@ -1,4 +1,10 @@
 /* CSS */
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
 .button-17 {
   align-items: center;
   appearance: none;
