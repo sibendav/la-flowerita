@@ -97,21 +97,21 @@ class Product extends Component {
       this.props.image.contentType +
       ";base64," +
       this.arrayBufferToBase64(this.props.image.data);
-    return (<div class="column">
-    <div class="product-img">
+    return (<div className="column">
+    <div className="product-img">
       <img src={path} onError={(e) => {
               e.target.src =
                 "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
               e.target.onerror = null; // prevents looping
             }}/>
     </div>
-    <div class="product-info">
-      <div class="product-text">
+    <div className="product-info">
+      <div className="product-text">
         <h1>{this.props.name}</h1>
         <h2>Seller {this.props.sellerName}</h2>
         <p>{this.props.description}</p>
       </div>
-      <div class="product-price-btn">
+      <div className="product-price-btn">
         <p><span className=".product-span">{this.props.price}</span>$</p>
           {this.state.isInWishList ? (
             <button type="button"  onClick={() => this.outOfWishList()}>

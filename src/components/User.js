@@ -35,38 +35,38 @@ class User extends Component {
       ";base64," + this.arrayBufferToBase64(this.props.profileImage.data);}
     var currentUser = this.props.user;
     return (
-              <tr class="candidates-list" key={currentUser._id}>
-                 <td class="title">
-                    <div class="thumb">
-                      <img class="img-fluid"  src={path} alt="" onError={(e) => {
+              <tr className="candidates-list" key={currentUser._id}>
+                 <td className="title">
+                    <div className="thumb">
+                      <img className="img-fluid"  src={path} alt="" onError={(e) => {
               e.target.src =
                 "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
               e.target.onerror = null; // prevents looping
             }}/>
                     </div>
                  
-                    <div class="candidate-list-details">
-                      <div class="candidate-list-info">
-                        <div class="candidate-list-title">
-                          <h5 class="mb-0"><a>{this.props.name}</a></h5>
+                    <div className="candidate-list-details">
+                      <div className="candidate-list-info">
+                        <div className="candidate-list-title">
+                          <h5 className="mb-0"><a>{this.props.name}</a></h5>
                         </div>
-                        <div class="candidate-list-option">
+                        <div className="candidate-list-option">
                         
-                          <ul class="list-unstyled">
-                            <li><i class="fas fa-phone pr-1"></i>{this.props.phone}</li>
-                            <li><i class="fas fa-map-marker-alt pr-1"></i>{this.props.address}</li>
-                            <li><i class="fas fa-envelope pr-1"></i>{this.props.email}</li>
+                          <ul className="list-unstyled">
+                            <li><i className="fas fa-phone pr-1"></i>{this.props.phone}</li>
+                            <li><i className="fas fa-map-marker-alt pr-1"></i>{this.props.address}</li>
+                            <li><i className="fas fa-envelope pr-1"></i>{this.props.email}</li>
                           </ul>
                         </div>
                         
                       </div>
                     </div>
                     </td>
-                    <td class="candidate-list-favourite-time text-center">
-                        <h5 class="mb-0"><a>{this.props.degree}</a></h5>
+                    <td className="candidate-list-favourite-time text-center">
+                        <h5 className="mb-0"><a>{this.props.degree}</a></h5>
                     </td>
-                    <td class="candidate-list-favourite-time text-center">
-                    <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                    <td className="candidate-list-favourite-time text-center">
+                    <ul className="list-unstyled mb-0 d-flex justify-content-end">
                     <UpdateUserModal
                             _id={this.props._id}
                             name={this.props.name}
