@@ -92,11 +92,13 @@ class Product extends Component {
     return window.btoa(binary);
   }
   render() {
-    var path =
+    var path = "";
+    if(this.props.image)
+    {path =
       "data:/" +
       this.props.image.contentType +
       ";base64," +
-      this.arrayBufferToBase64(this.props.image.data);
+      this.arrayBufferToBase64(this.props.image.data);}
     return (<div className="column">
     <div className="product-img">
       <img src={path} onError={(e) => {
@@ -112,28 +114,28 @@ class Product extends Component {
         <p>{this.props.description}</p>
       </div>
       <div className="product-price-btn">
-        <p><span className=".product-span">{this.props.price}</span>$</p>
+        <p><span className=".product-span ">{this.props.price}</span>$</p>
           {this.state.isInWishList ? (
-            <button type="button"  onClick={() => this.outOfWishList()}>
+            <button className="button-la-flowerita" type="button"  onClick={() => this.outOfWishList()}>
             <FaHeart
               id="inWishList"
               style={{ cursor: "pointer" }}
             />
                 </button>
           ) : (
-            <button type="button" onClick={() => this.intoWishList()} >
+            <button className="button-la-flowerita" type="button" onClick={() => this.intoWishList()} >
             <FaRegHeart
               id="outWishList"
               style={{ cursor: "pointer" }}
             />
                 </button>
           )}
-    <button type="button" onClick={() => this.intoCart(this.props)}>
+    <button className="button-la-flowerita" type="button" onClick={() => this.intoCart(this.props)}>
       <FaShoppingCart
           style={{ cursor: "pointer" }}
         />
     </button>
-    <button  type="button" onClick={() => this.setState({showModal:true})}>
+    <button className="button-la-flowerita" type="button" onClick={() => this.setState({showModal:true})}>
         <FaEye/>
         {this.state.showModal? <DetailsProductModal id={this.props.id}
             image={this.props.image}

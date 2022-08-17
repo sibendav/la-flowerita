@@ -167,7 +167,7 @@ class App extends Component {
             <nav 
               className="navbar navbar-expand-lg"
               style={{
-                backgroundColor: "#e3f2fd",
+                backgroundColor: "#ffdab9",
                 marginBottom: "auto",
                 marginInline: "auto",
                 marginTop: "auto",
@@ -179,6 +179,7 @@ class App extends Component {
                     <img
                       src={path}
                       className="avatar"
+                      title={`hello ${this.state.userName}`}
                       onError={(e) => {
                         e.target.src =
                           "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
@@ -189,7 +190,8 @@ class App extends Component {
                     /> 
                   ) : (
                     ""
-                  )}{this.state.userName? <span>Hello {this.state.userName}</span>: ""}
+                  )}
+                  {/* {this.state.userName? <button className="button-la-flowerita">Hello {this.state.userName}</button>: ""} */}
                 <a className="navbar-brand" exact="true" to="/">
                   <img className="avatar" src="images/icon.jpg" height="60" />
                 </a>
@@ -315,16 +317,16 @@ class App extends Component {
                         </NavLink>
                       </li>
                   </ul>
-                  <Button
+                  <button
                     type="button"
-                    className="btn btn-primary btn-lg btn-floating" 
+                    className="button-la-flowerita" 
                     id="logoutbtn"
-                    style={{width:"100px",height:"50px", display: this.state.loggedIn ? "block" : "none" }}
+                    style={{display: this.state.loggedIn ? "block" : "none" }}
                     onClick={() => this.logout()}
                     title="Log Out"
                   >
                     {this.state.menuCollapse ? "" :"Logout"}<FiLogOut />
-                  </Button>
+                  </button>
                   <LoginModal
                     reloadNavbar={this.refresh}
                     showButton={this.state.loggedIn ? "none" : "block"}
@@ -360,7 +362,7 @@ class App extends Component {
             </HashRouter>
             <footer
               className="container-fluid text-center"
-              style={{ backgroundColor: "#e3f2fd", float: "bottom" }}
+              style={{ backgroundColor: "#ffdab9", float: "bottom" }}
             >
               <p>© Simha Franko & Adi Malachi Yosef 2022</p>
             </footer>

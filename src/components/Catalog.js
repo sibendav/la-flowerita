@@ -77,11 +77,11 @@ class ProductList extends Component {
     return (
       <div className="container main-content">      
       <div className="catalog-btn" role="group" aria-label="Basic example">
-      <button type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
-      <button type="button" onClick={() => this.setState({showModal:true})} title="Add New Product"><FaPlus />{this.state.showModal? <NewProductModal showModal={true}/>:""}</button>
-      <button style={{width:"100px", height:"40px"}} type="button" onClick={(e) => this.changeType(e)} title="Show Flowers Only" value="Flower" >Flowers</button>
-      <button style={{width:"120px", height:"40px"}} type="button" onClick={(e) => this.changeType(e)} title="Show Bouquests Only" value="Bouquest">Bouquests</button>
-      <button className="sortersButtons" type="button" onClick={(e) => this.changeType(e)} title="Show All products" value="All">All</button>
+      <button className="button-la-flowerita" type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
+      <button className="button-la-flowerita" type="button" onClick={() => this.setState({showModal:true})} title="Add New Product"><FaPlus />{this.state.showModal? <NewProductModal showModal={true}/>:""}</button>
+      <button className="button-la-flowerita"  type="button" onClick={(e) => this.changeType(e)} title="Show Flowers Only" value="Flower" >Flowers</button>
+      <button className="button-la-flowerita" type="button" onClick={(e) => this.changeType(e)} title="Show Bouquests Only" value="Bouquest">Bouquests</button>
+      <button className="button-la-flowerita" type="button" onClick={(e) => this.changeType(e)} title="Show All products" value="All">All</button>
       </div>
       <LoadingIndicator/>
         { this.state.products && this.state.products.length > 0 ? 

@@ -184,9 +184,9 @@ class ShoppingCart extends Component {
                 <h6>Total Price :</h6>
                 <span>{this.state.totalPrice}$</span>
               </div>
-              <Button  onClick={() => this.payNow()} variant="dark" size="md" className="mt-4 w-100">
+              <button  onClick={() => this.payNow()} variant="dark" size="md" className="mt-4 w-100 button-la-flowerita">
                 pay now
-              </Button>
+              </button>
             </div>
           </Row>
         </Container>

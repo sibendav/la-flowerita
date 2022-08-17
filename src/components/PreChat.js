@@ -38,7 +38,9 @@ function PreChat(props) {
                                 setNewroom(event.target.value);
                             }}
                         />
-                        <button onClick={() => {
+                        <button
+                        className="button-la-flowerita"
+                         onClick={() => {
                             if (newroom!="") {
                             setRooms((prev) => [...prev, newroom]);
                             setRoom(newroom);
