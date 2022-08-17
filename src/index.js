@@ -65,7 +65,7 @@ class App extends Component {
             numOfProductsInCart: false,
             numOfProductsInWishlist: false,
             menuCollapse: false,
-            userName:""
+            userName:"",
         };
     }
 
@@ -82,7 +82,7 @@ class App extends Component {
                 profileImage: result.profileImage || "",
                 numOfProductsInCart: result.cart.products.length,
                 numOfProductsInWishlist: result.wishlist.products.length,
-                userName: result.userName
+                userName: result.userName,
               });
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");
