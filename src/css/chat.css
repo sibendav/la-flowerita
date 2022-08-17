@@ -100,7 +100,7 @@ body {
   height: auto;
   min-height: 40px;
   max-width: 120px;
-  background-color: #43a047;
+  background-color: #c6f4c9;
   border-radius: 5px;
   color: white;
   display: flex;
@@ -132,7 +132,7 @@ body {
 
 #other .message-content {
   justify-content: flex-end;
-  background-color: cornflowerblue;
+  background-color: #f7cdb2;
 }
 
 #other .message-meta {

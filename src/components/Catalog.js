@@ -78,7 +78,7 @@ class ProductList extends Component {
       <div className="container main-content">      
       <div className="catalog-btn" role="group" aria-label="Basic example">
       <button className="button-la-flowerita" type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
-      <button className="button-la-flowerita" type="button" onClick={() => this.setState({showModal:true})} title="Add New Product"><FaPlus />{this.state.showModal? <NewProductModal showModal={true}/>:""}</button>
+      {this.props.degree == "Seller" ?<button className="button-la-flowerita" type="button" onClick={() => this.setState({showModal:true})} title="Add New Product"><FaPlus />{this.state.showModal? <NewProductModal showModal={true}/>:""}</button>:""}
       <button className="button-la-flowerita"  type="button" onClick={(e) => this.changeType(e)} title="Show Flowers Only" value="Flower" >Flowers</button>
       <button className="button-la-flowerita" type="button" onClick={(e) => this.changeType(e)} title="Show Bouquests Only" value="Bouquest">Bouquests</button>
       <button className="button-la-flowerita" type="button" onClick={(e) => this.changeType(e)} title="Show All products" value="All">All</button>
@@ -88,6 +88,7 @@ class ProductList extends Component {
         this.state.products.map((product) => {
           return (
             <Product
+              degree={this.props.degree}
               id={product._id}
               image={product.image}
               name={product.name}

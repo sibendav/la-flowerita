@@ -65,7 +65,8 @@ class App extends Component {
             numOfProductsInCart: false,
             numOfProductsInWishlist: false,
             menuCollapse: false,
-            userName:""
+            userName:"",
+            degree:null
         };
     }
 
@@ -82,7 +83,8 @@ class App extends Component {
                 profileImage: result.profileImage || "",
                 numOfProductsInCart: result.cart.products.length,
                 numOfProductsInWishlist: result.wishlist.products.length,
-                userName: result.userName
+                userName: result.userName,
+                degree: result.degree
               });
               // localStorage.setItem("user", JSON.stringify(result.user));
               // const saved = localStorage.getItem("user");
@@ -125,7 +127,7 @@ class App extends Component {
                 user: false}
                 //because setState is async function
                 , () => {
-                  this.refresh();
+                  document.location.href = ""
                 })   
             },
             // Note: it's important to handle errors here
@@ -175,22 +177,6 @@ class App extends Component {
             >
               {/* {this.state.menuCollapse ? <FiArrowDownCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/> : <FiArrowUpCircle style={{cursor:"pointer"}} onClick={() => this.setMenuCollapse()}/>} */}
               <div className="container-fluid">
-              {this.state.loggedIn ? (
-                    <img
-                      src={path}
-                      className="avatar"
-                      title={`hello ${this.state.userName}`}
-                      onError={(e) => {
-                        e.target.src =
-                          "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
-                        e.target.onerror = null; // prevents looping
-                      }}
-                      alt={this.props.name}
-                      height="150"
-                    /> 
-                  ) : (
-                    ""
-                  )}
                   {/* {this.state.userName? <button className="button-la-flowerita">Hello {this.state.userName}</button>: ""} */}
                 <a className="navbar-brand" exact="true" to="/">
                   <img className="avatar" src="images/icon.jpg" height="60" />
@@ -239,7 +225,7 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        style={{ fontSize: "initial" }}//, display: "none"
+                        style={{ fontSize: "initial", display: this.state.degree == "Manager" ? "block" : "none" }}
                         to="/users"
                         id="users"
                         title="Users"
@@ -250,7 +236,7 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        style={{ fontSize: "initial" }}//, display: "none"
+                        style={{ fontSize: "initial" , display: this.state.degree == "Manager" || this.state.degree == "Seller" ? "block" : "none" }}
                         to="/orders"
                         id="orders"
                         title="Orders"
@@ -261,7 +247,7 @@ class App extends Component {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        style={{ fontSize: "initial" }}//, display: "none"
+                        style={{ fontSize: "initial" , display: this.state.loggedIn? "block" : "none" }}
                         to="/myOrders"
                         id="myOrders"
                         title="myOrders"
@@ -306,7 +292,7 @@ class App extends Component {
                     <li className="nav-item">
                           <NavLink
                             className="nav-link"
-                            style={{fontSize: "initial"}}
+                            style={{fontSize: "initial", display: this.state.loggedIn? "block" : "none" }}
                             to="/PreChat"
                             id="users"
                         >
@@ -327,6 +313,22 @@ class App extends Component {
                   >
                     {this.state.menuCollapse ? "" :"Logout"}<FiLogOut />
                   </button>
+                  {this.state.loggedIn ? (
+                    <img
+                      src={path}
+                      className="avatar"
+                      title={`hello ${this.state.userName}`}
+                      onError={(e) => {
+                        e.target.src =
+                          "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
+                        e.target.onerror = null; // prevents looping
+                      }}
+                      alt={this.props.name}
+                      height="150"
+                    /> 
+                  ) : (
+                    ""
+                  )}
                   <LoginModal
                     reloadNavbar={this.refresh}
                     showButton={this.state.loggedIn ? "none" : "block"}
@@ -343,7 +345,7 @@ class App extends Component {
               <Routes>
                 <Route exact="true" path="/" element={<About />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/catalog" element={<ProductList onUpdateWishlist={(num) => this.onUpdateWishlist(num)} onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/catalog" element={<ProductList degree={this.state.degree} onUpdateWishlist={(num) => this.onUpdateWishlist(num)} onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
                 <Route path="/cart" element={<ShoppingCart onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
                 <Route path="/wishlist" element={<Wishlist onUpdateCart={(num) => this.onUpdateCart(num)} onUpdateWishlist={(num) => this.onUpdateWishlist(num)}/>} />
                 <Route path="/contact" element={<Contact />} />

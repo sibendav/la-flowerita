@@ -33,7 +33,7 @@ class ResetPassword extends Component {
         console.log(res);
         if (res.status == 200) {
           console.log("email was sent successfully!");
-          this.setState({ emailSent: true });
+          this.setState({ emailSent: true , ERROR:""});
         }
         else if (res.status == 404){
           console.log("email was not sent!");
@@ -65,7 +65,7 @@ class ResetPassword extends Component {
         console.log(res);
         if (res.status == 200) {
           console.log("token is good!");
-          this.setState({id:res.id, tokenChecked: true });
+          this.setState({id:res.id, tokenChecked: true, ERROR:"" });
           }
         else if (res.status == 404){
           console.log("token not good!");

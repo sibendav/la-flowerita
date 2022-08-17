@@ -137,7 +137,9 @@ class Product extends Component {
     </button>
     <button className="button-la-flowerita" type="button" onClick={() => this.setState({showModal:true})}>
         <FaEye/>
-        {this.state.showModal? <DetailsProductModal id={this.props.id}
+        {this.state.showModal? <DetailsProductModal
+            degree={this.props.degree}
+            id={this.props.id}
             image={this.props.image}
             path={path}
             name={this.props.name}

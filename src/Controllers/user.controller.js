@@ -254,11 +254,13 @@ static async getSession(req, res, next){
   var wishlist = {products: []}
   var isLogged = false;
   var userName = null;
+  var degree = null;
   console.log("getsession");
   if(req.user){
     var user = await Users.findById(req.user._id);
     profileImage = user.profileImage;
     userName = user.name;
+    degree = user.degree;
     console.log(user.name);
     cart = await ShoppinglistsService.GetCurrentCart(req.user._id);
     wishlist = await WishlistService.GetCurrentWishlist(req.user._id);
@@ -273,7 +275,7 @@ static async getSession(req, res, next){
         wishlist = req.session.wishlist;
       }
   }
-  var result = {isLogged: isLogged, profileImage:profileImage, cart: cart, wishlist: wishlist, userName: userName}  
+  var result = {isLogged: isLogged, profileImage:profileImage, cart: cart, wishlist: wishlist, userName: userName, degree:degree}  
   console.log(req.session);
   return res.json(result)
 }

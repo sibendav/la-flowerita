@@ -14,6 +14,9 @@ static async getOrders(req, res, next){
     console.log(status);
     console.log(user.degree);
     var orders = [];
+    if(!req.user){
+      return res.json({status:403, orders:[]});
+    }
     if((status == "All" || !status) && user.degree=="Manager"){
         console.log("all-manager");
         orders = await  OrderService.GetALL();
