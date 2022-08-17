@@ -331,7 +331,9 @@ class App extends Component {
                     /> 
                   ) : (
                     ""
-                  )}
+                  )} 
+                    {this.state.loggedIn ? <p style={{"fontSize": "small","fontWeight": "bold","margin":"inherit", "fontFamily": "Niconne, cursive","color": "#f69887"}}>{`hello ${this.state.degree}`}<br/> {`${this.state.userName}`}</p>: ""}
+
                   <LoginModal
                     reloadNavbar={this.refresh}
                     showButton={this.state.loggedIn ? "none" : "block"}
