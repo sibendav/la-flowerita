@@ -12,11 +12,19 @@ static async getOrders(req, res, next){
     var status = req.body.status;
     console.log(status);
     var orders = [];
-    if(status == "All" || !status){
+    if((status == "All" || !status) && user.degree=="Manager"){
         console.log("all");
         orders = await  OrderService.GetALL();
-    } else{
+    } else if(user.degree=="Manager"){
         orders = await  OrderService.GetOrderByStatus(status);
+    }
+    else if(status == "All"|| !status){
+      orders = await  OrderService.GetALL();
+      orders =  orders.filter((x)=> {return x.product.find((p)=>{p.sellerId==req.user._id})});
+    }
+    else{
+      orders = await  OrderService.GetOrderByStatus(status);
+      orders =  orders.filter((x)=> {return x.product.find((p)=>{p.sellerId==req.user._id})});
     }
     console.log(orders);
     return res.json({orders: orders});

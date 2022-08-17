@@ -82,9 +82,9 @@ class UserList extends Component {
                     <table className="table manage-candidates-top mb-0">
                       <thead>
                       <tr>
-                        <th>Candidate Name</th>
-                        <th className="text-center">Status</th>
-                        <th className="action text-right">Action</th>
+                        <th>User Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="action text-right">Action</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -92,7 +92,8 @@ class UserList extends Component {
                           this.state.users.map((user) => {
                             return (
                               <User
-                                key = {user.id}
+                                _id = {user._id}
+                                key = {user._id}
                                 user = {user}
                                 name={user.name}
                                 degree={user.degree}
