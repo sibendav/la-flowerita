@@ -161,6 +161,7 @@ class Wishlist extends Component {
           <Row>
             <div className="col-9 wishlistShow">
               <Table bordered hover responsive="sm">
+                <LoadingIndicator />
                 <thead>
                   <tr>
                     <th>Product Img</th>
@@ -171,7 +172,6 @@ class Wishlist extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <LoadingIndicator />
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}

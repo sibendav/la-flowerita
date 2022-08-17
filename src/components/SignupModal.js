@@ -165,7 +165,9 @@ class SignupModal extends Component {
           style={{display: this.props.showButton}}
           onClick={() => this.handleShow()}
         >
-        {this.props.menuCollapse ? "" :"SignUp"}<FaPenSquare/>
+        {/* {this.props.menuCollapse ? "" :"SignUp"}<FaPenSquare/> */}
+        SignUp<FaPenSquare/>
+
         </button>
         <Modal
           style={{ opacity: 1 }}

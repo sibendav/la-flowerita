@@ -6,6 +6,21 @@ function Chat({ socket, username, room }) {
     const [messageList, setMessageList] = useState([]);
     // const [newChat, setnewChat] = useState(true);
     // alert(newChat);
+
+    React.useEffect(function effectFunction() {
+        var options = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body:JSON.stringify({room: room})
+        };
+        fetch("/getMessagesOfRoom", options)
+            .then(response => response.json())
+            .then((res) => {
+                console.log(res);
+                setMessageList(res.messageList);
+            });
+    }, []);
+
     const sendMessage = async () => {
         if (currentMessage !== "") {
             const messageData = {
@@ -22,6 +37,17 @@ function Chat({ socket, username, room }) {
             setMessageList((list) => [...list, messageData]);
             // setnewChat(false);
             setCurrentMessage("");
+            var options = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body:JSON.stringify({room: room, data: messageData})
+            };
+            await fetch("/addNewMessage", options)
+                .then((res) => {
+                    if(res.status != 200){
+                        console.log("error in saving message in mongo db")
+                    }
+                });
         }
     };
 
@@ -39,7 +65,7 @@ function Chat({ socket, username, room }) {
             </div>
             <div className="chat-body">
                 <ScrollToBottom className="message-container">
-                    {messageList.map((messageContent) => {
+                    {messageList && messageList != [] ? messageList.map((messageContent) => {
                         return (
                             <div
                                 className="message"
@@ -56,7 +82,9 @@ function Chat({ socket, username, room }) {
                                 </div>
                             </div>
                         );
-                    })}
+                    }):<span className="noConversationText">
+                    No Messages Here Yet...
+                   </span>}
                 </ScrollToBottom>
             </div>
             <div className="chat-footer">

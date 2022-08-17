@@ -6,7 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
-import withAuth from "./Auth.js";
 import {FaEye, FaPen, FaTrash } from "react-icons/fa";
 import swal from 'sweetalert';
 

@@ -43,7 +43,7 @@ import {
 
 
 //import icons from react icons
-import { FaList, FaMailBulk, FaHeart, FaQuestion, FaUsers } from "react-icons/fa";
+import { FaList, FaMailBulk, FaHeart, FaQuestion, FaUsers, FaTruckMoving, FaMoneyBillAlt} from "react-icons/fa";
 // import {BiLogOut} from "react-icons/bi";
 import {
   FiHome,
@@ -64,7 +64,7 @@ class App extends Component {
             profileImage: false,
             numOfProductsInCart: false,
             numOfProductsInWishlist: false,
-            menuCollapse: false,
+            menuCollapse: true,
             userName:"",
             degree:null
         };
@@ -196,6 +196,7 @@ class App extends Component {
                         aria-current="page"
                         to="/about"
                         id="about"
+                        title="About"
                       >
                         {this.state.menuCollapse ? "" :"About "}<FaQuestion />
                       </NavLink>
@@ -239,9 +240,9 @@ class App extends Component {
                         style={{ fontSize: "initial" , display: this.state.degree == "Manager" || this.state.degree == "Seller" ? "block" : "none" }}
                         to="/orders"
                         id="orders"
-                        title="Orders"
+                        title="Manage Orders"
                       >
-                        {this.state.menuCollapse ? "" : "Manage Orders "}<FaUsers />
+                        {this.state.menuCollapse ? "" : "Manage Orders "}<FaMoneyBillAlt />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -250,9 +251,9 @@ class App extends Component {
                         style={{ fontSize: "initial" , display: this.state.loggedIn? "block" : "none" }}
                         to="/myOrders"
                         id="myOrders"
-                        title="myOrders"
+                        title="My Orders"
                       >
-                        {this.state.menuCollapse ? "" : "My Orders "}<FaUsers />
+                        {this.state.menuCollapse ? "" : "My Orders "}<FaTruckMoving />
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -261,6 +262,7 @@ class App extends Component {
                         style={{ fontSize: "initial" }}
                         to="/cart"
                         id="cart"
+                        title="Cart"
                       >
                         {this.state.menuCollapse ? "" : "Cart"}<i className="fa" style={{ "fontSize": "24px" }}>
                           &#xf07a;
@@ -277,6 +279,7 @@ class App extends Component {
                         style={{ fontSize: "initial" }}
                         to="/wishlist"
                         id="users"
+                        title="Wish List"
                       >
                         {this.state.menuCollapse ?""
                         : "Wish List"}<i className="fa" style={{ "fontSize": "24px" }}>
@@ -295,6 +298,7 @@ class App extends Component {
                             style={{fontSize: "initial", display: this.state.loggedIn? "block" : "none" }}
                             to="/PreChat"
                             id="users"
+                            title="Chats"
                         >
                             {this.state.menuCollapse ? ""
                                 : "chat"}
@@ -311,7 +315,9 @@ class App extends Component {
                     onClick={() => this.logout()}
                     title="Log Out"
                   >
-                    {this.state.menuCollapse ? "" :"Logout"}<FiLogOut />
+                    Logout<FiLogOut />
+                    {/* {this.state.menuCollapse ? "" :"Logout"}<FiLogOut /> */}
+
                   </button>
                   {this.state.loggedIn ? (
                     <img
@@ -348,7 +354,7 @@ class App extends Component {
                 <Route exact="true" path="/" element={<About />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/catalog" element={<ProductList degree={this.state.degree} onUpdateWishlist={(num) => this.onUpdateWishlist(num)} onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
-                <Route path="/cart" element={<ShoppingCart onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
+                <Route path="/cart" element={<ShoppingCart loggedIn={this.state.loggedIn} onUpdateCart={(num) => this.onUpdateCart(num)}/>} />
                 <Route path="/wishlist" element={<Wishlist onUpdateCart={(num) => this.onUpdateCart(num)} onUpdateWishlist={(num) => this.onUpdateWishlist(num)}/>} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/resetPassword" element={<ResetPassword />} />

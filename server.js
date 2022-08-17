@@ -12,6 +12,7 @@ require("./src/Models/orderProducts");
 require("./src/Models/shoppinglists");
 require("./src/Models/userShoppinglists");
 require("./src/Models/orders");
+require("./src/Models/rooms");
 
 const dbConfig = require("./src/Config/db");
 

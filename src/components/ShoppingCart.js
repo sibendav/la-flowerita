@@ -15,9 +15,10 @@ class ShoppingCart extends Component {
       products: [],
       loggedIn: false,
       onUpdateCart: props.onUpdateCart,
+      loggedIn:props.loggedIn
     };
   }
-  componentDidMount = async () => {
+  componentDidMount(){
     var options = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -35,9 +36,6 @@ class ShoppingCart extends Component {
             ),
           });
         }
-      },
-      (error) => {
-        console.log(error);
       }
     ));
   }
@@ -86,6 +84,10 @@ class ShoppingCart extends Component {
       })
     }
   async payNow(){
+    if(!this.state.loggedIn){
+      swal("Error", "Please sign in first","error")
+      return;
+    }
     if(this.state.products.length < 1){
       swal("Error", "Please add atleast one product to the cart","error")
       return;
@@ -95,7 +97,7 @@ class ShoppingCart extends Component {
       headers: { "Content-Type": "application/json" },
     };
     trackPromise(
-      await fetch("/payNow", options).then(res => {
+      fetch("/payNow", options).then(res => {
       if(res.status == 200){
           swal("Success","Payment is successful","success");
           this.setState({products:[], totalPrice: 0});
@@ -143,9 +145,11 @@ class ShoppingCart extends Component {
       <div className="productSlider mb-5 mt-5">
         <Container>
           <h5 className="text-left mb-4 ps-2">Cart List</h5>
+          
           <Row>
-            <div className="col-9 cartShow">
+            <div className="col-9 cartShow"> 
               <Table bordered hover responsive="sm">
+              <LoadingIndicator/>
                 <thead>
                   <tr>
                     <th>Product Img</th>
@@ -157,7 +161,6 @@ class ShoppingCart extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                <LoadingIndicator/>
                   {this.state.products.map((product, idx) => (
                     <OrderedProduct
                       key={product.id}

@@ -7,6 +7,7 @@ const ShoppinglistCtrl = require("../Controllers/shoppinglist.controller");
 const OrderCtrl = require("../Controllers/order.controller");
 
 const WishlistCtrl = require("../Controllers/wishlist.controller");
+const ChatCtrl = require("../Controllers/chat.controller");
 
 
 var bodyParser = require("body-parser");
@@ -47,6 +48,12 @@ router.post("/updateProductInWishlist", jsonParser, WishlistCtrl.updateProductIn
 router.post("/deleteProductFromWishlist", jsonParser, WishlistCtrl.deleteProductFromWishlist);
 router.get("/getSession", jsonParser, UserCtrl.getSession);
 router.get("/payNow",jsonParser, ShoppinglistCtrl.payNow)
+
+router.post("/getMessagesOfRoom", jsonParser, ChatCtrl.getMessagesOfRoom);
+router.get("/getRoomsNames", jsonParser, ChatCtrl.getRoomNames);
+router.post("/addNewMessage", jsonParser, ChatCtrl.addNewMessage);
+router.post("/addNewRoom", jsonParser, ChatCtrl.addNewRoom);
+
 
 
 

@@ -4,7 +4,6 @@ import Modal from "react-bootstrap/Modal";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
-import withAuth from "./Auth.js"
 import swal from 'sweetalert';
 import LoadingIndicator from "./Spinner";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 

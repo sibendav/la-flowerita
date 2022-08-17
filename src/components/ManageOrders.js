@@ -1,12 +1,15 @@
 import {React, Component} from 'react';
 import sampleImage from '../logo.svg';
 import '../css/shoppingCart.css';
+
 import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
 import Order from "./Order.js"
 import swal from "sweetalert";
 import { Container, Table, Row, Button } from "react-bootstrap";
 import LoadingIndicator from "./Spinner";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
+import { FiRefreshCcw } from "react-icons/fi";
+
 class ManageOrders extends Component {
   constructor(props) {
     super(props);
@@ -65,14 +68,13 @@ class ManageOrders extends Component {
         <Container>
           
           <h5 className="text-left mb-4 ps-2">Order List</h5>
-          <div style={{"marginTop":"inherit"}} className="btn-group" role="group" aria-label="Basic example">
+          <div className="catalog-btn"role="group" aria-label="Basic example">
           <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="Pending">Pending</button>
           <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="InProcess" >In process</button>
           <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="Completed">Completed</button>
           <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="All">All</button>
-          <button type="button" className="button-la-flowerita" onClick={() => this.refreshPage()}>
-            <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
-          </button>
+          <button className="button-la-flowerita" type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
+
           </div>
           <Row>
             <div className="col-9 cartShow">

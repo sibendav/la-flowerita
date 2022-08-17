@@ -1,5 +1,4 @@
 import { React, Component } from "react";
-import sampleImage from "../logo.svg";
 import "../css/catalog.css";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FaHeart, FaRegHeart, FaShoppingCart, FaEye } from "react-icons/fa";
@@ -99,7 +98,7 @@ class Product extends Component {
       this.props.image.contentType +
       ";base64," +
       this.arrayBufferToBase64(this.props.image.data);}
-    return (<div className="column">
+    return (<div className="column center">
     <div className="product-img">
       <img src={path} onError={(e) => {
               e.target.src =

@@ -98,7 +98,9 @@ class LoginModal extends Component {
           style={{display: this.props.showButton}}
           onClick={() => this.handleShow()}
         >
-          {this.props.menuCollapse ? "" :"Login"}<FiLogIn/>
+          Login<FiLogIn/>
+          {/* {this.props.menuCollapse ? "" :"Login"}<FiLogIn/> */}
+
         </button>
         {/* <button style={{"float":"right"}} type="button" id="login"  data-bs-toggle="modal" data-bs-target="#myModal">
                       Login */}

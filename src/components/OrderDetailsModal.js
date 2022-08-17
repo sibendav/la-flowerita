@@ -7,7 +7,6 @@ import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import '../css/newProductModal.css';
 import '../css/shoppingCart.css';
-import withAuth from "./Auth.js";
 import {FaEye, FaPen, FaTrash } from "react-icons/fa";
 import { Container, Table } from "react-bootstrap";
 import swal from 'sweetalert';

@@ -6,6 +6,7 @@ import "../css/users.css";
 //import NewProductModal from "./NewProductModal";
 import LoadingIndicator from "./Spinner";
 import { usePromiseTracker, trackPromise } from "react-promise-tracker"; 
+import { FiRefreshCcw } from "react-icons/fi";
 
 
 class UserList extends Component {
@@ -65,15 +66,14 @@ class UserList extends Component {
     return (
       <div className="container main-content">
 
-      <div style={{"marginTop":"inherit"}} class="btn-group" role="group" aria-label="Basic example">
+        <div className="catalog-btn"role="group" aria-label="Basic example">
         
-        <button type="button" onClick={(e) => this.changeType(e)} value="All" className="button-17">All</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="Seller" className="button-17">Sellers</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="Customer" className="button-17">Customers</button>
-        <button type="button" onClick={(e) => this.changeType(e)} value="NotApproved" className="button-17">Not Approved</button>
-        <button type="button" onClick={() => this.refreshPage()} style={{"width":"10%","height":"5%",margin:"20px"}}>
-          <span><img src="images/refresh.png" style={{"height":"auto",width:"20%"}}/></span>&nbsp;Refresh
-      </button>
+        <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="All">All</button>
+        <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="Seller">Sellers</button>
+        <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="Customer">Customers</button>
+        <button type="button" className="button-la-flowerita" onClick={(e) => this.changeType(e)} value="NotApproved" >Not Approved</button>
+        <button className="button-la-flowerita" type="button" onClick={() => this.refreshPage()} title="Refresh"><FiRefreshCcw/></button>
+
       </div>
        <div>
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
