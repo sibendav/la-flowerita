@@ -145,9 +145,8 @@ class ShoppingCart extends Component {
       <div className="productSlider mb-5 mt-5">
         <Container>
           <h5 className="text-left mb-4 ps-2">Cart List</h5>
-          
           <Row>
-            <div className="col-9 cartShow"> 
+            <div className="col-9 cartShow">
               <Table bordered hover responsive="sm">
               <LoadingIndicator/>
                 <thead>

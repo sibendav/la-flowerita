@@ -50,8 +50,21 @@ static async getOrders(req, res, next){
       console.log("status-Seller");
       orders = await  OrderService.GetOrderByStatus(status);
       console.log(orders);
-      orders =  orders.filter((x)=> {return x.products.find((p)=>{p.sellerId==req.user._id})});
-    }
+      orders = orders.filter(x=>x.products.find((p) => {
+        if (p.sellerId==req.user._id) {
+          return true;
+        }
+        return false;
+      }))
+      // console.log(orders[0].products);
+      //orders =  orders.filter(x=> console.log(x.products.find((p)=>{p.sellerId==req.user._id})));
+      orders = orders.map(p=> p ={products:p.products.filter((p)=>
+        {if (p.sellerId==req.user._id) {
+          console.log("true")
+          return true;
+        }
+        return false;
+    }),_id:p._id, userId:p.userId, totalPrice:p.totalPrice, status:p.status, date:p.date});    }
     console.log(orders);
     return res.json({orders: orders});
 }

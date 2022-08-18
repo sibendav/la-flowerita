@@ -7,7 +7,6 @@ module.exports = class Chat {
         if(req.user){
             var messages = await Rooms.findOne({roomName: room});
             console.log("getMessagesOfRoom "+ messages);
-            console.log("result "+ messages.messageList);
             if(messages.messageList){
             return res.json({status:200, messageList: messages.messageList});
             } else{

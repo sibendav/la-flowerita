@@ -368,7 +368,7 @@ class App extends Component {
                 <Route path="/orders" element={<ManageOrders />} />
                 <Route path="/myOrders" element={<MyOrders />} />
 
-                <Route path="/PreChat" element={<PreChat userName={this.state.userName}/>} />
+                <Route path="/PreChat" element={<PreChat degree={this.state.degree} userName={this.state.userName}/>} />
 
               </Routes>
             </div>
